@@ -1,0 +1,66 @@
+[gd_scene format=3 uid="uid://dee08knnxgt4m"]
+
+[ext_resource type="Texture2D" uid="uid://be0xi2t7ywxi6" path="res://ui/Pulsing Heart/Health Bar Empty.png" id="1_m3434"]
+[ext_resource type="Script" uid="uid://cvcu5aqt280ht" path="res://ui/Pulsing Heart/hud.gd" id="1_uhvvn"]
+[ext_resource type="Texture2D" uid="uid://d2rs6ch0kynap" path="res://ui/Pulsing Heart/Health Bar Full.png" id="2_uhvvn"]
+[ext_resource type="Texture2D" uid="uid://bri1uyxhlkxij" path="res://ui/Pulsing Heart/HeartSpriteSheet.png" id="3_ks2pm"]
+[ext_resource type="Texture2D" uid="uid://boxlo5kerwtbw" path="res://player/icons8-crosshair-32.png" id="5_ks2pm"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h82iu"]
+atlas = ExtResource("3_ks2pm")
+region = Rect2(90, 0, 90, 28)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jvxom"]
+atlas = ExtResource("3_ks2pm")
+region = Rect2(0, 0, 90, 28)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_jw4lp"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_h82iu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jvxom")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="Hud" type="CanvasLayer" unique_id=1142552128]
+scale = Vector2(0.5, 0.5)
+transform = Transform2D(0.5, 0, 0, 0.5, 0, 0)
+script = ExtResource("1_uhvvn")
+
+[node name="TextureProgressBar" type="TextureProgressBar" parent="." unique_id=957834142]
+offset_left = 9.0
+offset_top = 208.0
+offset_right = 99.0
+offset_bottom = 248.0
+texture_under = ExtResource("1_m3434")
+texture_progress = ExtResource("2_uhvvn")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1578408345]
+position = Vector2(54, 222)
+sprite_frames = SubResource("SpriteFrames_jw4lp")
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=68884092]
+z_index = 10
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(2, 2)
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="CenterContainer" unique_id=938792408]
+texture_filter = 1
+clip_contents = true
+custom_minimum_size = Vector2(4, 20)
+layout_mode = 2
+texture = ExtResource("5_ks2pm")
+expand_mode = 1

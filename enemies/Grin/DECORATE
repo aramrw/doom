@@ -1,0 +1,295 @@
+ACTOR Grin 1230
+{
+	Health 75
+	Radius 12
+	Height 38 
+	Mass 100
+	Speed 12
+	PainChance 255
+	Monster
+	Species "Grin"
+	SeeSound "imptaunt"
+	PainSound "hihurt"
+	DeathSound "hideath"
+	ActiveSound "imptaunt"
+	Obituary "%o was ambushed by a Grin"
+	DropItem "Shotgun"
+	DamageFactor "GrinAttack", 0
+	+DONTHARMSPECIES
+	+FLOORCLIP
+//	+NOBLOCKMONST
+	States
+	{
+	Spawn:
+		TNT1 A 0 A_TakeInventory("GrinPatience",2200)
+		TNT1 A 0 A_TakeInventory("GrinRunTiredInv",21)
+		TNT1 A 0 A_ChangeFlag("MISSILEEVENMORE",0)
+		TNT1 A 0 A_ChangeFlag("MISSILEMORE",0)
+		TNT1 A 0 A_ChangeFlag("FRIGHTENED",0)
+		HOIM AA 10 A_Look
+		Loop
+	See:
+		TNT1 A 0 A_TakeInventory("GrinInv",3)
+		TNT1 A 0 A_TakeInventory("GrinRunning",2)
+		TNT1 A 0 A_TakeInventory("GrinPatience",2200)
+		TNT1 A 0 A_TakeInventory("GrinRunTiredInv",21)
+		TNT1 A 0 A_ChangeFlag("MISSILEEVENMORE",0)
+		TNT1 A 0 A_ChangeFlag("MISSILEMORE",0)
+		TNT1 A 0 A_ChangeFlag("FRIGHTENED",0)
+		HOIM ABCD 3 A_Chase
+		TNT1 A 0 A_TakeInventory("GrinInv",21)
+		Loop
+	Laugh:
+		TNT1 A 0 A_JumpIfCloser(300,"Missile")
+		HOI2 ABC 6
+		TNT1 A 0 A_PlaySound("HITAUNT")
+		HOI2 DEFGHIJKLMNO 6
+		Goto Scared+11
+	PutMineAndRun:	
+		TNT1 A 0 A_JumpIfInventory("GrinInv",3,3)
+		TNT1 A 0 A_SpawnItemEx("GrinMine",0,0,3,0,0,Random(5,8))
+		TNT1 A 0 A_GiveInventory("GrinInv",1)
+		HOIM ABCD 1 A_Chase("","",CHF_NOPLAYACTIVE)
+		Goto Scared+8
+	Scared:
+		TNT1 A 0 A_GiveInventory("GrinRunning",1)
+		TNT1 A 0 A_TakeInventory("GrinRunTiredInv",5)
+		TNT1 A 0 A_Jump(200,1)
+		TNT1 A 0 A_PlaySound("Grin/act",CHAN_VOICE)
+		TNT1 A 0 A_ChangeFlag("FRIGHTENED",1)
+		TNT1 A 0 A_ChangeFlag("MISSILEMORE",1)
+		TNT1 A 0 A_ChangeFlag("MISSILEEVENMORE",1)
+		TNT1 A 0 A_JumpIfTargetInLOS(1,360)
+		Goto WhereHasItGone
+		TNT1 A 0 A_JumpIfInventory("GrinInv",3,3)
+		TNT1 A 0 A_JumpIfCloser(600,"PutMineAndRun")
+		HOIM ABCD 1 A_Chase("","",CHF_NOPLAYACTIVE) 
+		HOIM ABCD 1 A_Chase("","",CHF_NOPLAYACTIVE)
+		TNT1 A 0 A_GiveInventory("GrinRunTiredInv",1)
+		TNT1 A 0 A_Jump(160,"1")
+		TNT1 A 0 A_JumpIfCloser(300,"Missile")
+		TNT1 A 0 A_JumpIfInventory("GrinRunTiredInv",11,1)
+		Goto Scared+8
+	WhereHasItGone: 
+		TNT1 A 0 A_ChangeFlag("MISSILEEVENMORE",0)
+		TNT1 A 0 A_ChangeFlag("MISSILEMORE",0)
+		TNT1 A 0 A_ChangeFlag("FRIGHTENED",0)	
+		TNT1 A 0 A_JumpIfTargetInLOS("See",360)
+		HOIM ABCD 3 A_Chase
+		TNT1 A 0 A_TakeInventory("GrinInv",3)
+	Camping:
+		TNT1 AA 0
+		TNT1 A 0 A_JumpIfInventory("GrinPatience",450,"See")
+		TNT1 A 0 A_FaceTarget
+		HOIM E 1 A_Chase("","MissileCamping2",CHF_DONTMOVE|CHF_NOPLAYACTIVE)
+		TNT1 A 0 A_Giveinventory("GrinPatience",1)
+		Loop
+	Missile:
+		TNT1 A 0 A_Jump(40,"Laugh")
+		TNT1 A 0 A_TakeInventory("GrinPatience",2200)
+		TNT1 A 0 A_ChangeFlag("MISSILEEVENMORE",0)
+		TNT1 A 0 A_ChangeFlag("MISSILEMORE",0)
+		TNT1 A 0 A_ChangeFlag("FRIGHTENED",0)
+		HOIM E 12 A_FaceTarget 
+		TNT1 A 0 Bright A_CustomBulletAttack (15, 8, 5, 2, "GrinBulletPuff")
+		TNT1 A 0 A_PlaySoundEx("shotguy/attack","auto",0,0)
+		HOIM F 5 Bright 
+		HOIM E 5
+		TNT1 A 0 A_Jump(40,"See")
+		Goto Scared
+	MissileCamping2: 
+		TNT1 A 0 A_TakeInventory("GrinPatience",2200)
+		TNT1 A 0 A_PLaySoundEx("shatgun/agarrar","auto",0,0)
+		TNT1 A 0 A_FaceTarget 
+		HOIM E 1 A_Recoil(1) 
+		TNT1 A 0 A_FaceTarget 
+		HOIM E 1 A_Recoil(1) 
+		TNT1 A 0 A_FaceTarget 
+		HOIM E 1 A_Recoil(1) 
+		TNT1 A 0 A_FaceTarget 
+		HOIM E 1 A_Recoil(1) 
+		TNT1 A 0 A_FaceTarget 
+		HOIM E 1 A_Recoil(1) 
+		TNT1 A 0 A_FaceTarget 
+		HOIM E 1 A_Recoil(1) 
+		TNT1 A 0 A_FaceTarget 
+		HOIM E 1 A_Recoil(1) 
+		TNT1 A 0 A_FaceTarget
+		HOIM E 1 A_Recoil(1) 
+		TNT1 A 0 A_FaceTarget 
+		HOIM E 1 A_Recoil(1) 
+		TNT1 A 0 A_FaceTarget 
+		HOIM E 1 A_Recoil(1) 
+		TNT1 A 0 A_FaceTarget 
+		HOIM E 1 A_Recoil(1) 
+		TNT1 A 0 A_FaceTarget 
+		HOIM E 1 A_Recoil(1) 
+		TNT1 A 0 A_FaceTarget
+		TNT1 A 0 A_Jump(60,"Laugh")
+		TNT1 A 0 A_PlaySoundEx("shotguy/attack","auto",0,0)
+		HOIM F 2 Bright A_CustomBulletAttack (15, 8, 5, 2, "GrinBulletPuff")
+		HOIM E 5
+		TNT1 A 0 A_Jump(60,"See")
+		Goto Scared
+	Pain:
+		TNT1 A 0 A_JumpIfInventory("GrinRunning",1,"PainNormal")
+		HOIM G 3
+		HOIM G 6 A_Pain
+		TNT1 A 0 A_Jump(60,"See")
+		Goto Scared
+	PainNormal:
+		TNT1 A 0 A_ChangeFlag("MISSILEEVENMORE",0)
+		TNT1 A 0 A_ChangeFlag("MISSILEMORE",0)
+		TNT1 A 0 A_ChangeFlag("FRIGHTENED",0) 
+	TNT1 A 0 A_TakeInventory("GrinPatience",800)
+		HOIM G 3
+		HOIM G 6 A_Pain
+		Goto See
+	Death:
+		HOIM H 5
+		HOIM I 5 A_Scream
+		HOIM J 5 A_NoBlocking
+		HOIM K 10
+	HOIM LM 5
+		HOIM N -1
+		Stop
+	XDeath:
+		HOIM O 5
+		HOIM P 5 A_XScream
+		HOIM Q 5 A_NoBlocking
+		HOIM R 10
+	HOIM STUV 5
+		HOIM W -1
+		Stop
+	Raise:
+		HOIM H 5
+		HOIM NMLKJI 5
+		Goto See
+	}
+}
+
+ACTOR GrinPatience : Inventory
+{
+	Inventory.Maxamount 800
+	-INVBAR
+}
+
+ACTOR GrinRunning : Inventory
+{
+	Inventory.Maxamount 1
+	-INVBAR
+}
+
+ACTOR GrinRunTiredInv : Inventory
+{
+	Inventory.Maxamount 20
+	-INVBAR
+}
+ 
+Actor GrinMine
+{
+	Radius 8
+	Height 5
+	Mass 1000000
+	Health 20
+	Damage 0
+	SeeSound "MINE001"
+	Species "Grin"
+	DONTHURTSHOOTER
+	Speed 2
+	+NOBLOOD
+	-SHOOTABLE
+	+MISSILE 
+	+THRUGHOST
+	States
+	{
+	Spawn:
+		HMIN A 0 A_Gravity
+		HMIN AAABBB 4 BRIGHT
+		Loop
+	Death:
+		HMIN A 0 A_SpawnItem("GrinMineBase")
+		Stop
+	}
+}
+Actor GrinMineBase
+{
+	Radius 10
+	Height 10
+	Mass 1000000
+	Health 1
+	Damage 1
+	SeeSound "MINE001"
+	Species "Grin"
+	DONTHURTSHOOTER
+	Speed 0
+	+THRUSPECIES
+	+NOBLOOD 
+	+SHOOTABLE
+	+PAINLESS
+	+MISSILE
+	+THRUGHOST
+	+DEHEXPLOSION
+	States
+	{
+	Spawn:
+		HMIN A 0 A_Gravity
+		HMIN AAAAAA 4
+		HMIN BBBBBB 4 BRIGHT
+		HMIN AAAAAA 4
+		HMIN BBBBBB 4 BRIGHT
+		HMIN AAAAAA 4
+		HMIN BBBBBB 4 BRIGHT
+		HMIN AAAAAA 4
+		HMIN BBBBBB 4 BRIGHT
+		HMIN AAAAAA 4
+		HMIN BBBBBB 2 BRIGHT
+		HMIN AAAAAA 2
+		HMIN BBBBBB 2 BRIGHT
+		HMIN CC 2
+		HMIN DD 2 BRIGHT
+		HMIN C 2
+		HMIN D 2 BRIGHT
+		HMIN C 1
+		HMIN D 1 BRIGHT
+		HMIN C 1
+		HMIN D 1 BRIGHT
+		HMIN C 1
+		HMIN D 1 BRIGHT
+		HMIN C 1
+		HMIN D 1 BRIGHT
+		HMIN C 1
+		HMIN D 1 BRIGHT
+		HMIN C 1
+		HMIN D 1 BRIGHT
+		HMIN C 1
+		HMIN D 1 BRIGHT
+		HMIN C 1
+		HMIN D 1 BRIGHT
+		HMIN C 1
+	Death:
+		TNT1 A 0 A_AlertMonsters
+		TNT1 A 0 A_PlaySound("weapons/rocklx") 
+		ADRO E 3 Bright A_Explode(30,64)
+		ADRO F 3 bright	
+		ADRO G 3 bright
+		ADRO HIJ 3 bright
+		stop
+	}
+}
+
+ACTOR GrinBulletPuff : BulletPuff
+{
+	damagetype "GrinAttack"
+}
+
+DamageType GrinAttack
+{
+	 Factor 1
+}
+
+actor GrinInv : Inventory	 
+{
+	 Inventory.Maxamount 3
+	 -invbar
+}

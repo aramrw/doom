@@ -1,0 +1,11 @@
+Name: AUTO-9
+Class: 2
+Type: Hitscan
+Palette: PNG
+Summon: AUTO-9weapon
+Ammo Type: Clip
+AltFire: Yes
+Powered Mode: None
+Brightmaps: None
+Actor modification: None
+ACS: None

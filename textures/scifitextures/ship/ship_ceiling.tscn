@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://bw0uup8kykjce"]
+
+[ext_resource type="Texture2D" uid="uid://eto8pbfpk1kf" path="res://textures/scifitextures/ceiling.png" id="1_jqkvt"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_m2q5u"]
+albedo_texture = ExtResource("1_jqkvt")
+
+[sub_resource type="BoxMesh" id="BoxMesh_uvkgh"]
+material = SubResource("StandardMaterial3D_m2q5u")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_2eyj4"]
+
+[node name="ShipCeiling" type="MeshInstance3D" unique_id=1475911580]
+mesh = SubResource("BoxMesh_uvkgh")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=527716801]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=1522759078]
+shape = SubResource("BoxShape3D_2eyj4")
