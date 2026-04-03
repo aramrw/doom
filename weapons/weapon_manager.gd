@@ -3,7 +3,8 @@ extends Node
 @onready var gun_sprite = $WeaponLayer/GunSprite
 @onready var shoot_sound = $ShootSound 
 
-signal ammo_updated(bullet_count: int)
+signal ammo_updated(bullet_count: int);
+signal magazine_count_updated(magazine_count: int);
 
 # 1. Grab the RayCast we just made. 
 # (Since this script is on WeaponManager, we go up one folder with "..", 
@@ -12,6 +13,16 @@ signal ammo_updated(bullet_count: int)
 @export_category("Gun Info")
 @export var damage: int = 35 
 @export var bullets: int = 10
+@export_subgroup("Magazines")
+@export var magazine_max = 10;
+@export var magazine_count: int = 1;
+
+func reload():
+	if magazine_count <= 0:
+		return
+	magazine_count -= 1;
+	magazine_count_updated.emit(magazine_count);
+	
 
 func fire():
 	if gun_sprite.animation == "shoot" and gun_sprite.is_playing():

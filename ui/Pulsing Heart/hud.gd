@@ -4,6 +4,7 @@ extends CanvasLayer
 @onready var heart_anim = $AnimatedSprite2D 
 @onready var fps_label = $FpsLabel
 @onready var bullets = $Bullets
+@onready var magazines = $Mag
 
 func _ready():
 	# Force the heart to start pulsing the moment the HUD loads
@@ -19,3 +20,7 @@ func _process(_delta):
 func update_bullets(count: int):
 	# This finds the child node that actually handles the ammo display
 	$Bullets.update_bullet_count(count)
+	
+func update_magazines(count: int):
+	# This finds the child node that actually handles the ammo display
+	$Mag.update_magazines_count(count)

@@ -30,6 +30,8 @@ func _ready():
 	# hookup hud to weapon_manager
 	weapon_manager.ammo_updated.connect(hud.update_bullets)
 	hud.update_bullets(weapon_manager.bullets)
+	weapon_manager.magazine_count_updated.connect(hud.update_magazines)
+	hud.update_magazines(weapon_manager.magazine_count)
 	
 	if hud:
 		hud.update_health(health)
