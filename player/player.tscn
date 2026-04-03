@@ -52,7 +52,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.473389, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.184246e-05, 0)
 target_position = Vector3(0, 0, -100)
 
-[node name="WeaponManager" type="Node3D" parent="." unique_id=536228798 node_paths=PackedStringArray("aim_raycast")]
+[node name="WeaponManager" type="Node3D" parent="." unique_id=536228798 node_paths=PackedStringArray("aim_raycast") groups=["WeaponManager"]]
 visible = false
 script = ExtResource("2_rkbax")
 aim_raycast = NodePath("../CharacterBody3D/Camera/AimRayCast")

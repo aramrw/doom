@@ -5,6 +5,8 @@
 [ext_resource type="Texture2D" uid="uid://d2rs6ch0kynap" path="res://ui/Pulsing Heart/Health Bar Full.png" id="2_uhvvn"]
 [ext_resource type="Texture2D" uid="uid://bri1uyxhlkxij" path="res://ui/Pulsing Heart/HeartSpriteSheet.png" id="3_ks2pm"]
 [ext_resource type="Texture2D" uid="uid://boxlo5kerwtbw" path="res://player/icons8-crosshair-32.png" id="5_ks2pm"]
+[ext_resource type="Texture2D" uid="uid://dyooeoajd32g4" path="res://ui/bullet.png" id="6_jvxom"]
+[ext_resource type="Script" uid="uid://bqt3ynqksme4u" path="res://ui/bullets.gd" id="7_h82iu"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_h82iu"]
 atlas = ExtResource("3_ks2pm")
@@ -28,10 +30,23 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="LabelSettings" id="LabelSettings_jvxom"]
+font_size = 20
+stacked_shadow_count = 1
+stacked_shadow_0/offset = Vector2(1, 1)
+
 [node name="Hud" type="CanvasLayer" unique_id=1142552128]
 scale = Vector2(0.5, 0.5)
 transform = Transform2D(0.5, 0, 0, 0.5, 0, 0)
 script = ExtResource("1_uhvvn")
+
+[node name="FpsLabel" type="Label" parent="." unique_id=2115703631]
+offset_left = 6.0
+offset_top = 2.0
+offset_right = 30.0
+offset_bottom = 33.0
+theme_override_font_sizes/font_size = 22
+clip_text = true
 
 [node name="TextureProgressBar" type="TextureProgressBar" parent="." unique_id=957834142]
 offset_left = 9.0
@@ -50,6 +65,8 @@ z_index = 10
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_top = 2.0
+offset_bottom = 2.0
 grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(2, 2)
@@ -64,3 +81,28 @@ custom_minimum_size = Vector2(4, 20)
 layout_mode = 2
 texture = ExtResource("5_ks2pm")
 expand_mode = 1
+
+[node name="Bullets" type="TextureRect" parent="." unique_id=42449466]
+offset_left = 344.0
+offset_top = 208.0
+offset_right = 364.0
+offset_bottom = 242.0
+texture = ExtResource("6_jvxom")
+expand_mode = 1
+script = ExtResource("7_h82iu")
+
+[node name="BulletsLabel" type="Label" parent="Bullets" unique_id=1536346938]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 7.0
+offset_right = 32.0
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 22
+label_settings = SubResource("LabelSettings_jvxom")
+horizontal_alignment = 1
+clip_text = true

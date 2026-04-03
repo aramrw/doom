@@ -27,6 +27,10 @@ func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	gun_default_pos = gun_sprite.position
 	
+	# hookup hud to weapon_manager
+	weapon_manager.ammo_updated.connect(hud.update_bullets)
+	hud.update_bullets(weapon_manager.bullets)
+	
 	if hud:
 		hud.update_health(health)
 

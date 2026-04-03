@@ -3,17 +3,24 @@ extends Node
 @onready var gun_sprite = $WeaponLayer/GunSprite
 @onready var shoot_sound = $ShootSound 
 
+signal ammo_updated(bullet_count: int)
+
 # 1. Grab the RayCast we just made. 
 # (Since this script is on WeaponManager, we go up one folder with "..", 
 # then down into CharacterBody3D/Camera to find it).
 @export var aim_raycast: RayCast3D;
-
-# 2. How much damage the gun does
+@export_category("Gun Info")
 @export var damage: int = 35 
+@export var bullets: int = 10
 
 func fire():
 	if gun_sprite.animation == "shoot" and gun_sprite.is_playing():
 		return
+	
+	if bullets <= 0:
+		return
+	bullets -= 1;
+	ammo_updated.emit(bullets);
 		
 	gun_sprite.play("shoot")
 	shoot_sound.play()
