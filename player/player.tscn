@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://dph1xsp2evfca" path="res://player/player.gd" id="1_oul6g"]
 [ext_resource type="Script" uid="uid://cm63mb3u7m2c1" path="res://weapons/weapon_manager.gd" id="2_rkbax"]
-[ext_resource type="Resource" uid="uid://dukslul6e06xb" path="res://weapons/shotguns/TOZ-34/toz_34_wpdata.tres" id="3_boad6"]
 [ext_resource type="Script" uid="uid://cb3fhq0jm1ik7" path="res://weapons/import_weapon.gd" id="6_boad6"]
 [ext_resource type="AudioStream" uid="uid://of6lbjkpy10h" path="res://weapons/shotguns/TOZ-34/SOUNDS/TOZSFIR.ogg" id="7_rgyib"]
 [ext_resource type="PackedScene" uid="uid://dee08knnxgt4m" path="res://ui/Pulsing Heart/hud.tscn" id="8_rgyib"]
@@ -25,15 +24,10 @@ transform = Transform3D(1, 0, 0, 0, 0.9911647, 0.13263698, 0, -0.13263698, 0.991
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.184246e-05, 0)
 target_position = Vector3(0, 0, -100)
 
-[ext_resource type="Resource" uid="uid://bl8mae865blbt" path="res://weapons/pistols/auto9_wpdata.tres" id="4_auto9"]
-...
 [node name="WeaponManager" type="Node3D" parent="." unique_id=536228798 node_paths=PackedStringArray("aim_raycast") groups=["WeaponManager"]]
 visible = false
 script = ExtResource("2_rkbax")
 aim_raycast = NodePath("../CharacterBody3D/Camera/AimRayCast")
-primary_weapon = ExtResource("3_boad6")
-secondary_weapon = ExtResource("4_auto9")
-max_magazines = 2
 
 [node name="WeaponLayer" type="CanvasLayer" parent="WeaponManager" unique_id=2131710237]
 
