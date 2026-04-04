@@ -1,0 +1,157 @@
+Flickerlight FLAME
+{
+	color 0.8 0.6 0.0
+	size 96
+	offset 0 50 0
+	secondarySize 112
+	chance 0.1
+}
+
+Flickerlight CHAN_FLAME
+{
+	color 0.8 0.6 0.0
+	size 96
+	offset 0 0 0
+	secondarySize 112
+	chance 0.1
+}
+
+Flickerlight LILFLAME
+{
+	color 0.8 0.6 0.0
+	size 50
+	offset 0 50 0
+	secondarySize 60
+	chance 0.1
+}
+
+Flickerlight PURFLAME
+{
+	color 0.6 0.0 1.0
+	size 96
+	offset 0 0 0
+	secondarySize 112
+	chance 0.1
+}
+
+Flickerlight REDFLAME
+{
+	color 1.0 0.0 0.0
+	size 96
+	offset 0 0 0
+	secondarySize 112
+	chance 0.1
+}
+
+Flickerlight BLUFLAME
+{
+	color 0.0 0.0 1.0
+	size 96
+	offset 0 0 0
+	secondarySize 112
+	chance 0.1
+}
+
+Flickerlight GRNFLAME
+{
+	color 0.0 1.0 0.0
+	size 96
+	offset 0 0 0
+	secondarySize 112
+	chance 0.1
+}
+
+	flickerlight CEILINGBRAZIER
+{
+	color 0.8 0.6 0.0
+	size 68
+	secondarySize 76
+	chance 0.6
+	offset 0 32 0
+}
+
+//////////////////////////////////////////////////////
+
+
+object XFlamingSkull
+{
+	frame XFLS { light FLAME }
+}
+
+object XShortBrazier
+{
+	frame LBR1 { light FLAME }
+}
+
+object XTallBrazier
+{
+	frame TBR1 { light FLAME }
+}
+
+object XShortBrazier2
+{
+	frame LBR2 { light FLAME }
+}
+
+object XTallBrazier2
+{
+	frame TBR2 { light FLAME }
+}
+
+object XWallTorch
+{
+	frame XWLT { light FLAME }
+}
+
+object XCandles
+{
+	frame XCAN { light LILFLAME }
+}
+
+object XChandelier
+{
+	frame XCND { light CHAN_FLAME }
+}
+
+object XRedTorch
+{
+	frame TRED { light REDFLAME }
+}
+
+object XBlueTorch
+{
+	frame TBLU { light BLUFLAME }
+}
+
+object XGreenTorch
+{
+	frame TGRN { light GRNFLAME }
+
+}
+
+object XPurpleTorch
+{
+	frame TPUR	{ light PURFLAME }
+}
+
+object XFlame
+{
+	frame XSFL { light FLAME }
+}
+
+object XFireBarrel
+{
+	frame FICA { light FLAME }
+}	
+
+
+Object XCeilingBrazier
+{
+	frame XCBR { light CEILINGBRAZIER }
+}
+
+
+
+
+
+

@@ -1,0 +1,22 @@
+Information:
+Name: Improved Torches (aka Better Flame Animations)
+Connection: Uses edited version of Ceiling Brazier
+Palette: Doom
+Summon: XTallBrazier, XTallBrazier2, XShortBrazier, XShortBrazier2, XCandles, XChandelier, XFlame, XFireBarrel, XWallTorch, XFlamingSkull, XCeilingBrazier, XRedTorch, XBlueTorch, XGreenTorch, XPurpleTorch
+Ambient Sound: Yes
+De-/Activatable: No
+Destroyable: No
+Special Effects: No
+Brightmaps: No
+Actor modification: No
+ACS: No
+
+Credits:
+Code: Rifleman
+GLDefs: Rifleman
+Sounds: Unknown, had it on my PC for ages
+Sprites: Doom, Strife, Hexen. Ceiling Brazier by Gothic
+Sprite Edit: Rifleman
+Idea Base: I was curious if I could improve the look of flames in various torches without using high-res assets - I wanted to preserve the vanilla aesthetic.
+
+A collection of torches, braziers and firesticks from Doom clones with (IMO) improved animation of the flame, dynamic lights and ambient sound for better atmosphere.

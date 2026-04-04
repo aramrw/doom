@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cqlple4um3rs" path="res://weapons/weapon_data.gd" id="1_osl3q"]
 [ext_resource type="SpriteFrames" uid="uid://dp5w2s0cqy2sr" path="res://weapons/pistols/auto9/auto9_spriteframes.tres" id="2_m0enl"]
-[ext_resource type="Resource" path="res://weapons/pistols/auto9/auto9_fire_action.tres" id="3_fire"]
+[ext_resource type="Resource" uid="uid://dvtuhpimo3b4a" path="res://weapons/pistols/auto9/auto9_fire_action.tres" id="3_fire"]
 
 [resource]
 script = ExtResource("1_osl3q")
@@ -11,4 +11,4 @@ sprite_frames = ExtResource("2_m0enl")
 actions = {
 "primary": ExtResource("3_fire")
 }
-max_bullets = 50
+max_bullets = 25

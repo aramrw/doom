@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://ptyatmeg2bag"]
+
+[node name="Prop" type="StaticBody3D" unique_id=1379107535]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1250590589]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=881712694]
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="." unique_id=259819077]

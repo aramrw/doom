@@ -29,9 +29,12 @@
 [ext_resource type="Texture2D" uid="uid://2p4goyvmvuc0" path="res://enemies/cultist/Sprites/CULTR0.png" id="26_7x7no"]
 [ext_resource type="Texture2D" uid="uid://dy8gi7lys4o6i" path="res://enemies/cultist/Sprites/CULTS0.png" id="27_bqrdh"]
 [ext_resource type="Texture2D" uid="uid://bjllhne16r0dn" path="res://enemies/cultist/Sprites/CULTT0.png" id="28_cl4gm"]
+[ext_resource type="Texture2D" uid="uid://cm4ywjxwgdyii" path="res://enemies/cultist/Sprites/CULTU0.png" id="29_g0j55"]
 [ext_resource type="Texture2D" uid="uid://wei3ouns3tj2" path="res://enemies/cultist/Sprites/CULTH0.png" id="29_ty8or"]
 [ext_resource type="Texture2D" uid="uid://cqi8eha50r5p1" path="res://enemies/cultist/Sprites/CULTA1C1.png" id="30_cd5nq"]
+[ext_resource type="Texture2D" uid="uid://c6o7x4omuhkkm" path="res://enemies/cultist/Sprites/CULTV0.png" id="30_dpth8"]
 [ext_resource type="Texture2D" uid="uid://cagql1ogqrh8x" path="res://enemies/cultist/Sprites/CULTB1D1.png" id="31_kxdad"]
+[ext_resource type="Texture2D" uid="uid://d4cgeupvf7mbr" path="res://enemies/cultist/Sprites/CULTW0.png" id="31_lgn1r"]
 [ext_resource type="Texture2D" uid="uid://dbfui0jh7tbtp" path="res://enemies/cultist/Sprites/CULTA2C8.png" id="32_v37gg"]
 [ext_resource type="Texture2D" uid="uid://o0ufj8qkhxo4" path="res://enemies/cultist/Sprites/CULTB2D8.png" id="33_8udw8"]
 [ext_resource type="Texture2D" uid="uid://506e4qg08ug2" path="res://enemies/cultist/Sprites/CULTA3C7.png" id="34_55y3e"]
@@ -157,6 +160,15 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": ExtResource("28_cl4gm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("29_g0j55")
+}, {
+"duration": 1.0,
+"texture": ExtResource("30_dpth8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("31_lgn1r")
 }],
 "loop": false,
 "name": &"death_2",
@@ -247,7 +259,7 @@ billboard = 2
 shaded = true
 texture_filter = 0
 sprite_frames = SubResource("SpriteFrames_g1gdb")
-animation = &"attack_1"
+animation = &"death_2"
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="." unique_id=255344233]
 simplify_path = true
