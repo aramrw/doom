@@ -1,6 +1,7 @@
 extends Node
 
 @onready var gun_sprite = $WeaponLayer/GunSprite
+var offhand_sprite: AnimatedSprite2D
 @onready var shoot_sound = $ShootSound 
 
 signal ammo_updated(bullet_count: int)
@@ -24,6 +25,11 @@ var current_shot_count: int = 0 # Tracked for spray patterns/recoil
 var last_shot_time: float = 0.0
 
 func _ready():
+	# Setup offhand sprite
+	offhand_sprite = gun_sprite.duplicate()
+	offhand_sprite.name = "OffhandSprite"
+	$WeaponLayer.add_child(offhand_sprite)
+	
 	# Connect to the frame changed signal to trigger effects on specific frames
 	gun_sprite.frame_changed.connect(_on_gun_sprite_frame_changed)
 	
@@ -41,6 +47,16 @@ func equip_weapon(new_weapon: WeaponData):
 		gun_sprite.play("idle")
 		gun_sprite.offset = current_weapon.sprite_offset
 		gun_sprite.flip_h = current_weapon.flip_h
+		
+	# Handle offhand
+	if current_weapon.offhand_frames:
+		offhand_sprite.show()
+		offhand_sprite.sprite_frames = current_weapon.offhand_frames
+		offhand_sprite.play("idle")
+		offhand_sprite.offset = current_weapon.offhand_offset
+		offhand_sprite.flip_h = current_weapon.offhand_flip_h
+	else:
+		offhand_sprite.hide()
 		
 	ammo_updated.emit(bullets)
 
@@ -67,6 +83,9 @@ func start_action(action_name: String):
 		current_shot_count = 0
 	
 	gun_sprite.play(current_action.animation_name)
+	if current_weapon.offhand_frames:
+		offhand_sprite.play(current_action.animation_name)
+	
 	# Process the first frame immediately
 	process_step()
 
@@ -112,6 +131,8 @@ func _on_gun_sprite_animation_finished() -> void:
 		else:
 			current_action = null
 			gun_sprite.play("idle")
+			if current_weapon.offhand_frames:
+				offhand_sprite.play("idle")
 			
 	elif gun_sprite.animation == "reload":
 		is_reloading = false
