@@ -9,11 +9,11 @@
 script = ExtResource("1_1obji")
 weapon_name = "combat_knife"
 sprite_frames = ExtResource("2_anims")
-sprite_offset = Vector2(100, 0)
-flip_h = true
+sprite_offset = Vector2(-100, 0)
+flip_h = false
 offhand_frames = ExtResource("3_offhand")
-offhand_offset = Vector2(-100, 0)
-offhand_flip_h = true
+offhand_offset = Vector2(100, 0)
+offhand_flip_h = false
 actions = {
 "primary": ExtResource("4_swing")
 }
