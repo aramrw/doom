@@ -17,6 +17,9 @@ class_name DoomEnemyBase
 var player: Node3D
 var current_anim_state: String = "walk"
 
+# --- PROJECTILE ---
+@export var projectile_scene: PackedScene = null
+
 # --- STATE VARIABLES ---
 var is_attacking: bool = false
 var on_cooldown: bool = false 
@@ -177,12 +180,25 @@ func attack():
 	
 	# Only do damage if the enemy wasn't killed or stunned during the 0.4s wind-up!
 	if not is_dead and not is_hit:
-		los_raycast.force_raycast_update()
-		if los_raycast.get_collider() == player.body:
-			player.take_damage(attack_damage)
+		if projectile_scene:
+			var proj = projectile_scene.instantiate()
+			get_tree().root.add_child(proj)
+			# Fire from chest height (around 1.2 meters)
+			proj.global_position = global_position + Vector3(0, 1.2, 0) 
 			
-			# trigger taunt
+			# Target the player's body
+			var dir = global_position.direction_to(player.body.global_position)
+			proj.setup(self, dir, attack_damage, 15.0) # Speed 15.0 for magic ball
+			
 			sfx.taunt()
+		else:
+			# Fallback to raycast/melee
+			los_raycast.force_raycast_update()
+			if los_raycast.get_collider() == player.body:
+				player.take_damage(attack_damage)
+				
+				# trigger taunt
+				sfx.taunt()
 		
 	is_attacking = false
 	
