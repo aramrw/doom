@@ -12,6 +12,8 @@
 
 [node name="Player" type="Node3D" unique_id=432180329 groups=["Player"]]
 script = ExtResource("1_oul6g")
+SPEED = 3.0
+LOOK_SPEED = 1.8
 
 [node name="CharacterBody3D" type="CharacterBody3D" parent="." unique_id=995130082]
 
@@ -41,6 +43,7 @@ scale = Vector2(0.7, 0.7)
 speed_scale = 4.0
 
 [node name="ShootSound" type="AudioStreamPlayer" parent="WeaponManager" unique_id=1230038840]
+volume_db = -4.0
 bus = &"SfxBus"
 
 [node name="Hud" parent="." unique_id=1142552128 instance=ExtResource("8_rgyib")]

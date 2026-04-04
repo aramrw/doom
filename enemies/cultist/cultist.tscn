@@ -43,6 +43,7 @@
 [ext_resource type="Texture2D" uid="uid://dhj3xoinrn7lx" path="res://enemies/cultist/Sprites/CULTB4D6.png" id="37_1hb6h"]
 [ext_resource type="Texture2D" uid="uid://jfdf2leaw8du" path="res://enemies/cultist/Sprites/CULTA5C5.png" id="38_b1b5v"]
 [ext_resource type="Texture2D" uid="uid://2tkaff5m1451" path="res://enemies/cultist/Sprites/CULTB5D5.png" id="39_pexd8"]
+[ext_resource type="PackedScene" uid="uid://b51q3r7u1i6x8" path="res://enemies/cultist/cultist_projectile.tscn" id="99_proj"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ej5ua"]
 height = 1.6981964
@@ -238,14 +239,21 @@ animations = [{
 "speed": 8.0
 }]
 
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_g0j55"]
+frequency = 0.0284
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_dpth8"]
+noise = SubResource("FastNoiseLite_g0j55")
+
 [node name="Cultist" type="CharacterBody3D" unique_id=1006558139]
 floor_stop_on_slope = false
 safe_margin = 0.1
 script = ExtResource("1_2cjw2")
 speed = 1.5
-attack_range = 6.0
+attack_range = 15.0
 attack_damage = 15
 detection_range = 30.0
+projectile_scene = ExtResource("99_proj")
 health = 50
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1779757227]
@@ -259,7 +267,7 @@ billboard = 2
 shaded = true
 texture_filter = 0
 sprite_frames = SubResource("SpriteFrames_g1gdb")
-animation = &"death_2"
+animation = &"attack_1"
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="." unique_id=255344233]
 simplify_path = true
@@ -270,5 +278,12 @@ simplify_path = true
 pitch_scale = 5.0
 bus = &"SfxBus"
 script = ExtResource("2_bfhyb")
-taunt_folder = "res://enemies/cultist/Sounds/Taunt"
 pitch_step = 10.0
+
+[node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=606545182]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6351599, 0)
+light_color = Color(0.74591833, 0.44484898, 0.5157802, 1)
+light_energy = 0.1
+light_projector = SubResource("NoiseTexture2D_dpth8")
+shadow_enabled = true
+omni_range = 13.102

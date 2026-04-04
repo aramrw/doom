@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c0fthiso55eih"
-path="res://.godot/imported/CFX4F0.png-82c9cf95aa97d169cdea4eeb9cc350e8.ctex"
+uid="uid://36cjp00h4jee"
+path="res://.godot/imported/CFX4B4B6.png-0326bc5663744979b7a283e6fe3d4d7d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://enemies/cultist/Sprites/CFX4F0.png"
-dest_files=["res://.godot/imported/CFX4F0.png-82c9cf95aa97d169cdea4eeb9cc350e8.ctex"]
+source_file="res://enemies/cultist/Sprites/attack_projectile/CFX4B4B6.png"
+dest_files=["res://.godot/imported/CFX4B4B6.png-0326bc5663744979b7a283e6fe3d4d7d.ctex"]
 
 [params]
 

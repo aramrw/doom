@@ -10,8 +10,8 @@ extends Node3D
 @export_category("Sensitivity")
 @export var mouse_sensitivity = 0.03;
 
-const SPEED = 5.0
-const LOOK_SPEED = 2.5 
+@export var SPEED = 5.0
+@export var LOOK_SPEED = 2.5 
 const BOB_FREQ = 2.7
 const BOB_AMP = 0.03
 
@@ -27,6 +27,7 @@ var max_health: int = 100
 var health: int = max_health
 
 func _ready():
+	add_to_group("Player")
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	gun_default_pos = gun_sprite.position
 	

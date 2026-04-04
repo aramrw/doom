@@ -1,0 +1,168 @@
+[gd_scene format=3 uid="uid://b51q3r7u1i6x8"]
+
+[ext_resource type="Script" uid="uid://m75yik10iiq" path="res://weapons/projectiles/directional_projectile.gd" id="1_1"]
+[ext_resource type="Texture2D" uid="uid://2h455cypr4kq" path="res://enemies/cultist/Sprites/attack_projectile/CFX4A1A5.png" id="2_2"]
+[ext_resource type="AudioStream" uid="uid://c74gdabso8f3k" path="res://enemies/cultist/Sounds/DSCULATK.ogg" id="2_sound_atk"]
+[ext_resource type="Texture2D" uid="uid://bt60cxesrxhmx" path="res://enemies/cultist/Sprites/attack_projectile/CFX4B1B5.png" id="3_3"]
+[ext_resource type="AudioStream" uid="uid://cpicbn04hhxhr" path="res://enemies/cultist/Sounds/DSDISHT1.ogg" id="3_sound_hit"]
+[ext_resource type="Texture2D" uid="uid://beyttstwgriax" path="res://enemies/cultist/Sprites/attack_projectile/CFX4C0.png" id="4_4"]
+[ext_resource type="Texture2D" uid="uid://jht664lgqtrm" path="res://enemies/cultist/Sprites/attack_projectile/CFX4D0.png" id="5_5"]
+[ext_resource type="Texture2D" uid="uid://sfvpqse6ny4l" path="res://enemies/cultist/Sprites/attack_projectile/CFX4E0.png" id="6_6"]
+[ext_resource type="Texture2D" uid="uid://c0fthiso55eih" path="res://enemies/cultist/Sprites/attack_projectile/CFX4F0.png" id="7_7"]
+[ext_resource type="Texture2D" uid="uid://dcsxukfu5okcl" path="res://enemies/cultist/Sprites/attack_projectile/CFX4A2A8.png" id="8_8"]
+[ext_resource type="Texture2D" uid="uid://df0wcxp7cqmcj" path="res://enemies/cultist/Sprites/attack_projectile/CFX4B2B8.png" id="9_9"]
+[ext_resource type="Texture2D" uid="uid://b2qqv0x2cfena" path="res://enemies/cultist/Sprites/attack_projectile/CFX4A3A7.png" id="10_10"]
+[ext_resource type="Texture2D" uid="uid://pbhs8brfgbv0" path="res://enemies/cultist/Sprites/attack_projectile/CFX4B3B7.png" id="11_11"]
+[ext_resource type="Texture2D" uid="uid://5lknajyu6ufq" path="res://enemies/cultist/Sprites/attack_projectile/CFX4A4A6.png" id="12_12"]
+[ext_resource type="Texture2D" uid="uid://36cjp00h4jee" path="res://enemies/cultist/Sprites/attack_projectile/CFX4B4B6.png" id="13_13"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_1"]
+radius = 0.2
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_1"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_7")
+}],
+"loop": true,
+"name": &"fly_1",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("8_8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_9")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_7")
+}],
+"loop": true,
+"name": &"fly_2",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("10_10")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_11")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_7")
+}],
+"loop": true,
+"name": &"fly_3",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("12_12")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_13")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_7")
+}],
+"loop": true,
+"name": &"fly_4",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_7")
+}],
+"loop": true,
+"name": &"fly_5",
+"speed": 8.0
+}]
+
+[node name="CultistProjectile" type="Area3D" unique_id=240745810]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("1_1")
+speed = 15.0
+damage = 15
+whoosh_sound = ExtResource("2_sound_atk")
+impact_sound = ExtResource("3_sound_hit")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1327620469]
+shape = SubResource("SphereShape3D_1")
+
+[node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="." unique_id=2009423823]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0)
+pixel_size = 0.02
+shaded = true
+texture_filter = 0
+sprite_frames = SubResource("SpriteFrames_1")
+animation = &"fly_1"
+
+[node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=720458610]
+light_color = Color(0.8, 0.2, 1, 1)
+light_energy = 0.5
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="." unique_id=795763281]
+volume_db = -20.0
+unit_size = 1.5
+max_db = 0.0
+bus = &"SfxBus"

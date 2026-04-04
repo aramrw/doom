@@ -5,7 +5,9 @@ class_name SoundEffect
 @export var pitch_randomness: float = 0.1
 
 func execute(_source_node: Node, weapon_manager: Node) -> void:
-    if weapon_manager.shoot_sound:
-        weapon_manager.shoot_sound.stream = sound
-        weapon_manager.shoot_sound.pitch_scale = 1.0 + randf_range(-pitch_randomness, pitch_randomness)
-        weapon_manager.shoot_sound.play()
+	if weapon_manager.shoot_sound:
+		var shoot_sound: AudioStreamPlayer = weapon_manager.shoot_sound
+		shoot_sound.stream = sound
+		shoot_sound.pitch_scale = 1.0 + randf_range(-pitch_randomness, pitch_randomness)
+		shoot_sound.volume_db = -28.0;
+		shoot_sound.play();
