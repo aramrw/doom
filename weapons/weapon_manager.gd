@@ -40,6 +40,7 @@ func equip_weapon(new_weapon: WeaponData):
 		gun_sprite.sprite_frames = current_weapon.sprite_frames
 		gun_sprite.play("idle")
 		gun_sprite.offset = current_weapon.sprite_offset
+		gun_sprite.flip_h = current_weapon.flip_h
 		
 	ammo_updated.emit(bullets)
 
