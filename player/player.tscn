@@ -21,8 +21,11 @@ LOOK_SPEED = 1.8
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CapsuleShape3D_oul6g")
 
-[node name="Camera" type="Camera3D" parent="CharacterBody3D" unique_id=1370230432]
-transform = Transform3D(1, 0, 0, 0, 0.9911647, 0.13263698, 0, -0.13263698, 0.9911647, 0, 1.473389, 0)
+[node name="ShakeGimbal" type="Node3D" parent="CharacterBody3D" unique_id=123456789]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.473389, 0)
+
+[node name="Camera" type="Camera3D" parent="CharacterBody3D/ShakeGimbal" unique_id=1370230432]
+transform = Transform3D(1, 0, 0, 0, 0.9911647, 0.13263698, 0, -0.13263698, 0.9911647, 0, 0, 0)
 
 [node name="AimRayCast" type="RayCast3D" parent="CharacterBody3D/Camera" unique_id=1414309329]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.184246e-05, 0)

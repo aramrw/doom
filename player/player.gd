@@ -1,11 +1,22 @@
 extends Node3D
 
-@onready var camera: Camera3D = $CharacterBody3D/Camera
+@onready var camera: Camera3D = $CharacterBody3D/ShakeGimbal/Camera
+@onready var shake_gimbal: Node3D = $CharacterBody3D/ShakeGimbal
 @onready var body: CharacterBody3D = $CharacterBody3D
 @onready var weapon_manager = $WeaponManager
 @onready var default_height = camera.position.y
 @onready var gun_sprite = $WeaponManager/WeaponLayer/GunSprite
 @onready var hud = $Hud
+
+var trauma: float = 0.0
+var trauma_decay: float = 3.5 # Fast decay
+var trauma_power: float = 2.0
+
+var noise = FastNoiseLite.new()
+var noise_y = 0.0
+
+@export var max_roll: float = 1.5 # Minimal rotation
+@export var max_offset: Vector2 = Vector2(0.03, 0.03) # Minimal displacement
 
 @export_category("Sensitivity")
 @export var mouse_sensitivity = 0.03;
@@ -31,6 +42,9 @@ func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	gun_default_pos = gun_sprite.position
 	
+	noise.seed = randi()
+	noise.frequency = 0.5
+	
 	# hookup hud to weapon_manager
 	weapon_manager.ammo_updated.connect(hud.update_bullets)
 	hud.update_bullets(weapon_manager.bullets)
@@ -43,7 +57,7 @@ func _ready():
 	if hud:
 		hud.update_health(health)
 
-func _process(_delta):
+func _process(delta):
 	if Input.is_action_just_pressed("shoot"): 
 		weapon_manager.fire()
 	if Input.is_action_just_pressed("reload"):
@@ -59,6 +73,7 @@ func _process(_delta):
 		if weapon_manager.current_weapon:
 			hud.update_weapon_ui(weapon_manager.current_weapon)
 		
+	_process_camera_shake(delta)
 	if Input.is_action_just_pressed("ui_cancel"):
 		if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
@@ -151,3 +166,10 @@ func die():
 	print("Player Died!")
 	# For now, just restart the level when you die
 	get_tree().reload_current_scene()
+
+func add_trauma(amount: float):
+	trauma = clamp(trauma + amount, 0.0, 1.0)
+
+func _process_camera_shake(delta):
+	if trauma > 0:
+		pass

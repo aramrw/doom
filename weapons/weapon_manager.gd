@@ -32,6 +32,7 @@ var current_action: WeaponAction = null
 var current_step_index: int = 0
 var current_shot_count: int = 0 # Tracked for spray patterns/recoil
 var last_shot_time: float = 0.0
+var last_processed_frame: int = -1
 
 func _ready():
 	# Setup offhand sprite
@@ -108,6 +109,7 @@ func start_action(action_name: String):
 		
 	current_action = action
 	current_step_index = 0
+	last_processed_frame = -1 # Reset for new action
 	
 	# Handle spray timing (CS:GO style)
 	var now = Time.get_ticks_msec() / 1000.0
@@ -128,6 +130,11 @@ func _on_gun_sprite_frame_changed():
 
 func process_step():
 	var current_frame = gun_sprite.frame
+	
+	if current_frame == last_processed_frame:
+		return
+	
+	last_processed_frame = current_frame
 	
 	# Find any steps that match this frame
 	for step in current_action.steps:
