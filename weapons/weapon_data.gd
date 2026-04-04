@@ -10,3 +10,6 @@ class_name WeaponData
 @export_subgroup("Actions")
 @export var actions: Dictionary = {} # String (e.g. "primary") to WeaponAction
 @export var hud_hint: String = "BULLETS"
+
+@export_subgroup("Ammo")
+@export var max_bullets: int = 10

@@ -33,8 +33,8 @@ func _ready():
 
 func equip_weapon(new_weapon: WeaponData):
 	current_weapon = new_weapon
-	# For now, we still use a default bullet count, but this will move to Action/Ammo logic
-	bullets = 10 
+	# Initialize bullets to the weapon's max capacity
+	bullets = current_weapon.max_bullets 
 	
 	if current_weapon.sprite_frames:
 		gun_sprite.sprite_frames = current_weapon.sprite_frames
@@ -112,7 +112,7 @@ func _on_gun_sprite_animation_finished() -> void:
 			
 	elif gun_sprite.animation == "reload":
 		is_reloading = false
-		bullets = 10 # Default refill
+		bullets = current_weapon.max_bullets
 		magazine_count -= 1
 		
 		ammo_updated.emit(bullets)
