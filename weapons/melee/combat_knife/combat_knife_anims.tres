@@ -1,0 +1,43 @@
+[gd_resource type="SpriteFrames" load_steps=10 format=3]
+
+[ext_resource type="Texture2D" path="res://weapons/melee/combat_knife/SPRITES/KNFMA0.png" id="1_idle"]
+[ext_resource type="Texture2D" path="res://weapons/melee/combat_knife/SPRITES/KNFLA0.png" id="2_fire1"]
+[ext_resource type="Texture2D" path="res://weapons/melee/combat_knife/SPRITES/KNFLB0.png" id="3_fire2"]
+[ext_resource type="Texture2D" path="res://weapons/melee/combat_knife/SPRITES/KNFLC0.png" id="4_fire3"]
+[ext_resource type="Texture2D" path="res://weapons/melee/combat_knife/SPRITES/KNFLD0.png" id="5_fire4"]
+[ext_resource type="Texture2D" path="res://weapons/melee/combat_knife/SPRITES/KNFLE0.png" id="6_fire5"]
+[ext_resource type="Texture2D" path="res://weapons/melee/combat_knife/SPRITES/KNFLF0.png" id="7_fire6"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_idle")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_fire1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_fire2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_fire3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_fire4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_fire5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_fire6")
+}],
+"loop": false,
+"name": &"shoot",
+"speed": 15.0
+}]

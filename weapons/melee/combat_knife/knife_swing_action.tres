@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="WeaponAction" format=3]
+[ext_resource type="Script" path="res://weapons/weapon_action.gd" id="1_action"]
+[ext_resource type="Resource" path="res://weapons/melee/combat_knife/knife_swing_step_0.tres" id="2_step0"]
+[ext_resource type="Resource" path="res://weapons/melee/combat_knife/knife_swing_step_2.tres" id="3_step2"]
+
+[resource]
+script = ExtResource("1_action")
+animation_name = "shoot"
+steps = [ExtResource("2_step0"), ExtResource("3_step2")]
+loop = false
+consumes_ammo = false

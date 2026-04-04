@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="ActionStep" format=3]
+[ext_resource type="Script" path="res://weapons/action_step.gd" id="1_step"]
+[ext_resource type="Resource" path="res://weapons/melee/combat_knife/knife_swing_sound.tres" id="2_sound"]
+
+[resource]
+script = ExtResource("1_step")
+frame_index = 0
+duration_seconds = 0.0
+effects = [ExtResource("2_sound")]

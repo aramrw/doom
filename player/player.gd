@@ -48,6 +48,18 @@ func _process(_delta):
 	if Input.is_action_just_pressed("reload"):
 		weapon_manager.reload()
 		
+	if Input.is_key_pressed(KEY_1):
+		var knife = load("res://weapons/melee/combat_knife/combat_knife_data.tres")
+		if weapon_manager.current_weapon != knife:
+			weapon_manager.equip_weapon(knife)
+			hud.update_weapon_ui(knife)
+	
+	if Input.is_key_pressed(KEY_2):
+		var shotgun = load("res://weapons/shotguns/TOZ-34/toz_34_wpdata.tres")
+		if weapon_manager.current_weapon != shotgun:
+			weapon_manager.equip_weapon(shotgun)
+			hud.update_weapon_ui(shotgun)
+		
 	if Input.is_action_just_pressed("ui_cancel"):
 		if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE

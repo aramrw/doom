@@ -47,17 +47,17 @@ func fire():
 	if is_reloading or current_action:
 		return
 		
-	if bullets <= 0:
-		# Maybe play a click sound here later
-		return
-		
 	start_action("primary")
 
 func start_action(action_name: String):
 	if not current_weapon or not current_weapon.actions.has(action_name):
 		return
 		
-	current_action = current_weapon.actions[action_name]
+	var action = current_weapon.actions[action_name]
+	if action.consumes_ammo and bullets <= 0:
+		return
+		
+	current_action = action
 	current_step_index = 0
 	
 	# Handle spray timing (CS:GO style)
@@ -85,10 +85,12 @@ func process_step():
 				
 				# If we fired a bullet, track it
 				if effect is HitscanEffect or effect is ProjectileEffect:
-					bullets -= 1
+					if current_action.consumes_ammo:
+						bullets -= 1
+						ammo_updated.emit(bullets)
+					
 					current_shot_count += 1
 					last_shot_time = Time.get_ticks_msec() / 1000.0
-					ammo_updated.emit(bullets)
 
 func reload():
 	if is_reloading or current_action or magazine_count <= 0:

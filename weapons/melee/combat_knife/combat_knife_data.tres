@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3]
+
+[ext_resource type="Script" path="res://weapons/weapon_data.gd" id="1_1obji"]
+[ext_resource type="Resource" path="res://weapons/melee/combat_knife/combat_knife_anims.tres" id="2_anims"]
+[ext_resource type="Resource" path="res://weapons/melee/combat_knife/knife_swing_action.tres" id="3_swing"]
+
+[resource]
+script = ExtResource("1_1obji")
+weapon_name = "combat_knife"
+sprite_frames = ExtResource("2_anims")
+sprite_offset = Vector2(0, 0)
+actions = {
+"primary": ExtResource("3_swing")
+}
+hud_hint = "MELEE"
+max_bullets = 0
