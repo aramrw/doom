@@ -17,6 +17,14 @@ func _process(_delta):
 	# Update the text every frame with the current FPS
 	fps_label.text = str(Engine.get_frames_per_second())
 
+func update_weapon_ui(weapon: WeaponData):
+	if weapon.hud_hint == "SHELLS" or weapon.hud_hint == "BULLETS":
+		bullets.show()
+		magazines.show()
+	else:
+		bullets.hide()
+		magazines.hide()
+
 func update_bullets(count: int):
 	# This finds the child node that actually handles the ammo display
 	$Bullets.update_bullet_count(count)

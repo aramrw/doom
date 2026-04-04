@@ -1,0 +1,10 @@
+# weapons/shotguns/TOZ-34/toz_34_fire_action.tres
+[gd_resource type="Resource" script_class="WeaponAction" format=3]
+[ext_resource type="Script" path="res://weapons/weapon_action.gd" id="1_action"]
+[ext_resource type="Resource" path="res://weapons/shotguns/TOZ-34/toz_34_fire_step.tres" id="2_step"]
+
+[resource]
+script = ExtResource("1_action")
+animation_name = "shoot"
+steps = [ExtResource("2_step")]
+loop = false

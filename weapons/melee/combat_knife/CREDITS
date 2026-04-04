@@ -1,0 +1,24 @@
+Name: Combat Knife
+Class: 1
+Type: Melee
+Palette: Doom
+Summon: CombatKnife
+Ammo Type: No
+Altfire: Stab
+Powered Mode: No
+Brightmaps: No
+Actor modification: No
+ACS: No
+
+Credits:
+Code: LossForWords
+Sounds: Valve, Dennaton
+Sprites: LossForWords, sonik.o.fan, Amuscaria, CaptainJ, iD Software.
+
+Description:
+A standard issue combat knife, with notching ridges along the base of the blade.
+Low damage, but very fast swing speed.
+Affected by Berserk.
+While the strength multiplier is cut to a measly 2x, the swing speed is doubled.
+Secondary fire does a stab. Also affected by Berserk, under the same principle as above.
+Tap Altfire for a quick jab, hold altfire to "cook" a stronger thrust.

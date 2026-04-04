@@ -36,6 +36,9 @@ func _ready():
 	weapon_manager.magazine_count_updated.connect(hud.update_magazines)
 	hud.update_magazines(weapon_manager.magazine_count)
 	
+	if weapon_manager.current_weapon:
+		hud.update_weapon_ui(weapon_manager.current_weapon)
+	
 	if hud:
 		hud.update_health(health)
 

@@ -1,17 +1,15 @@
 [gd_resource type="Resource" script_class="WeaponData" format=3 uid="uid://dukslul6e06xb"]
 
 [ext_resource type="Script" uid="uid://cqlple4um3rs" path="res://weapons/weapon_data.gd" id="1_1obji"]
-[ext_resource type="AudioStream" uid="uid://of6lbjkpy10h" path="res://weapons/shotguns/TOZ-34/SOUNDS/TOZSFIR.ogg" id="2_7verh"]
+[ext_resource type="Resource" path="res://weapons/shotguns/TOZ-34/toz_34_fire_action.tres" id="2_fire"]
 [ext_resource type="SpriteFrames" uid="uid://bioxcavuplyho" path="res://weapons/shotguns/TOZ-34/toz_34_anims.tres" id="3_qd7mn"]
 
 [resource]
 script = ExtResource("1_1obji")
 weapon_name = "toz_34"
-damage = 30
 sprite_frames = ExtResource("3_qd7mn")
 sprite_offset = Vector2(0, 20)
-shoot_sound = ExtResource("2_7verh")
-max_bullets = 2
-ammo_type = 2
-pellet_count = 2
-spread_angle = 0.5
+actions = {
+"primary": ExtResource("2_fire")
+}
+hud_hint = "SHELLS"

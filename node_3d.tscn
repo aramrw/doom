@@ -140,7 +140,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2597854, 0.5225768, -3.6403
 [node name="Cultist" parent="." unique_id=118476925 instance=ExtResource("11_tereu")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.638075, 0.50049996, -6.861253)
 
-[node name="Grin" parent="." unique_id=1006558139 instance=ExtResource("7_wc5p8")]
+[node name="Cultist2" parent="." unique_id=1006558139 instance=ExtResource("11_tereu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -61.904438, 0.50049996, 17.022404)
+
+[node name="Grin" parent="." unique_id=1478331952 instance=ExtResource("7_wc5p8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23.057579, 0.5628073, 7.0092134)
 
 [node name="Grin2" parent="." unique_id=2054395248 instance=ExtResource("7_wc5p8")]
