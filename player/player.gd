@@ -50,11 +50,13 @@ func _process(_delta):
 		
 	if Input.is_key_pressed(KEY_1):
 		weapon_manager.switch_to_slot("primary")
-		hud.update_weapon_ui(weapon_manager.current_weapon)
+		if weapon_manager.current_weapon:
+			hud.update_weapon_ui(weapon_manager.current_weapon)
 	
 	if Input.is_key_pressed(KEY_2):
 		weapon_manager.switch_to_slot("secondary")
-		hud.update_weapon_ui(weapon_manager.current_weapon)
+		if weapon_manager.current_weapon:
+			hud.update_weapon_ui(weapon_manager.current_weapon)
 		
 	if Input.is_action_just_pressed("ui_cancel"):
 		if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:

@@ -18,7 +18,12 @@ func _process(_delta):
 	fps_label.text = str(Engine.get_frames_per_second())
 
 func update_weapon_ui(weapon: WeaponData):
-1	if weapon.hud_hint == "SHELLS" or weapon.hud_hint == "BULLETS":
+	if weapon == null:
+		bullets.hide()
+		magazines.hide()
+		return
+		
+	if weapon.hud_hint == "SHELLS" or weapon.hud_hint == "BULLETS":
 		bullets.show()
 		magazines.show()
 	else:
