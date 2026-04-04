@@ -1,0 +1,26 @@
+Name: TOZ-34
+Class: 3
+Type: Hitscan
+Palette: Doom
+Summon: TOZ34
+Ammo Type: Shell
+Altfire: Double-barrel shot
+Powered Mode: No
+Brightmaps: No
+Actor modification: No
+ACS: No
+
+Credits:
+Code: LossForWords
+Sounds: Hyperix, Magmacow
+Sprites: LossForWords, SAM61, Joblez, iD Software.
+//Muzzleflashes: Joblez
+//Hand sprites: ID Software, LossForWords
+//Shotgun: SAM61, sprites by LossForWords
+
+Description:
+Double-barrel, high-quality Russian hunting shotgun.
+It's longer barrel gives it a much tighter spread than most shotguns.
+Primary fire fires each barrel individually. Secondary fires both at once, with doubled spread and recoil.
+If you have only one shell in the chamber, the secondary fire fires the second barrel, effectively letting you roll shots in quick succession.
+Tapping fire instead of holding it down lets you rapid-fire shots.

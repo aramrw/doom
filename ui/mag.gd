@@ -6,4 +6,5 @@ func _ready():
 	pass
 
 func update_magazines_count(new_count: int):
+	play("reload")
 	mag_label.text = str(new_count)

@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3 uid="uid://bl8mae865blbt"]
+
+[ext_resource type="Script" uid="uid://cqlple4um3rs" path="res://weapons/weapon_data.gd" id="1_osl3q"]
+[ext_resource type="SpriteFrames" uid="uid://dp5w2s0cqy2sr" path="res://weapons/pistols/auto9/auto9_spriteframes.tres" id="2_m0enl"]
+
+[resource]
+script = ExtResource("1_osl3q")
+sprite_frames = ExtResource("2_m0enl")
+ammo_type = 1
+metadata/_custom_type_script = "uid://cqlple4um3rs"

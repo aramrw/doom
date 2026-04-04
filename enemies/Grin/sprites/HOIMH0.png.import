@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bysh760sbcspb"
-path.s3tc="res://.godot/imported/HOIMH0.png-93570353877ede4028f6b176334aff7e.s3tc.ctex"
+uid="uid://cfbglg4n1forj"
+path.s3tc="res://.godot/imported/HOIMH0.png-78605ec07286cd0486bbdf674e9045d2.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://enemies/Grin/sprites/HOIMH0.png"
-dest_files=["res://.godot/imported/HOIMH0.png-93570353877ede4028f6b176334aff7e.s3tc.ctex"]
+source_file="res://enemies/grin/sprites/HOIMH0.png"
+dest_files=["res://.godot/imported/HOIMH0.png-78605ec07286cd0486bbdf674e9045d2.s3tc.ctex"]
 
 [params]
 

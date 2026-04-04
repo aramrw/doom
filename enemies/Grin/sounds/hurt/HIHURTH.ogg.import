@@ -2,13 +2,13 @@
 
 importer="oggvorbisstr"
 type="AudioStreamOggVorbis"
-uid="uid://buang7551wcca"
-path="res://.godot/imported/HIHURTH.ogg-5945e71277aaedd54d4f17d1fc53e50b.oggvorbisstr"
+uid="uid://cbtwkixy21oxc"
+path="res://.godot/imported/HIHURTH.ogg-7193419ba7231112ca316c2f4ff16b61.oggvorbisstr"
 
 [deps]
 
-source_file="res://enemies/Grin/sounds/hurt/HIHURTH.ogg"
-dest_files=["res://.godot/imported/HIHURTH.ogg-5945e71277aaedd54d4f17d1fc53e50b.oggvorbisstr"]
+source_file="res://enemies/grin/sounds/hurt/HIHURTH.ogg"
+dest_files=["res://.godot/imported/HIHURTH.ogg-7193419ba7231112ca316c2f4ff16b61.oggvorbisstr"]
 
 [params]
 

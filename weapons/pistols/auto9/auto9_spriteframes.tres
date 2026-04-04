@@ -1,0 +1,68 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://dp5w2s0cqy2sr"]
+
+[ext_resource type="Texture2D" uid="uid://ekj5muis6wtq" path="res://weapons/pistols/auto9/SPRITES/DUA9A0.png" id="1_wo677"]
+[ext_resource type="Texture2D" uid="uid://do5jbggivxi0i" path="res://weapons/pistols/auto9/SPRITES/AUT9I0.png" id="2_oknfb"]
+[ext_resource type="Texture2D" uid="uid://cnybork3j4xm8" path="res://weapons/pistols/auto9/SPRITES/AUT9J0.png" id="3_6ad8v"]
+[ext_resource type="Texture2D" uid="uid://gckjifjsdauj" path="res://weapons/pistols/auto9/SPRITES/AUT9K0.png" id="4_8r3b1"]
+[ext_resource type="Texture2D" uid="uid://bqwnw5wa2r30h" path="res://weapons/pistols/auto9/SPRITES/AUT9L0.png" id="5_wobxj"]
+[ext_resource type="Texture2D" uid="uid://dvhvwksar2yu0" path="res://weapons/pistols/auto9/SPRITES/AUT9M0.png" id="6_b13xo"]
+[ext_resource type="Texture2D" uid="uid://c6y7b7boeat2s" path="res://weapons/pistols/auto9/SPRITES/AUT9N0.png" id="7_oc58g"]
+[ext_resource type="Texture2D" uid="uid://ukirqe4jcyua" path="res://weapons/pistols/auto9/SPRITES/AUT9O0.png" id="8_5g15b"]
+[ext_resource type="Texture2D" uid="uid://dcp4g4vqb4ndu" path="res://weapons/pistols/auto9/SPRITES/AUT9P0.png" id="9_rbhxn"]
+[ext_resource type="Texture2D" uid="uid://dgon1igai7alc" path="res://weapons/pistols/auto9/SPRITES/DUA9B0.png" id="10_5xsv5"]
+[ext_resource type="Texture2D" uid="uid://b1g2xuyt2l2px" path="res://weapons/pistols/auto9/SPRITES/DUA9F0.png" id="11_n4y3p"]
+[ext_resource type="Texture2D" uid="uid://dqxhktuqu0pa6" path="res://weapons/pistols/auto9/SPRITES/DUA9G0.png" id="12_nr85v"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_wo677")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_oknfb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_6ad8v")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_8r3b1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_wobxj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_b13xo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_oc58g")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_5g15b")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_rbhxn")
+}],
+"loop": false,
+"name": &"reload",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("10_5xsv5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_n4y3p")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_nr85v")
+}],
+"loop": false,
+"name": &"shoot",
+"speed": 5.0
+}]

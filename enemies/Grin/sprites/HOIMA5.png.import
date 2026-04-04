@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c2dyq1i3g3c4i"
-path.s3tc="res://.godot/imported/HOIMA5.png-607c7f8b2b3a2e421f70a778d7d880b5.s3tc.ctex"
+uid="uid://b3dk8debn6nqr"
+path.s3tc="res://.godot/imported/HOIMA5.png-71f8f2bf1c77412b9a9fc6631e661b6e.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://enemies/Grin/sprites/HOIMA5.png"
-dest_files=["res://.godot/imported/HOIMA5.png-607c7f8b2b3a2e421f70a778d7d880b5.s3tc.ctex"]
+source_file="res://enemies/grin/sprites/HOIMA5.png"
+dest_files=["res://.godot/imported/HOIMA5.png-71f8f2bf1c77412b9a9fc6631e661b6e.s3tc.ctex"]
 
 [params]
 

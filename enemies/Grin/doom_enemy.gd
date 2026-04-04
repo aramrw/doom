@@ -1,4 +1,5 @@
 extends CharacterBody3D
+class_name DoomEnemyBase
 
 @export var speed: float = 4.0
 @export var attack_range: float = 2.0 

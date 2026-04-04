@@ -1,0 +1,163 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://bioxcavuplyho"]
+
+[ext_resource type="Texture2D" uid="uid://ddrfac8bas7su" path="res://weapons/shotguns/TOZ-34/SPRITES/TOZSA0.png" id="1_5j306"]
+[ext_resource type="Texture2D" uid="uid://67mpgm8gk7a4" path="res://weapons/shotguns/TOZ-34/SPRITES/TOZFA0.png" id="3_lm7q7"]
+[ext_resource type="Texture2D" uid="uid://bavshjxnqqauk" path="res://weapons/shotguns/TOZ-34/SPRITES/TOZFB0.png" id="4_4p4xu"]
+[ext_resource type="Texture2D" uid="uid://dmwwm0vkif0lc" path="res://weapons/shotguns/TOZ-34/SPRITES/TOZFC0.png" id="5_penxi"]
+[ext_resource type="Texture2D" uid="uid://cagorbae45mgf" path="res://weapons/shotguns/TOZ-34/SPRITES/TOZFD0.png" id="6_xu8g7"]
+[ext_resource type="Texture2D" uid="uid://duc3krsqamgqi" path="res://weapons/shotguns/TOZ-34/SPRITES/TOZFE0.png" id="7_g8yoj"]
+[ext_resource type="Texture2D" uid="uid://c0xjoiotvo3ad" path="res://weapons/shotguns/TOZ-34/SPRITES/TOZFF0.png" id="8_r271b"]
+[ext_resource type="Texture2D" uid="uid://b2yusjqh5djeh" path="res://weapons/shotguns/TOZ-34/SPRITES/TOZRA0.png" id="9_084i5"]
+[ext_resource type="Texture2D" uid="uid://b1cfrw8o1ngor" path="res://weapons/shotguns/TOZ-34/SPRITES/TOZRB0.png" id="10_0qgjm"]
+[ext_resource type="Texture2D" uid="uid://wvnhs5n3slf6" path="res://weapons/shotguns/TOZ-34/SPRITES/TOZRC0.png" id="11_7jdf2"]
+[ext_resource type="Texture2D" uid="uid://dp4i3rphse0h5" path="res://weapons/shotguns/TOZ-34/SPRITES/TOZRD0.png" id="12_uhdxm"]
+[ext_resource type="Texture2D" uid="uid://n0ueyty843rd" path="res://weapons/shotguns/TOZ-34/SPRITES/TOZRE0.png" id="13_l0ts5"]
+[ext_resource type="Texture2D" uid="uid://c4v1cf6y0itx4" path="res://weapons/shotguns/TOZ-34/SPRITES/TOZRF0.png" id="14_dy6w0"]
+[ext_resource type="Texture2D" uid="uid://dpydab25rggk6" path="res://weapons/shotguns/TOZ-34/SPRITES/TOZRG0.png" id="15_qg5bo"]
+[ext_resource type="Texture2D" uid="uid://cbqdjf7hu7e3j" path="res://weapons/shotguns/TOZ-34/SPRITES/TOZRH0.png" id="16_nwyyg"]
+[ext_resource type="Texture2D" uid="uid://co2d3n3meevk8" path="res://weapons/shotguns/TOZ-34/SPRITES/TOZRI0.png" id="17_adgo1"]
+[ext_resource type="Texture2D" uid="uid://dff4vs75bo8mn" path="res://weapons/shotguns/TOZ-34/SPRITES/TOZRJ0.png" id="18_hmee1"]
+[ext_resource type="Texture2D" uid="uid://dlxwvanb58ljk" path="res://weapons/shotguns/TOZ-34/SPRITES/TOZRK0.png" id="19_1nx1w"]
+[ext_resource type="Texture2D" uid="uid://5mrwhmyylolc" path="res://weapons/shotguns/TOZ-34/SPRITES/TOZRL0.png" id="20_bl6ya"]
+[ext_resource type="Texture2D" uid="uid://dmxqpob6g1jbv" path="res://weapons/shotguns/TOZ-34/SPRITES/TOZRM0.png" id="21_8owod"]
+[ext_resource type="Texture2D" uid="uid://d2u641hs35nkh" path="res://weapons/shotguns/TOZ-34/SPRITES/TOZRN0.png" id="22_wtl16"]
+[ext_resource type="Texture2D" uid="uid://ctmljggjgb8ba" path="res://weapons/shotguns/TOZ-34/SPRITES/TOZRO0.png" id="23_iak3y"]
+[ext_resource type="Texture2D" uid="uid://d1q6w8h2kmv7v" path="res://weapons/shotguns/TOZ-34/SPRITES/TOZRP0.png" id="24_nn444"]
+[ext_resource type="Texture2D" uid="uid://b5c877v77fpdr" path="res://weapons/shotguns/TOZ-34/SPRITES/TOZRQ0.png" id="25_bcm2f"]
+[ext_resource type="Texture2D" uid="uid://djrwop4ix4qy5" path="res://weapons/shotguns/TOZ-34/SPRITES/TOZRR0.png" id="26_q6mg1"]
+[ext_resource type="Texture2D" uid="uid://cr2tqm5qp20y" path="res://weapons/shotguns/TOZ-34/SPRITES/TOZRS0.png" id="27_j2oqh"]
+[ext_resource type="Texture2D" uid="uid://ts75ldr2ai4n" path="res://weapons/shotguns/TOZ-34/SPRITES/TOZRT0.png" id="28_0nm34"]
+[ext_resource type="Texture2D" uid="uid://cgv5ju265xwpu" path="res://weapons/shotguns/TOZ-34/SPRITES/TOZRU0.png" id="29_15415"]
+[ext_resource type="Texture2D" uid="uid://b2iiwpnlpyabm" path="res://weapons/shotguns/TOZ-34/SPRITES/TOZRV0.png" id="30_gqlkt"]
+[ext_resource type="Texture2D" uid="uid://cr7825y4k7g38" path="res://weapons/shotguns/TOZ-34/SPRITES/TOZRW0.png" id="31_2jrj2"]
+[ext_resource type="Texture2D" uid="uid://b7x1gvpn0jnc3" path="res://weapons/shotguns/TOZ-34/SPRITES/TOZSB0.png" id="32_47gi0"]
+[ext_resource type="Texture2D" uid="uid://b6gr3a8yxc5e7" path="res://weapons/shotguns/TOZ-34/SPRITES/TOZSC0.png" id="33_1dwfa"]
+[ext_resource type="Texture2D" uid="uid://bawesjym321mf" path="res://weapons/shotguns/TOZ-34/SPRITES/TOZSD0.png" id="34_ckxpx"]
+[ext_resource type="Texture2D" uid="uid://b43h2ujcgr2is" path="res://weapons/shotguns/TOZ-34/SPRITES/TOZSE0.png" id="35_lgdjl"]
+[ext_resource type="Texture2D" uid="uid://bptvr0hq8i7pb" path="res://weapons/shotguns/TOZ-34/SPRITES/TOZSF0.png" id="36_gwu3d"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_5j306")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("9_084i5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_0qgjm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_7jdf2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_uhdxm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_l0ts5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_dy6w0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_qg5bo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_nwyyg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_adgo1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_hmee1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19_1nx1w")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_bl6ya")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_8owod")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22_wtl16")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23_iak3y")
+}, {
+"duration": 1.0,
+"texture": ExtResource("24_nn444")
+}, {
+"duration": 1.0,
+"texture": ExtResource("25_bcm2f")
+}, {
+"duration": 1.0,
+"texture": ExtResource("26_q6mg1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("27_j2oqh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("28_0nm34")
+}, {
+"duration": 1.0,
+"texture": ExtResource("29_15415")
+}, {
+"duration": 1.0,
+"texture": ExtResource("30_gqlkt")
+}, {
+"duration": 1.0,
+"texture": ExtResource("31_2jrj2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("1_5j306")
+}, {
+"duration": 1.0,
+"texture": ExtResource("32_47gi0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("33_1dwfa")
+}, {
+"duration": 1.0,
+"texture": ExtResource("34_ckxpx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("35_lgdjl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("36_gwu3d")
+}],
+"loop": false,
+"name": &"reload",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_lm7q7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_4p4xu")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_penxi")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_xu8g7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_g8yoj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_r271b")
+}],
+"loop": false,
+"name": &"shoot",
+"speed": 5.0
+}]

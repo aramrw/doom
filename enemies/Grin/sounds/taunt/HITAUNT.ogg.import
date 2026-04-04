@@ -2,13 +2,13 @@
 
 importer="oggvorbisstr"
 type="AudioStreamOggVorbis"
-uid="uid://ck5s41ikpsjap"
-path="res://.godot/imported/HITAUNT.ogg-3d9308686c21b429a84367c461cfa28e.oggvorbisstr"
+uid="uid://dxttijgq6nrui"
+path="res://.godot/imported/HITAUNT.ogg-06cddd7efe414e399e785ad8d2651880.oggvorbisstr"
 
 [deps]
 
-source_file="res://enemies/Grin/sounds/taunt/HITAUNT.ogg"
-dest_files=["res://.godot/imported/HITAUNT.ogg-3d9308686c21b429a84367c461cfa28e.oggvorbisstr"]
+source_file="res://enemies/grin/sounds/taunt/HITAUNT.ogg"
+dest_files=["res://.godot/imported/HITAUNT.ogg-06cddd7efe414e399e785ad8d2651880.oggvorbisstr"]
 
 [params]
 

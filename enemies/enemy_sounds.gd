@@ -5,7 +5,6 @@ extends AudioStreamPlayer3D
 @export_dir var death_folder: String
 @export_dir var hurt_folder: String
 @export_dir var taunt_folder: String
-@export_dir var laugh_folder: String
 
 # --- SETTINGS ---
 @export var pitch_step: float = 0.08      # How much the pitch jumps per hit
@@ -35,24 +34,23 @@ func _process(delta):
 # --- PUBLIC FUNCTIONS ---
 
 func hurt():
-	# Nudge the pitch up (the "stress" effect)
-	var max_p = base_pitch + 0.6
-	pitch_scale = clamp(pitch_scale + randf_range(0.02, pitch_step), base_pitch - 0.4, max_p)
-	_play_random_from_dir(hurt_folder)
+	if (hurt_folder):
+		# Nudge the pitch up (the "stress" effect)
+		var max_p = base_pitch + 0.6
+		pitch_scale = clamp(pitch_scale + randf_range(0.02, pitch_step), base_pitch - 0.4, max_p)
+		_play_random_from_dir(hurt_folder)
 
 func death():
-	pitch_scale = base_pitch 
-	if distortion_effect: distortion_effect.drive = 0.2
-	_play_random_from_dir(death_folder)
+	if (death_folder):
+		pitch_scale = base_pitch 
+		if distortion_effect: distortion_effect.drive = 0.2
+		_play_random_from_dir(death_folder)
 
 func taunt():
-	# Taunts can be a bit more varied/chaotic
-	pitch_scale = base_pitch + randf_range(-0.1, 0.1)
-	_play_random_from_dir(taunt_folder)
-
-func laugh():
-	pitch_scale = base_pitch + randf_range(-0.05, 0.2) # Laughs usually sound better higher
-	_play_random_from_dir(laugh_folder)
+	if (taunt_folder):
+		# Taunts can be a bit more varied/chaotic
+		pitch_scale = base_pitch + randf_range(-0.1, 0.1)
+		_play_random_from_dir(taunt_folder)
 
 # --- INTERNAL HELPER ---
 

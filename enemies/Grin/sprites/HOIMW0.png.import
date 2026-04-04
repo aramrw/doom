@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cu34jk2p6k1xs"
-path="res://.godot/imported/HOIMW0.png-25d44006433a329bafaf8336f3808481.ctex"
+uid="uid://bmfi18qknnypx"
+path="res://.godot/imported/HOIMW0.png-3de7126e063d0b7d403fd31928538826.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://enemies/Grin/sprites/HOIMW0.png"
-dest_files=["res://.godot/imported/HOIMW0.png-25d44006433a329bafaf8336f3808481.ctex"]
+source_file="res://enemies/grin/sprites/HOIMW0.png"
+dest_files=["res://.godot/imported/HOIMW0.png-3de7126e063d0b7d403fd31928538826.ctex"]
 
 [params]
 

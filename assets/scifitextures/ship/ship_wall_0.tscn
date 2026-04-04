@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://dh5cqpdjfub83"]
+
+[ext_resource type="Texture2D" uid="uid://bjydiwnnwago8" path="res://assets/scifitextures/wall_ship_0.png" id="1_l2ji6"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6igak"]
+albedo_texture = ExtResource("1_l2ji6")
+texture_filter = 0
+
+[sub_resource type="BoxMesh" id="BoxMesh_4ljwh"]
+material = SubResource("StandardMaterial3D_6igak")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_cjitg"]
+
+[node name="ShipWall0" type="MeshInstance3D" unique_id=1090138703]
+mesh = SubResource("BoxMesh_4ljwh")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=1218908471]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=25734068]
+shape = SubResource("BoxShape3D_cjitg")

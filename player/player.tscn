@@ -2,39 +2,12 @@
 
 [ext_resource type="Script" uid="uid://dph1xsp2evfca" path="res://player/player.gd" id="1_oul6g"]
 [ext_resource type="Script" uid="uid://cm63mb3u7m2c1" path="res://weapons/weapon_manager.gd" id="2_rkbax"]
-[ext_resource type="Texture2D" uid="uid://ekj5muis6wtq" path="res://weapons/auto9/SPRITES/DUA9A0.png" id="3_g1dw6"]
-[ext_resource type="Texture2D" uid="uid://dgon1igai7alc" path="res://weapons/auto9/SPRITES/DUA9B0.png" id="4_hg6s5"]
-[ext_resource type="AudioStream" uid="uid://ysqnwpgemamf" path="res://weapons/auto9/SOUNDS/AUT9FIRC.ogg" id="7_boad6"]
+[ext_resource type="Resource" uid="uid://dukslul6e06xb" path="res://weapons/shotguns/TOZ-34/toz_34_wpdata.tres" id="3_boad6"]
+[ext_resource type="Script" uid="uid://cb3fhq0jm1ik7" path="res://weapons/import_weapon.gd" id="6_boad6"]
+[ext_resource type="AudioStream" uid="uid://of6lbjkpy10h" path="res://weapons/shotguns/TOZ-34/SOUNDS/TOZSFIR.ogg" id="7_rgyib"]
 [ext_resource type="PackedScene" uid="uid://dee08knnxgt4m" path="res://ui/Pulsing Heart/hud.tscn" id="8_rgyib"]
-[ext_resource type="Texture2D" uid="uid://b1g2xuyt2l2px" path="res://weapons/auto9/SPRITES/DUA9F0.png" id="8_yllr7"]
-[ext_resource type="Texture2D" uid="uid://dqxhktuqu0pa6" path="res://weapons/auto9/SPRITES/DUA9G0.png" id="9_kb6p2"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_oul6g"]
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_yw30f"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": ExtResource("3_g1dw6")
-}],
-"loop": true,
-"name": &"idle",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": ExtResource("4_hg6s5")
-}, {
-"duration": 1.0,
-"texture": ExtResource("8_yllr7")
-}, {
-"duration": 1.0,
-"texture": ExtResource("9_kb6p2")
-}],
-"loop": false,
-"name": &"shoot",
-"speed": 5.0
-}]
 
 [node name="Player" type="Node3D" unique_id=432180329 groups=["Player"]]
 script = ExtResource("1_oul6g")
@@ -46,7 +19,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CapsuleShape3D_oul6g")
 
 [node name="Camera" type="Camera3D" parent="CharacterBody3D" unique_id=1370230432]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.473389, 0)
+transform = Transform3D(1, 0, 0, 0, 0.9911647, 0.13263698, 0, -0.13263698, 0.9911647, 0, 1.473389, 0)
 
 [node name="AimRayCast" type="RayCast3D" parent="CharacterBody3D/Camera" unique_id=1414309329]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.184246e-05, 0)
@@ -56,23 +29,27 @@ target_position = Vector3(0, 0, -100)
 visible = false
 script = ExtResource("2_rkbax")
 aim_raycast = NodePath("../CharacterBody3D/Camera/AimRayCast")
-damage = 15
+current_weapon = ExtResource("3_boad6")
+max_magazines = 2
 
 [node name="WeaponLayer" type="CanvasLayer" parent="WeaponManager" unique_id=2131710237]
 
 [node name="GunSprite" type="AnimatedSprite2D" parent="WeaponManager/WeaponLayer" unique_id=69001507]
 position = Vector2(137, 91)
 scale = Vector2(0.7, 0.7)
-sprite_frames = SubResource("SpriteFrames_yw30f")
-animation = &"idle"
-frame_progress = 0.2450385
 speed_scale = 4.0
 
 [node name="ShootSound" type="AudioStreamPlayer" parent="WeaponManager" unique_id=1230038840]
-stream = ExtResource("7_boad6")
 bus = &"SfxBus"
 
 [node name="Hud" parent="." unique_id=1142552128 instance=ExtResource("8_rgyib")]
+
+[node name="WeaponImporter" type="Node" parent="." unique_id=660056430]
+script = ExtResource("6_boad6")
+weapon_name = "toz_34"
+damage = 30
+sprites_folder = "res://weapons/shotguns/TOZ-34/SPRITES"
+shoot_sound = ExtResource("7_rgyib")
 
 [connection signal="animation_finished" from="WeaponManager/WeaponLayer/GunSprite" to="." method="_on_gun_sprite_animation_finished"]
 [connection signal="animation_finished" from="WeaponManager/WeaponLayer/GunSprite" to="WeaponManager" method="_on_gun_sprite_animation_finished"]

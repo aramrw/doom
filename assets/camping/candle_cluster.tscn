@@ -1,0 +1,36 @@
+[gd_scene format=3 uid="uid://cnjbf1ad8wdsp"]
+
+[ext_resource type="PackedScene" uid="uid://bxyau2eq1ktrx" path="res://assets/camping/candle-light/candle_light.glb" id="1_b3dkb"]
+[ext_resource type="AnimationLibrary" uid="uid://c458suktjodp1" path="res://assets/camping/lights.res" id="2_j2svr"]
+
+[node name="candle_cluster" unique_id=1877897410 instance=ExtResource("1_b3dkb")]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
+
+[node name="Skeleton3D" parent="Sketchfab_model/7bdce573fa4f4345b532d79e2adc2223_fbx/Object_2/RootNode/Object_4" parent_id_path=PackedInt32Array(165583151) index="0" unique_id=734083461]
+bones/1/rotation = Quaternion(-0.47126126, -0.52843225, 0.49998283, 0.4986876)
+bones/2/rotation = Quaternion(-0.00013254563, -0.035101246, -0.049502295, 0.998157)
+bones/5/rotation = Quaternion(0.08008803, 0.042346932, 0.6823898, 0.72535294)
+bones/6/rotation = Quaternion(0.0005039418, -0.065429464, -0.013385804, 0.9977673)
+bones/9/rotation = Quaternion(0.43419325, 0.42544678, 0.5324905, 0.5890035)
+bones/10/rotation = Quaternion(0.0016867993, 0.108561866, 0.05319633, 0.9926639)
+
+[node name="IK Chain001" parent="Sketchfab_model/7bdce573fa4f4345b532d79e2adc2223_fbx/Object_2/RootNode/Object_4" parent_id_path=PackedInt32Array(165583151) index="6" unique_id=2030357056]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, -0.35433626, 85.295425, -0.64880896)
+
+[node name="IK Chain002" parent="Sketchfab_model/7bdce573fa4f4345b532d79e2adc2223_fbx/Object_2/RootNode/Object_4" parent_id_path=PackedInt32Array(165583151) index="7" unique_id=1493007474]
+transform = Transform3D(-0.17364812, -0.9848078, 0, 0, 0, 1, -0.9848078, 0.17364809, 0, 8.39827, 94.557625, -26.089048)
+
+[node name="IK Chain003" parent="Sketchfab_model/7bdce573fa4f4345b532d79e2adc2223_fbx/Object_2/RootNode/Object_4" parent_id_path=PackedInt32Array(165583151) index="9" unique_id=1871054971]
+transform = Transform3D(-0.9659258, -0.25881913, 0, 0, 0, 1, -0.25881913, 0.9659258, 0, 23.085386, 114.24295, -17.478363)
+
+[node name="AnimationPlayer2" type="AnimationPlayer" parent="." index="2" unique_id=564144410]
+libraries/lights = ExtResource("2_j2svr")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="." index="3" unique_id=1746470674]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 167.59978, -12.9795475)
+light_energy = 0.5
+light_volumetric_fog_energy = 2.324
+light_size = 0.169
+light_bake_mode = 1
+shadow_enabled = true
+omni_range = 210.491

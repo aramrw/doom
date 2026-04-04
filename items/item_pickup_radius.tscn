@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://cqxvv45yrneec"]
+
+[ext_resource type="Script" uid="uid://d4i5sj7nq4p3u" path="res://items/item_pickup_radius.gd" id="1_mr7nd"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_uqgn2"]
+radius = 0.6084037
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_uqgn2"]
+
+[node name="ItemPickupRadius" type="Area3D" unique_id=366953278]
+script = ExtResource("1_mr7nd")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=981085968]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.48095703, 0)
+shape = SubResource("SphereShape3D_uqgn2")
+
+[node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="." unique_id=80831292]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.68928677, 0)
+billboard = 2
+texture_filter = 0
+sprite_frames = SubResource("SpriteFrames_uqgn2")

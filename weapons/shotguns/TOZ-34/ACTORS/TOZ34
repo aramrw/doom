@@ -1,0 +1,140 @@
+ACTOR TOZ34 : Weapon
+{
+    +FLOORCLIP
+	+AMMO_CHECKBOTH
+	+NoAlert
+	+NOAUTOFIRE
+	Weapon.SlotNumber 3
+    Weapon.AmmoType1 "TOZLoaded"
+    Weapon.AmmoType2 "Shell"
+    Weapon.AmmoGive2 2
+    Weapon.AmmoUse1 1
+    Weapon.AmmoUse2 1
+    Weapon.KickBack 400
+	Scale 0.7
+    Inventory.PickupSound "Misc/w_pkup" 
+	Tag "TOZ-34"
+    Inventory.PickupMessage "Picked up a TOZ-34."
+    States
+    {
+    Spawn:
+        TOZC A -1
+        Loop
+    Ready:
+        TOZS A 1 A_WeaponReady(WRF_ALLOWRELOAD)
+        Loop
+    Deselect:
+        TOZS A 1 A_Lower
+        TNT1 AA 0 A_Lower
+        Loop
+    Select:
+        TOZS A 1 A_Raise
+        TNT1 AA 0 A_Raise
+        Loop
+    Fire:
+        TNT1 A 0 A_JumpIf(CountInv("TOZLoaded") == 0,"Reload")
+		TNT1 A 0 A_GunFlash
+		TNT1 A 0 A_AlertMonsters
+        TOZS B 0 A_PlayWeaponSound("TOZSFIR")
+        TNT1 A 0 A_JumpIf(CountInv("TOZLoaded") < 2,"BottomBarrel")
+	TopBarrel:
+		TOZF A 1 BRIGHT A_FireBullets(1.7, 1.7, 7, random(8, 15), "TOZPuff1", 1)
+        TOZF B 1 BRIGHT
+		Goto Recoil
+	BottomBarrel:
+		TOZF C 1 BRIGHT A_FireBullets(1.7, 1.7, 7, random(8, 15), "TOZPuff1", 1)
+        TOZF D 1 BRIGHT
+	    Goto Recoil
+	Recoil:
+        TNT1 A 0 A_SetPitch(Pitch -2.4)
+	    TNT1 A 0 A_Quake(4, 4, 0, 48576, "None")
+		TOZS B 2
+		TOZS CD 1
+		TOZS EF 1 A_WeaponReady(WRF_NOSWITCH|WRF_NOBOB)
+		TOZS A 2 A_WeaponReady(WRF_NOSWITCH|WRF_NOBOB)
+		TOZS A 0 A_Refire
+		Goto Ready
+    AltFire:
+        TNT1 A 0 A_JumpIf(CountInv("TOZLoaded") == 0,"Reload")
+        TNT1 A 0 A_JumpIf(CountInv("TOZLoaded") < 2,"SingleBarrel")
+		TNT1 A 0 A_GunFlash
+		TNT1 A 0 A_AlertMonsters
+        TOZS B 0 A_PlayWeaponSound("TOZSFI2")
+		TOZF E 1 BRIGHT A_FireBullets(1.7 * 2, 1.7 * 2, 12, random(8, 15), "TOZPuff2", 0)
+		TOZF E 0 A_TakeInventory("TOZLoaded",2)
+        TOZF F 1 BRIGHT
+        TNT1 A 0 A_SetPitch(Pitch -4.8)
+	    TNT1 A 0 A_Quake(8, 8, 0, 48576, "None")
+		TOZS B 3
+		TOZS C 2
+		TOZS DEF 1
+		TOZS A 3
+		Goto Reload
+	SingleBarrel:
+		TNT1 A 0 A_GunFlash
+		TNT1 A 0 A_AlertMonsters
+        TOZS B 0 A_PlayWeaponSound("TOZSFIR")
+		TOZF C 1 BRIGHT A_FireBullets(2.3, 2.3, 7, random(8, 15), "TOZPuff1", 0)
+		TOZF E 0 A_TakeInventory("TOZLoaded",2)
+        TOZF D 1 BRIGHT
+	    Goto Recoil
+    Reload:
+        TNT1 A 0 A_JumpIfInventory("TOZLoaded", 2, 2)
+        TNT1 A 0 A_JumpIfInventory("Shell", 1, "ReloadWork")
+        TOZS A 1 A_WeaponReady
+        Goto Ready
+	ReloadWork:
+	    TOZS ADC 1
+		TOZS B 2
+		TOZS E 1
+        TOZR AB 1
+		TNT1 A 0 A_PlaySoundEX("TOZSRE1",CHAN_7)
+		TOZR C 1
+		TOZR D 2
+        TNT1 A 0 A_JumpIf(CountInv("TOZLoaded") < 1,"ReloadDry")
+		Goto ReloadPartial
+  ReloadDry:
+		TOZR E 9
+		TOZR FG 2
+		TNT1 A 0 A_PlaySoundEX("TOZSRE2",CHAN_7)
+		TOZR H 1
+		Goto ReloadWork2
+  ReloadPartial:
+		TOZR S 9
+		TOZR TU 2
+		TNT1 A 0 A_PlaySoundEX("TOZSRE4",CHAN_7)
+		TOZR V 1
+		Goto ReloadWork2
+  ReloadWork2:
+        TOZR IJ 1
+		TNT1 A 8
+  ReloadLoop:
+        TNT1 A 0 A_TakeInventory("Shell", 1, TIF_NOTAKEINFINITE)
+        TNT1 A 0 A_GiveInventory("TOZLoaded", 1)
+        TNT1 A 0 A_JumpIfInventory("TOZLoaded", 2, "ReloadFinish")
+        TNT1 A 0 A_JumpIfInventory("Shell", 1, "ReloadLoop")
+        Goto ReloadFinish
+  ReloadFinish:
+        TOZR LM 1
+		TNT1 A 0 A_PlaySoundEX("TOZSRE3",CHAN_7)
+        TOZR N 4
+        TOZR O 3
+		TOZR PQR 2
+		TOZS A 2
+        Goto Ready
+}
+}
+
+ACTOR TOZLoaded : Ammo
+{
+   +IGNORESKILL
+   Inventory.Amount 0
+   Inventory.MaxAmount 2
+   Ammo.BackpackAmount 0
+   Ammo.BackpackMaxAmount 2
+}
+
+ACTOR TOZPuff1 : BulletPuff
+{ DamageType "Shotgun" Decal "BulletChip" +NOEXTREMEDEATH}
+ACTOR TOZPuff2 : BulletPuff
+{ DamageType "SSG" Decal "BulletChip" }

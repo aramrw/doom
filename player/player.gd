@@ -7,6 +7,9 @@ extends Node3D
 @onready var gun_sprite = $WeaponManager/WeaponLayer/GunSprite
 @onready var hud = $Hud
 
+@export_category("Sensitivity")
+@export var mouse_sensitivity = 0.03;
+
 const SPEED = 5.0
 const LOOK_SPEED = 2.5 
 const BOB_FREQ = 2.7
@@ -39,6 +42,14 @@ func _ready():
 func _process(_delta):
 	if Input.is_action_just_pressed("shoot"): 
 		weapon_manager.fire()
+	if Input.is_action_just_pressed("reload"):
+		weapon_manager.reload()
+		
+	if Input.is_action_just_pressed("ui_cancel"):
+		if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+		else:
+			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 func _physics_process(delta: float) -> void:
 	if not body.is_on_floor():
@@ -75,12 +86,41 @@ func _physics_process(delta: float) -> void:
 
 	# 6. Actually move the body
 	body.move_and_slide()
+	
+func handle_item_pickup(item: ItemData):
+	match item.type:
+		ItemData.ItemType.HLTH_MEDKIT:
+			health = clamp(health + item.amount, 0, max_health)
+			hud.update_health(health)
+			
+		ItemData.ItemType.AMMO_MAGAZINE:
+			weapon_manager.handle_item_pickup(item);
+			
+		ItemData.ItemType.AMMO_SHELL:
+			# You can add logic for other guns here later!
+			print("Picked up ", item.amount, " shells.")
+			
+		ItemData.ItemType.AMMO_ROCKET:
+			print("Picked up ", item.amount, " rockets.")
 
 func _headbob(time) -> Vector3:
 	var pos = Vector3.ZERO
 	pos.y = sin(time * BOB_FREQ) * BOB_AMP + default_height
 	pos.x = cos(time * BOB_FREQ / 2) * BOB_AMP
 	return pos
+	
+func _unhandled_input(event: InputEvent) -> void:
+	# Only look around if the mouse is currently captured
+	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+		
+		# Rotate the body left/right (Horizontal)
+		body.rotate_y(-event.relative.x * mouse_sensitivity)
+		
+		# Rotate the camera up/down (Vertical)
+		camera.rotate_x(-event.relative.y * mouse_sensitivity)
+		
+		# Clamp the camera so the player can't do backflips
+		camera.rotation.x = clamp(camera.rotation.x, deg_to_rad(-80), deg_to_rad(80))
 
 # --- NEW DAMAGE FUNCTION ---
 func take_damage(amount: int):

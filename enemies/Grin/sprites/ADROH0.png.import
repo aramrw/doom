@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cie8jui7tn12n"
-path="res://.godot/imported/ADROH0.png-238e0d2b092f84cf7fa12daf72c95e01.ctex"
+uid="uid://b2stfaoy3n1rc"
+path="res://.godot/imported/ADROH0.png-6b1a4657ffe95b8e898cb6b3776804aa.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://enemies/Grin/sprites/ADROH0.png"
-dest_files=["res://.godot/imported/ADROH0.png-238e0d2b092f84cf7fa12daf72c95e01.ctex"]
+source_file="res://enemies/grin/sprites/ADROH0.png"
+dest_files=["res://.godot/imported/ADROH0.png-6b1a4657ffe95b8e898cb6b3776804aa.ctex"]
 
 [params]
 

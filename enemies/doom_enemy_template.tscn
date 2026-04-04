@@ -1,0 +1,38 @@
+[gd_scene format=3 uid="uid://b02m3m4u5kabn"]
+
+[ext_resource type="Script" uid="uid://cs44fpyvf8m0x" path="res://enemies/Grin/doom_enemy.gd" id="1_lch36"]
+[ext_resource type="Script" path="res://enemies/enemy_sounds.gd" id="2_jgin6"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ej5ua"]
+height = 2.3876038
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_lch36"]
+
+[node name="DoomEnemy" type="CharacterBody3D" unique_id=1006558139]
+floor_stop_on_slope = false
+safe_margin = 0.5
+script = ExtResource("1_lch36")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1779757227]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.026836932, 1.5509595, 0.0030199215)
+shape = SubResource("CapsuleShape3D_ej5ua")
+
+[node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="." unique_id=2131804395]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 1.0706522, 0)
+billboard = 2
+shaded = true
+texture_filter = 0
+sprite_frames = SubResource("SpriteFrames_lch36")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="." unique_id=255344233]
+simplify_path = true
+
+[node name="RayCast3D" type="RayCast3D" parent="." unique_id=1035914153]
+
+[node name="EnemySounds" type="AudioStreamPlayer3D" parent="." unique_id=22765739]
+pitch_scale = 5.0
+bus = &"SfxBus"
+script = ExtResource("2_jgin6")
+death_folder = "res://enemies/Grin/sounds/death"
+taunt_folder = "res://enemies/Grin/sounds/taunt"
+pitch_step = 10.0

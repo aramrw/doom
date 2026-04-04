@@ -1,12 +1,16 @@
 [gd_scene format=3 uid="uid://poy2pirej3aj"]
 
 [ext_resource type="Shader" uid="uid://ctuuuuq8rh1dk" path="res://shaders/global/retro_filter.gdshader" id="1_jka67"]
-[ext_resource type="Texture2D" uid="uid://bjkkswc0o11vi" path="res://textures/scifitextures/floor_ship.png" id="1_r3fl7"]
+[ext_resource type="Texture2D" uid="uid://bjkkswc0o11vi" path="res://assets/scifitextures/floor_ship.png" id="1_r3fl7"]
 [ext_resource type="PackedScene" uid="uid://ir7fkolw0y7b" path="res://player/player.tscn" id="2_noarx"]
-[ext_resource type="PackedScene" uid="uid://dh5cqpdjfub83" path="res://textures/scifitextures/ship/ship_wall_0.tscn" id="3_a0tk4"]
-[ext_resource type="Texture2D" uid="uid://bjydiwnnwago8" path="res://textures/scifitextures/wall_ship_0.png" id="4_r3fl7"]
-[ext_resource type="PackedScene" uid="uid://bw0uup8kykjce" path="res://textures/scifitextures/ship/ship_ceiling.tscn" id="6_i5arm"]
-[ext_resource type="PackedScene" uid="uid://bmx87k8st5vy0" path="res://enemies/Grin/doom_enemy.tscn" id="7_wc5p8"]
+[ext_resource type="PackedScene" uid="uid://dh5cqpdjfub83" path="res://assets/scifitextures/ship/ship_wall_0.tscn" id="3_a0tk4"]
+[ext_resource type="Texture2D" uid="uid://bjydiwnnwago8" path="res://assets/scifitextures/wall_ship_0.png" id="4_r3fl7"]
+[ext_resource type="PackedScene" uid="uid://bw0uup8kykjce" path="res://assets/scifitextures/ship/ship_ceiling.tscn" id="6_i5arm"]
+[ext_resource type="PackedScene" uid="uid://bmx87k8st5vy0" path="res://enemies/grin/grin.tscn" id="7_wc5p8"]
+[ext_resource type="PackedScene" uid="uid://cqxvv45yrneec" path="res://items/item_pickup_radius.tscn" id="8_4arys"]
+[ext_resource type="PackedScene" uid="uid://d1jpcw1ontism" path="res://assets/camping/sleeping_bag.tscn" id="8_jsk3o"]
+[ext_resource type="Resource" uid="uid://cr3jy8ioouucp" path="res://items/weapons/pistols/pistol_mag.tres" id="9_6iypd"]
+[ext_resource type="PackedScene" uid="uid://b7hwuaxqyod5w" path="res://enemies/cultist/cultist.tscn" id="11_tereu"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_i5arm"]
 shader = ExtResource("1_jka67")
@@ -23,7 +27,8 @@ sky_material = SubResource("ProceduralSkyMaterial_a202f")
 [sub_resource type="Environment" id="Environment_4xowi"]
 background_mode = 2
 sky = SubResource("Sky_a202f")
-ambient_light_source = 3
+ambient_light_source = 2
+ambient_light_color = Color(0.20205414, 0.20676932, 0.23292303, 1)
 fog_enabled = true
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_wc5p8"]
@@ -42,14 +47,19 @@ albedo_texture = ExtResource("1_r3fl7")
 uv1_scale = Vector3(10, 10, 10)
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_a202f"]
-lightmap_size_hint = Vector2i(100, 100)
+lightmap_size_hint = Vector2i(2502, 2502)
 material = SubResource("StandardMaterial3D_4xowi")
 size = Vector2(500, 500)
 center_offset = Vector3(0, 0.5, 0)
 
-[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_wc5p8"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_jsk3o"]
+size = Vector3(500, 0.001, 500)
 
 [node name="Node3D" type="Node3D" unique_id=1074528092]
+
+[node name="ItemPickupRadius" parent="." unique_id=366953278 instance=ExtResource("8_4arys")]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 2.216501, 1.0366548, -7.569035)
+data = ExtResource("9_6iypd")
 
 [node name="RetroFilter" type="CanvasLayer" parent="." unique_id=781796435]
 layer = 10
@@ -68,12 +78,6 @@ environment = SubResource("Environment_4xowi")
 [node name="Player" parent="." unique_id=432180329 instance=ExtResource("2_noarx")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.018581152, 0, 0.091042995)
 
-[node name="DoomEnemy" parent="." unique_id=1006558139 instance=ExtResource("7_wc5p8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1.2763064, -8)
-
-[node name="DoomEnemy3" parent="." unique_id=1404666868 instance=ExtResource("7_wc5p8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27.581387, 2.2872562, 2.9653149)
-
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="." unique_id=236648503]
 navigation_mesh = SubResource("NavigationMesh_wc5p8")
 
@@ -83,6 +87,14 @@ mesh = SubResource("BoxMesh_jka67")
 
 [node name="ShipWall1" parent="NavigationRegion3D" unique_id=1168329087 instance=ExtResource("3_a0tk4")]
 transform = Transform3D(37.587704, 0, 1.7101004, 0, 20, 0, -13.680803, 0, 4.698463, -21.27398, 3.0055518, 15.564095)
+mesh = SubResource("BoxMesh_jka67")
+
+[node name="ShipWall8" parent="NavigationRegion3D" unique_id=1192730142 instance=ExtResource("3_a0tk4")]
+transform = Transform3D(37.587704, 0, 1.7101004, 0, 20, 0, -13.680803, 0, 4.698463, -21.27398, 3.0055518, 38.12054)
+mesh = SubResource("BoxMesh_jka67")
+
+[node name="ShipWall9" parent="NavigationRegion3D" unique_id=1449198761 instance=ExtResource("3_a0tk4")]
+transform = Transform3D(37.587704, 0, 1.7101004, 0, 20, 0, -13.680803, 0, 4.698463, -58.712494, 2.9010606, 51.506832)
 mesh = SubResource("BoxMesh_jka67")
 
 [node name="ShipWall2" parent="NavigationRegion3D" unique_id=1140889312 instance=ExtResource("3_a0tk4")]
@@ -106,7 +118,7 @@ transform = Transform3D(-28.811909, 11.117891, 2.0745633, -23.24012, -16.205135,
 mesh = SubResource("BoxMesh_jka67")
 
 [node name="ShipWall7" parent="NavigationRegion3D" unique_id=849730331 instance=ExtResource("3_a0tk4")]
-transform = Transform3D(-28.811909, 11.11789, 2.074563, -20.95875, -0.881099, -4.252989, -18.182535, -16.60169, 1.61502, -43.68148, 10.391228, 15.82057)
+transform = Transform3D(16.879135, 0.13849756, 3.6881711, 0.62314993, 19.983416, -0.16097474, -18.431137, 0.80246663, 3.3721635, -67.170074, 10.770046, 11.071018)
 mesh = SubResource("BoxMesh_jka67")
 
 [node name="ShipCeiling" parent="NavigationRegion3D" unique_id=1475911580 instance=ExtResource("6_i5arm")]
@@ -116,7 +128,20 @@ transform = Transform3D(100, 0, 0, 0, 0.1, 0, 0, 0, 100, -20.814, 11, -1.693)
 cast_shadow = 0
 mesh = SubResource("PlaneMesh_a202f")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="NavigationRegion3D/MeshInstance3D" unique_id=1073093684]
+[node name="StaticBody3D" type="StaticBody3D" parent="NavigationRegion3D/MeshInstance3D" unique_id=1829517300]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MeshInstance3D/StaticBody3D" unique_id=1472050615]
-shape = SubResource("WorldBoundaryShape3D_wc5p8")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MeshInstance3D/StaticBody3D" unique_id=1878726688]
+shape = SubResource("BoxShape3D_jsk3o")
+
+[node name="SleepingBag" parent="." unique_id=843237321 instance=ExtResource("8_jsk3o")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2597854, 0.5225768, -3.640376)
+
+[node name="Cultist" parent="." unique_id=118476925 instance=ExtResource("11_tereu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.638075, 0.50049996, -6.861253)
+
+[node name="Grin" parent="." unique_id=1006558139 instance=ExtResource("7_wc5p8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23.057579, 0.5628073, 7.0092134)
+
+[node name="Grin2" parent="." unique_id=2054395248 instance=ExtResource("7_wc5p8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.337135, 1.1373085, -1.9675949)

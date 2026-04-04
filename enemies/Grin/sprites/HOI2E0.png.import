@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b0b1tyli5yn10"
-path="res://.godot/imported/HOI2E0.png-63a8cecad68ac4ab4889e9b7073f9ba8.ctex"
+uid="uid://dlg1hkw2nueok"
+path="res://.godot/imported/HOI2E0.png-2775a90045910786edfd11c880ba0180.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://enemies/Grin/sprites/HOI2E0.png"
-dest_files=["res://.godot/imported/HOI2E0.png-63a8cecad68ac4ab4889e9b7073f9ba8.ctex"]
+source_file="res://enemies/grin/sprites/HOI2E0.png"
+dest_files=["res://.godot/imported/HOI2E0.png-2775a90045910786edfd11c880ba0180.ctex"]
 
 [params]
 

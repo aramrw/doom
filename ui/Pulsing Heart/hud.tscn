@@ -179,10 +179,13 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_lub35")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_srtj6")
 }],
-"loop": true,
-"name": &"default",
-"speed": 5.0
+"loop": false,
+"name": &"reload",
+"speed": 10.0
 }]
 
 [sub_resource type="LabelSettings" id="LabelSettings_srtj6"]
@@ -209,14 +212,14 @@ clip_text = true
 
 [node name="TextureProgressBar" type="TextureProgressBar" parent="." unique_id=957834142]
 offset_left = 9.0
-offset_top = 208.0
+offset_top = 212.0
 offset_right = 99.0
-offset_bottom = 248.0
+offset_bottom = 252.0
 texture_under = ExtResource("1_m3434")
 texture_progress = ExtResource("2_uhvvn")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1578408345]
-position = Vector2(54, 222)
+position = Vector2(54, 226)
 sprite_frames = SubResource("SpriteFrames_jw4lp")
 
 [node name="CenterContainer" type="CenterContainer" parent="." unique_id=68884092]
@@ -269,8 +272,9 @@ clip_text = true
 position = Vector2(356, 186)
 scale = Vector2(0.14825577, 0.12790702)
 sprite_frames = SubResource("SpriteFrames_1ek6s")
-frame = 1
-frame_progress = 0.47278178
+animation = &"reload"
+frame = 20
+frame_progress = 1.0
 script = ExtResource("9_srtj6")
 
 [node name="MagLabel" type="Label" parent="Mag" unique_id=365954388]

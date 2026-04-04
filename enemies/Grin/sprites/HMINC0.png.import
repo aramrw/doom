@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://xf7yujp7cfal"
-path="res://.godot/imported/HMINC0.png-d4caf56632c5f880b6be3345ab37e841.ctex"
+uid="uid://bvekjiibhv763"
+path="res://.godot/imported/HMINC0.png-beb1a77385e02dfc9ba8af2cc35f8826.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://enemies/Grin/sprites/HMINC0.png"
-dest_files=["res://.godot/imported/HMINC0.png-d4caf56632c5f880b6be3345ab37e841.ctex"]
+source_file="res://enemies/grin/sprites/HMINC0.png"
+dest_files=["res://.godot/imported/HMINC0.png-beb1a77385e02dfc9ba8af2cc35f8826.ctex"]
 
 [params]
 

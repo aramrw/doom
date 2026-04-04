@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d2aolj5x5dyr3"
-path="res://.godot/imported/HOIMU0.png-6140d0fca5d31e1548b589931900ab5c.ctex"
+uid="uid://dj3et0qh3u4bd"
+path="res://.godot/imported/HOIMU0.png-e8d36a279484db21b12a9d90536ec407.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://enemies/Grin/sprites/HOIMU0.png"
-dest_files=["res://.godot/imported/HOIMU0.png-6140d0fca5d31e1548b589931900ab5c.ctex"]
+source_file="res://enemies/grin/sprites/HOIMU0.png"
+dest_files=["res://.godot/imported/HOIMU0.png-e8d36a279484db21b12a9d90536ec407.ctex"]
 
 [params]
 

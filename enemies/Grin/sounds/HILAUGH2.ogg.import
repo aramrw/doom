@@ -2,13 +2,13 @@
 
 importer="oggvorbisstr"
 type="AudioStreamOggVorbis"
-uid="uid://ervqy6cnrsvj"
-path="res://.godot/imported/HILAUGH2.ogg-171fce40ef76355272708e80a9f6368b.oggvorbisstr"
+uid="uid://bhvvmkbfa8aqy"
+path="res://.godot/imported/HILAUGH2.ogg-4dd0e47aba6df381cbd96495f139edac.oggvorbisstr"
 
 [deps]
 
-source_file="res://enemies/Grin/sounds/HILAUGH2.ogg"
-dest_files=["res://.godot/imported/HILAUGH2.ogg-171fce40ef76355272708e80a9f6368b.oggvorbisstr"]
+source_file="res://enemies/grin/sounds/HILAUGH2.ogg"
+dest_files=["res://.godot/imported/HILAUGH2.ogg-4dd0e47aba6df381cbd96495f139edac.oggvorbisstr"]
 
 [params]
 
