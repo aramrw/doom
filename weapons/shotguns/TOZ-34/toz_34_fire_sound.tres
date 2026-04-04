@@ -1,4 +1,3 @@
-# weapons/shotguns/TOZ-34/toz_34_fire_sound.tres
 [gd_resource type="Resource" script_class="SoundEffect" format=3]
 [ext_resource type="Script" path="res://weapons/effects/sound_effect.gd" id="1_sound_script"]
 [ext_resource type="AudioStream" uid="uid://of6lbjkpy10h" path="res://weapons/shotguns/TOZ-34/SOUNDS/TOZSFIR.ogg" id="2_sound_file"]

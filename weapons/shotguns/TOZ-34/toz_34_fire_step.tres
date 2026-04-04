@@ -1,4 +1,3 @@
-# weapons/shotguns/TOZ-34/toz_34_fire_step.tres
 [gd_resource type="Resource" script_class="ActionStep" format=3]
 [ext_resource type="Script" path="res://weapons/action_step.gd" id="1_step"]
 [ext_resource type="Resource" path="res://weapons/shotguns/TOZ-34/toz_34_fire_effect.tres" id="2_effect"]
