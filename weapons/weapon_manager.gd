@@ -9,16 +9,25 @@ signal magazine_count_updated(magazine_count: int)
 
 @export var aim_raycast: RayCast3D
 
-# --- NEW: Modular Weapon Data ---
-@export var current_weapon: WeaponData
+# --- Weapon Slots ---
+@export var primary_weapon: WeaponData
+@export var secondary_weapon: WeaponData
 
-# We keep these here because they change constantly during gameplay
+var current_weapon: WeaponData
+var current_slot: String = "none"
+
+# Track ammo per slot
+var slot_ammo = {
+	"primary": {"bullets": 0, "magazines": 1},
+	"secondary": {"bullets": 0, "magazines": 1}
+}
+
+# We keep these here because they are the "active" counts used by the manager
 var bullets: int = 0
-@export var max_magazines = 10
 @export var magazine_count: int = 1
 var is_reloading = false
 
-# --- NEW: Action State ---
+# --- Action State ---
 var current_action: WeaponAction = null
 var current_step_index: int = 0
 var current_shot_count: int = 0 # Tracked for spray patterns/recoil
@@ -33,32 +42,55 @@ func _ready():
 	# Connect to the frame changed signal to trigger effects on specific frames
 	gun_sprite.frame_changed.connect(_on_gun_sprite_frame_changed)
 	
-	# When the game starts, load whatever gun is in the slot
-	if current_weapon:
-		equip_weapon(current_weapon)
+	# Default to primary slot if available
+	if primary_weapon:
+		switch_to_slot("primary")
+
+func switch_to_slot(slot_name: String):
+	if slot_name == current_slot: return
+	if is_reloading or current_action: return
+	
+	var next_weapon = primary_weapon if slot_name == "primary" else secondary_weapon
+	if not next_weapon: return
+	
+	# Save current ammo if we are switching from a valid slot
+	if current_slot != "none":
+		slot_ammo[current_slot]["bullets"] = bullets
+		slot_ammo[current_slot]["magazines"] = magazine_count
+	
+	# Switch weapon
+	current_slot = slot_name
+	current_weapon = next_weapon
+	
+	# Load next ammo
+	bullets = slot_ammo[current_slot]["bullets"]
+	magazine_count = slot_ammo[current_slot]["magazines"]
+	
+	# If this is the first time equipping, fill it up
+	if bullets == 0 and magazine_count > 0:
+		bullets = current_weapon.max_bullets
+	
+	equip_weapon(current_weapon)
 
 func equip_weapon(new_weapon: WeaponData):
-	current_weapon = new_weapon
-	# Initialize bullets to the weapon's max capacity
-	bullets = current_weapon.max_bullets 
-	
-	if current_weapon.sprite_frames:
-		gun_sprite.sprite_frames = current_weapon.sprite_frames
+	if new_weapon.sprite_frames:
+		gun_sprite.sprite_frames = new_weapon.sprite_frames
 		gun_sprite.play("idle")
-		gun_sprite.offset = current_weapon.sprite_offset
-		gun_sprite.flip_h = current_weapon.flip_h
+		gun_sprite.offset = new_weapon.sprite_offset
+		gun_sprite.flip_h = new_weapon.flip_h
 		
 	# Handle offhand
-	if current_weapon.offhand_frames:
+	if new_weapon.offhand_frames:
 		offhand_sprite.show()
-		offhand_sprite.sprite_frames = current_weapon.offhand_frames
+		offhand_sprite.sprite_frames = new_weapon.offhand_frames
 		offhand_sprite.play("idle")
-		offhand_sprite.offset = current_weapon.offhand_offset
-		offhand_sprite.flip_h = current_weapon.offhand_flip_h
+		offhand_sprite.offset = new_weapon.offhand_offset
+		offhand_sprite.flip_h = new_weapon.offhand_flip_h
 	else:
 		offhand_sprite.hide()
 		
 	ammo_updated.emit(bullets)
+	magazine_count_updated.emit(magazine_count)
 
 func fire():
 	if is_reloading or current_action:

@@ -1,19 +1,17 @@
 [gd_resource type="Resource" script_class="WeaponData" format=3 uid="uid://cxr6os0aqhquv"]
 
-[ext_resource type="Script" path="res://weapons/weapon_data.gd" id="1_1obji"]
-[ext_resource type="SpriteFrames" path="res://weapons/melee/combat_knife/combat_knife_anims.tres" id="2_anims"]
-[ext_resource type="SpriteFrames" path="res://weapons/melee/combat_knife/combat_knife_offhand_anims.tres" id="3_offhand"]
-[ext_resource type="Resource" path="res://weapons/melee/combat_knife/knife_swing_action.tres" id="4_swing"]
+[ext_resource type="Script" uid="uid://cqlple4um3rs" path="res://weapons/weapon_data.gd" id="1_1obji"]
+[ext_resource type="SpriteFrames" uid="uid://dduhx4lsa10ty" path="res://weapons/melee/combat_knife/combat_knife_anims.tres" id="2_anims"]
+[ext_resource type="SpriteFrames" uid="uid://khflyq3f7iw3" path="res://weapons/melee/combat_knife/combat_knife_offhand_anims.tres" id="3_offhand"]
+[ext_resource type="Resource" uid="uid://dxo0s466wm0y2" path="res://weapons/melee/combat_knife/knife_swing_action.tres" id="4_swing"]
 
 [resource]
 script = ExtResource("1_1obji")
 weapon_name = "combat_knife"
 sprite_frames = ExtResource("2_anims")
 sprite_offset = Vector2(-100, 0)
-flip_h = false
 offhand_frames = ExtResource("3_offhand")
-offhand_offset = Vector2(100, 0)
-offhand_flip_h = false
+offhand_offset = Vector2(80, 45)
 actions = {
 "primary": ExtResource("4_swing")
 }

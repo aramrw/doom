@@ -1,11 +1,11 @@
-[gd_resource type="Resource" script_class="WeaponAction" format=3]
-[ext_resource type="Script" path="res://weapons/weapon_action.gd" id="1_action"]
+[gd_resource type="Resource" script_class="WeaponAction" format=3 uid="uid://dxo0s466wm0y2"]
+
+[ext_resource type="Script" uid="uid://7og58pc8mae4" path="res://weapons/weapon_action.gd" id="1_action"]
 [ext_resource type="Resource" path="res://weapons/melee/combat_knife/knife_swing_step_0.tres" id="2_step0"]
+[ext_resource type="Script" uid="uid://k0g2eck3n5cy" path="res://weapons/action_step.gd" id="2_u1qmr"]
 [ext_resource type="Resource" path="res://weapons/melee/combat_knife/knife_swing_step_2.tres" id="3_step2"]
 
 [resource]
 script = ExtResource("1_action")
-animation_name = "shoot"
-steps = [ExtResource("2_step0"), ExtResource("3_step2")]
-loop = false
+steps = Array[ExtResource("2_u1qmr")]([ExtResource("2_step0"), ExtResource("3_step2")])
 consumes_ammo = false
