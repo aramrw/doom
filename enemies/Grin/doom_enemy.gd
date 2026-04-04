@@ -29,6 +29,16 @@ var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 func _ready():
 	player = get_tree().get_first_node_in_group("Player")
 	los_raycast.add_exception(self)
+	
+	# --- AUTO-INITIALIZE HIT FLASH SHADER ---
+	if sprite and not sprite.material_override:
+		var mat = ShaderMaterial.new()
+		var shader_res = load("res://enemies/shaders/hit_flash.gdshader")
+		if shader_res:
+			mat.shader = shader_res
+			mat.set_shader_parameter("flash_intensity", 0.0) # Ensure it starts OFF
+			sprite.material_override = mat
+			
 	await get_tree().physics_frame
 
 func _physics_process(delta):
@@ -86,19 +96,22 @@ func take_damage(amount: int):
 		current_anim_state = "pain_1" 
 		sfx.hurt()
 		
-		# --- THE CLEAN HIT FLASH ---
-		# We set modulate to a "Super Red". (Red: 10, Green: 1, Blue: 1)
-		# This makes it flash bright red while keeping the texture visible!
-		sprite.modulate = Color(6.106, 1.246, 0.99, 1.0) 
+		# --- TRIGGER HIT FLASH (SHADER) ---
+		if sprite.material_override is ShaderMaterial:
+			var mat = sprite.material_override
+			mat.set_shader_parameter("flash_intensity", 1.0)
+			var tween = create_tween()
+			tween.tween_property(mat, "shader_parameter/flash_intensity", 0.0, 0.15)
+		else:
+			# Fallback to modulate if shader fails
+			sprite.modulate = Color(10, 10, 10, 1) # Super white flash
+			var tween = create_tween()
+			tween.tween_property(sprite, "modulate", Color(1, 1, 1, 1), 0.15)
 		
 		update_sprite_angle()
 		
 		# Wait for the flinch to finish
 		await get_tree().create_timer(0.3).timeout
-		
-		# --- RESET THE FLASH ---
-		if sprite:
-			sprite.modulate = Color(1.0, 1.0, 1.0, 1.0) # Reset to normal white
 			
 		if not is_dead: 
 			is_hit = false
