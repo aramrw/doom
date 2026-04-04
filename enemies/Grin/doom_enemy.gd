@@ -29,16 +29,6 @@ var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 func _ready():
 	player = get_tree().get_first_node_in_group("Player")
 	los_raycast.add_exception(self)
-	
-	# --- AUTO-INITIALIZE HIT FLASH SHADER ---
-	if sprite and not sprite.material_override:
-		var mat = ShaderMaterial.new()
-		var shader_res = load("res://enemies/shaders/hit_flash.gdshader")
-		if shader_res:
-			mat.shader = shader_res
-			mat.set_shader_parameter("flash_intensity", 0.0) # Ensure it starts OFF
-			sprite.material_override = mat
-			
 	await get_tree().physics_frame
 
 func _physics_process(delta):
@@ -96,17 +86,11 @@ func take_damage(amount: int):
 		current_anim_state = "pain_1" 
 		sfx.hurt()
 		
-		# --- TRIGGER HIT FLASH (SHADER) ---
-		if sprite.material_override is ShaderMaterial:
-			var mat = sprite.material_override
-			mat.set_shader_parameter("flash_intensity", 1.0)
-			var tween = create_tween()
-			tween.tween_property(mat, "shader_parameter/flash_intensity", 0.0, 0.15)
-		else:
-			# Fallback to modulate if shader fails
-			sprite.modulate = Color(10, 10, 10, 1) # Super white flash
-			var tween = create_tween()
-			tween.tween_property(sprite, "modulate", Color(1, 1, 1, 1), 0.15)
+		# --- THE CLEAN HDR HIT FLASH ---
+		# We boost the modulation to 10.0 (Pure White HDR Glow)
+		sprite.modulate = Color(10, 10, 10, 1.0) 
+		var tween = create_tween()
+		tween.tween_property(sprite, "modulate", Color(1, 1, 1, 1), 0.15)
 		
 		update_sprite_angle()
 		

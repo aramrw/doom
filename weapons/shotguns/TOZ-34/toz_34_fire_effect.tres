@@ -1,9 +1,10 @@
-[gd_resource type="Resource" script_class="HitscanEffect" format=3]
-[ext_resource type="Script" path="res://weapons/effects/hitscan_effect.gd" id="1_effect"]
+[gd_resource type="Resource" script_class="HitscanEffect" format=3 uid="uid://m0ds7bad1vrj"]
+
+[ext_resource type="Script" uid="uid://b504e5ofchd15" path="res://weapons/effects/hitscan_effect.gd" id="1_effect"]
 
 [resource]
 script = ExtResource("1_effect")
-damage = 30
-pellets = 8
+damage = 90
+pellets = 2
 spread_angle = 5.0
-range_distance = 100.0
+range_distance = 70.0

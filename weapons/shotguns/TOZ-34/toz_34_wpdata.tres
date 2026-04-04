@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="WeaponData" format=3 uid="uid://dukslul6e06xb"]
 
 [ext_resource type="Script" uid="uid://cqlple4um3rs" path="res://weapons/weapon_data.gd" id="1_1obji"]
-[ext_resource type="Resource" path="res://weapons/shotguns/TOZ-34/toz_34_fire_action.tres" id="2_fire"]
+[ext_resource type="Resource" uid="uid://xe0buvxm0gci" path="res://weapons/shotguns/TOZ-34/toz_34_fire_action.tres" id="2_fire"]
 [ext_resource type="SpriteFrames" uid="uid://bioxcavuplyho" path="res://weapons/shotguns/TOZ-34/toz_34_anims.tres" id="3_qd7mn"]
 
 [resource]
