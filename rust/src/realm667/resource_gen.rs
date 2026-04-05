@@ -5,9 +5,9 @@ use crate::realm667::actor::ActorDefinition;
 pub struct ResourceGenerator;
 
 impl ResourceGenerator {
-    pub fn generate_weapon_resources(actor: &ActorDefinition, actor_root: &Path) {
+    pub fn generate_weapon_resources(actor: &ActorDefinition, actor_root: &Path, rel_base: &str) {
         let weapon_name = actor.name.to_lowercase();
-        let rel_path = format!("res://weapons/{}", weapon_name); // Simplified for now
+        let rel_path = rel_base.trim_end_matches('/');
         
         // 1. Generate Effects
         let effect_path = actor_root.join(format!("{}_fire_effect.tres", weapon_name));

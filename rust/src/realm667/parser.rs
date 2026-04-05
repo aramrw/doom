@@ -29,10 +29,19 @@ impl Parser {
         let mut actors = Vec::new();
         while self.cur_token != Token::Eof {
             if let Token::Identifier(ref id) = self.cur_token {
-                if id.to_lowercase() == "actor" {
+                let lower = id.to_lowercase();
+                if lower == "actor" || lower == "class" {
                     if let Some(actor) = self.parse_actor() {
                         actors.push(actor);
                     }
+                } else {
+                    self.next_token();
+                }
+            } else if let Token::Operator(op) = self.cur_token.clone() {
+                if op == "#" {
+                    // Skip #include lines for now in the general parser,
+                    // as they should be pre-processed or handled differently.
+                    self.next_token();
                 } else {
                     self.next_token();
                 }
@@ -64,7 +73,7 @@ impl Parser {
 
     fn parse_actor(&mut self) -> Option<ActorDefinition> {
         let mut actor = ActorDefinition::default();
-        self.next_token(); // skip "actor"
+        self.next_token(); // skip "actor" or "class"
 
         // Name
         if let Token::Identifier(name) = self.cur_token.clone() {
@@ -86,6 +95,11 @@ impl Parser {
             self.next_token();
         }
 
+        // ZScript sometimes has "native" or other keywords here
+        while let Token::Identifier(_) = self.cur_token {
+            self.next_token();
+        }
+
         if self.cur_token != Token::BraceOpen {
             return None;
         }
@@ -97,28 +111,22 @@ impl Parser {
                     let lower = id.to_lowercase();
                     if lower == "states" {
                         actor.states = self.parse_states();
+                    } else if lower == "default" {
+                        self.next_token(); // skip "default"
+                        if self.cur_token == Token::BraceOpen {
+                            self.next_token();
+                            while self.cur_token != Token::BraceClose && self.cur_token != Token::Eof {
+                                self.parse_actor_property(&mut actor);
+                            }
+                            self.next_token(); // skip brace close
+                        }
                     } else if id.starts_with('+') {
                         actor.flags.push(id[1..].to_string());
                         self.next_token();
                     } else if id.starts_with('-') {
-                        // Handle removal of flags if needed
                         self.next_token();
                     } else {
-                        // Property
-                        self.next_token();
-                        let mut value = String::new();
-                        while self.cur_token != Token::SemiColon && !matches!(self.cur_token, Token::Identifier(_)) && self.cur_token != Token::BraceClose {
-                            match &self.cur_token {
-                                Token::Number(n) => value.push_str(&n.to_string()),
-                                Token::Identifier(s) => value.push_str(s),
-                                Token::StringLiteral(s) => value.push_str(s),
-                                Token::Comma => value.push(','),
-                                _ => {}
-                            }
-                            value.push(' ');
-                            self.next_token();
-                        }
-                        actor.properties.insert(id, value.trim().to_string());
+                        self.parse_actor_property(&mut actor);
                     }
                 }
                 _ => self.next_token(),
@@ -126,6 +134,40 @@ impl Parser {
         }
 
         Some(actor)
+    }
+
+    fn parse_actor_property(&mut self, actor: &mut ActorDefinition) {
+        if let Token::Identifier(id) = self.cur_token.clone() {
+            if id.starts_with('+') {
+                actor.flags.push(id[1..].to_string());
+                self.next_token();
+                return;
+            }
+            if id.starts_with('-') {
+                self.next_token();
+                return;
+            }
+            
+            self.next_token();
+            let mut value = String::new();
+            while self.cur_token != Token::SemiColon && !matches!(self.cur_token, Token::Identifier(_)) && self.cur_token != Token::BraceClose {
+                match &self.cur_token {
+                    Token::Number(n) => value.push_str(&n.to_string()),
+                    Token::Identifier(s) => value.push_str(s),
+                    Token::StringLiteral(s) => value.push_str(s),
+                    Token::Comma => value.push(','),
+                    _ => {}
+                }
+                value.push(' ');
+                self.next_token();
+            }
+            if self.cur_token == Token::SemiColon {
+                self.next_token();
+            }
+            actor.properties.insert(id, value.trim().to_string());
+        } else {
+            self.next_token();
+        }
     }
 
     fn parse_states(&mut self) -> HashMap<String, Vec<StateFrame>> {

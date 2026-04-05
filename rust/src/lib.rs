@@ -6,4 +6,10 @@ pub use realm667::Realm667Importer;
 struct MyExtension;
 
 #[gdextension]
-unsafe impl ExtensionLibrary for MyExtension {}
+unsafe impl ExtensionLibrary for MyExtension {
+    fn on_stage_init(stage: InitStage) {
+        if stage == InitStage::Scene {
+            godot_print!("GDExtension initialized! (Scene stage)");
+        }
+    }
+}
