@@ -40,6 +40,7 @@ const GUN_BOB_AMP_Y = 5.0
 
 var tbob = 0.0
 var gun_default_pos = Vector2.ZERO 
+var last_targeted_node: Node3D = null
 
 # --- NEW HEALTH VARIABLES ---
 var max_health: int = 100
@@ -95,6 +96,52 @@ func _process(delta):
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 		else:
 			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+			
+	update_target_outline()
+
+func update_target_outline():
+	var interact_ray = $CharacterBody3D/ShakeGimbal/Camera/InteractRay
+	var aim_ray = $CharacterBody3D/ShakeGimbal/Camera/AimRayCast
+	
+	# Priority to interaction range, then combat range
+	var target = null
+	if interact_ray.is_colliding():
+		target = interact_ray.get_collider()
+	elif aim_ray.is_colliding():
+		target = aim_ray.get_collider()
+		
+	# Traverse up to find the base node if needed
+	var target_node = null
+	if target:
+		if target.has_method("set_outline"):
+			target_node = target
+		elif target.get_parent() and target.get_parent().has_method("set_outline"):
+			target_node = target.get_parent()
+			
+	# Clear previous target if changed
+	if last_targeted_node and last_targeted_node != target_node:
+		if is_instance_valid(last_targeted_node):
+			last_targeted_node.set_outline(false)
+		last_targeted_node = null
+		
+	# Set current target
+	if target_node and is_instance_valid(target_node):
+		var outline_color = Color(1, 1, 1, 1) # Neutral White
+		
+		# Check if hostile
+		var is_hostile = false
+		if target_node.is_in_group("Enemies"):
+			if target_node.is_in_group("NPCs"):
+				if target_node.get("attacks_player"):
+					is_hostile = true
+			else:
+				is_hostile = true
+				
+		if is_hostile:
+			outline_color = Color(1, 0, 0, 1) # Hostile Red
+			
+		target_node.set_outline(true, outline_color)
+		last_targeted_node = target_node
 
 func handle_interaction():
 	# 1. If dialogue is already open, advance it and return

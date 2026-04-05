@@ -30,10 +30,39 @@ var is_dead: bool = false # For the corpse state
 @export var health: int = 100
 var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 
+# --- OUTLINE VARIABLES ---
+var outline_active: bool = false
+var outline_mat: ShaderMaterial = null
+
 func _ready():
 	player = get_tree().get_first_node_in_group("Player")
 	los_raycast.add_exception(self)
 	await get_tree().physics_frame
+
+func _process(_delta):
+	# If dead, definitely no outline
+	if is_dead and outline_active:
+		set_outline(false)
+		
+	if outline_active and outline_mat and sprite:
+		var tex = sprite.sprite_frames.get_frame_texture(sprite.animation, sprite.frame)
+		outline_mat.set_shader_parameter("tex", tex)
+
+func set_outline(active: bool, color: Color = Color.RED):
+	if is_dead: 
+		outline_active = false
+		if sprite: sprite.material_overlay = null
+		return
+		
+	outline_active = active
+	if active:
+		if not outline_mat:
+			outline_mat = ShaderMaterial.new()
+			outline_mat.shader = load("res://shaders/outline.gdshader")
+		outline_mat.set_shader_parameter("outline_color", color)
+		if sprite: sprite.material_overlay = outline_mat
+	else:
+		if sprite: sprite.material_overlay = null
 
 func _physics_process(delta):
 	# Always apply gravity, even to corpses, so they don't float
