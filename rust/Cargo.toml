@@ -8,3 +8,4 @@ crate-type = ["cdylib"]
 
 [dependencies]
 godot = "0.5.0"
+zip = "8.5.0"
