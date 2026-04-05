@@ -51,19 +51,21 @@ impl AssetHandler {
             return None;
         }
 
+        // Standardize slashes and get ONLY the filename
+        let zip_full_name = zip_file.name().replace('\\', "/");
+        let zip_file_name = zip_full_name.split('/').last().unwrap_or(&zip_full_name);
+
         let mut content = Vec::new();
         if zip_file.read_to_end(&mut content).is_err() {
             return None;
         }
 
-        let fixed_name = Self::get_correct_extension(&content, zip_file.name());
+        let fixed_name = Self::get_correct_extension(&content, zip_file_name);
         let dest_path = base_path.join(fixed_name);
 
         // Ensure parent directories exist
         if let Some(parent) = dest_path.parent() {
-            if fs::create_dir_all(parent).is_err() {
-                return None;
-            }
+            let _ = fs::create_dir_all(parent);
         }
 
         let mut out_file = match File::create(&dest_path) {

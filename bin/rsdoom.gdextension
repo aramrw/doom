@@ -1,0 +1,12 @@
+[configuration]
+entry_symbol = "gdext_rust_init"
+compatibility_minimum = "4.1"
+reloadable = true
+
+[libraries]
+macos.arm64 = "librsdoom.dylib"
+macos.x86_64 = "librsdoom.dylib"
+macos.debug.arm64 = "librsdoom.dylib"
+macos.release.arm64 = "librsdoom.dylib"
+macos.debug.x86_64 = "librsdoom.dylib"
+macos.release.x86_64 = "librsdoom.dylib"

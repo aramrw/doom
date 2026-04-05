@@ -66,19 +66,20 @@ impl Realm667Importer {
         let abs_pk3_path_str = abs_pk3_path_gs.to_string();
         let pk3_path_obj = Path::new(&abs_pk3_path_str);
         
-        let parent_dir = pk3_path_obj.parent().unwrap_or(Path::new(""));
-        let stem = pk3_path_obj.file_stem().unwrap_or_default().to_str().unwrap_or("extracted");
+        // Output directory is now just the parent of the PK3
+        let abs_output_base = pk3_path_obj.parent().unwrap_or(Path::new(""));
         
-        // Output directory is parent/stem
-        let abs_output_base = parent_dir.join(stem);
-        
-        // Derive Godot res:// path for the output base
-        let res_output_base = path.strip_suffix(".pk3").unwrap_or(&path).strip_suffix(".PK3").unwrap_or(&path).to_string();
+        // Derive Godot res:// parent path
+        let res_output_base = if let Some(pos) = path.rfind('/') {
+            path[..pos].to_string()
+        } else {
+            "res://".to_string()
+        };
 
         godot_print!("--------------------------------------------------");
         godot_print!("Realm667Importer: STARTING IMPORT");
         godot_print!("Source: {}", abs_pk3_path_str);
-        godot_print!("Output: {}", abs_output_base.display());
+        godot_print!("Output Base: {}", abs_output_base.display());
 
         let file = match File::open(&abs_pk3_path_str) {
             Ok(f) => f,
@@ -148,7 +149,7 @@ impl Realm667Importer {
             actors.len()
         );
 
-        let base_out = abs_output_base.as_path();
+        let base_out = abs_output_base;
 
         for actor in actors {
             let category = actor.determine_category();
@@ -206,7 +207,7 @@ impl Realm667Importer {
                 if trimmed.to_lowercase().starts_with("#include") {
                     let parts: Vec<&str> = trimmed.split_whitespace().collect();
                     if parts.len() >= 2 {
-                        let mut include_path = parts[1].replace('"', "").replace('\'', "");
+                        let include_path = parts[1].replace('"', "").replace('\'', "");
                         if let Some(sub_content) = self.read_zip_file_recursive(archive, &include_path) {
                             full_content.push_str(&sub_content);
                             full_content.push('\n');
