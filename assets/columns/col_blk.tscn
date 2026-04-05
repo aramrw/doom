@@ -1,0 +1,40 @@
+[gd_scene format=3 uid="uid://b0wwypm788ncq"]
+
+[ext_resource type="Texture2D" uid="uid://be0hhs0ogaytt" path="res://assets/columns/col_blk/0006_COLBLU.lmp.png" id="1_841xj"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_841xj"]
+radius = 0.1303711
+height = 1.3530273
+
+[node name="Prop" type="StaticBody3D" unique_id=1379107535]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1250590589]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.008544922, 0)
+shape = SubResource("CapsuleShape3D_841xj")
+
+[node name="AnimatedSprite2D" type="Sprite3D" parent="." unique_id=1947429412]
+modulate = Color(1, 0.9953333, 0.72, 1)
+shaded = true
+texture_filter = 0
+texture = ExtResource("1_841xj")
+
+[node name="AnimatedSprite2D3" type="Sprite3D" parent="." unique_id=1658116143]
+transform = Transform3D(-0.64278764, 0, 0.76604444, 0, 1, 0, -0.76604444, 0, -0.64278764, 0, 0, 0)
+modulate = Color(1, 0.9953333, 0.72, 1)
+shaded = true
+texture_filter = 0
+texture = ExtResource("1_841xj")
+
+[node name="AnimatedSprite2D2" type="Sprite3D" parent="." unique_id=1123445047]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0, 0)
+modulate = Color(1, 0.9953333, 0.72, 1)
+shaded = true
+texture_filter = 0
+texture = ExtResource("1_841xj")
+
+[node name="AnimatedSprite2D4" type="Sprite3D" parent="." unique_id=945488357]
+transform = Transform3D(0.8660254, 0, 0.5, 0, 1, 0, -0.5, 0, 0.8660254, 0, 0, 0)
+modulate = Color(1, 0.9953333, 0.72, 1)
+shaded = true
+texture_filter = 0
+texture = ExtResource("1_841xj")

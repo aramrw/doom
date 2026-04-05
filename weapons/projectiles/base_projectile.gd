@@ -31,10 +31,10 @@ func setup(p_firer: Node3D, p_direction: Vector3, p_damage: int = -1, p_speed: f
 
 	# Team detection logic
 	if firer.is_in_group("Player"):
-		collision_mask = 4 # Layer 3: Enemies (adjust based on your project's layers)
+		collision_mask = 5 # Layer 1: World + Layer 3: Enemies
 		add_to_group("player_projectiles")
 	else:
-		collision_mask = 2 # Layer 2: Player
+		collision_mask = 3 # Layer 1: World + Layer 2: Player
 		add_to_group("enemy_projectiles")
 
 func _physics_process(delta):
@@ -44,6 +44,8 @@ func _physics_process(delta):
 func _on_body_entered(body: Node3D):
 	if body.has_method("take_damage"):
 		body.take_damage(damage)
+	elif body.get_parent() and body.get_parent().has_method("take_damage"):
+		body.get_parent().take_damage(damage)
 
 	_on_impact()
 

@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="CameraShakeEffect" format=3 uid="uid://bshak3efect1"]
+[gd_resource type="Resource" script_class="CameraShakeEffect" format=3 uid="uid://cpqrsk7efect"]
 
 [ext_resource type="Script" path="res://weapons/effects/camera_shake_effect.gd" id="1_1"]
 

@@ -1,0 +1,55 @@
+[gd_scene format=3 uid="uid://0lefihnkg1ip"]
+
+[ext_resource type="Script" uid="uid://cu60wd67lfbcu" path="res://ui/dialogue_ui.gd" id="1_diag"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_u2tjw"]
+font_size = 12
+font_color = Color(0.99262446, 0.68970376, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_ianla"]
+font_size = 7
+shadow_size = 20
+
+[node name="DialogueUI" type="CanvasLayer" unique_id=1394953821]
+script = ExtResource("1_diag")
+
+[node name="Panel" type="Panel" parent="." unique_id=707418245]
+clip_contents = true
+anchors_preset = -1
+anchor_top = 0.65
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="ColorRect" type="ColorRect" parent="Panel" unique_id=1234567891]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.7)
+
+[node name="NameLabel" type="Label" parent="Panel" unique_id=60803568]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 2.0
+offset_right = 195.0
+offset_bottom = 18.0
+theme_override_colors/font_color = Color(1, 0.843137, 0, 1)
+theme_override_font_sizes/font_size = 10
+text = "Name"
+label_settings = SubResource("LabelSettings_u2tjw")
+vertical_alignment = 1
+
+[node name="TextLabel" type="Label" parent="Panel" unique_id=1455269902]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 16.0
+offset_right = 195.0
+offset_bottom = 44.0
+theme_override_font_sizes/font_size = 10
+text = "Dialogue text goes here..."
+label_settings = SubResource("LabelSettings_ianla")
+autowrap_mode = 2

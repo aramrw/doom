@@ -1,0 +1,93 @@
+Actor ShotgunMonk
+{
+Health 60
+Radius 20
+Height 56
+Mass 100
+Speed 10
+scale 0.6
+PainChance 100
+MONSTER
+SeeSound "SPOT"
+PainSound "PAN"
+DeathSound "DIE"
+ActiveSound "ROM"
+AttackSound "ATT"
+Obituary "%o got 'Maranax Pallexed' by a Shotgun welding Monk."
+Dropitem "Shell"
+States
+{
+  Spawn:
+    MARA P 2 A_Look
+    Loop
+  See:
+    MARA ABCDE 4 A_Chase
+    Loop
+  Missile:
+    MARA G 0 A_Jump (50, "Dynamite")
+    MARA G 6 Bright A_FaceTarget
+    MARA P 6 A_CustomBulletAttack (5, 4, 3, 4, "BulletPuff", 0)
+    MARA P 6 A_CPosRefire
+    Goto See
+  Dynamite:
+    MARA R 4 A_PlaySound("TOSS")
+    MARA S 4
+    MARA T 4 A_spawnprojectile ("Dynamit")
+    MARA U 4
+    Goto See
+  Pain:
+    MARA F 3 A_Pain
+    Goto See
+  Death:
+    MARA H 4 A_Scream
+    MARA I 4 A_Noblocking
+    MARA J 4
+    MARA K 4
+    MARA L 4
+    MARA M 4
+    MARA N 4
+    MARA O -1
+    Stop
+  XDeath:
+	MARD A 4 A_XScream
+	MARD B 4 A_NoBlocking
+	MARD C 4
+	MARD D 4
+	MARD E 4
+	MARD F 4
+	MARD G -1
+	Stop
+  }
+}
+ACTOR Dynamit
+{
+  Radius 8
+  Height 8
+  Speed 25
+  scale 0.5
+  Projectile
+  -NOGRAVITY
+  +RANDOMIZE
+  +DEHEXPLOSION
+  +GrenadeTrail
+  BounceType "Doom"
+  Gravity 0.5
+  Scale 0.8
+  damage 10
+  DeathSound "EXPLODCL"
+  BounceSound "LAND"
+  Obituary "%o tried to use a burning dynamite as a Flare."
+  States
+  {
+  Spawn:
+    DYNA A 3 Bright NoDelay A_StartSound("TNTFUSE",7,CHANF_LOOPING)
+    DYNA BCDEFGH 3 Bright
+    Loop
+   Death:
+    TNT1 A 0 A_Setscale(0.8)
+    TNT1 A 0 A_StopSound(7)
+    DYEX A 2 Bright A_Explode
+    DYEX BCDEFGHIJKLM 2 Bright
+    Stop
+  }
+}

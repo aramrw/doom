@@ -1,0 +1,57 @@
+ACTOR MWeapFire_Missile : FireBall {
+	Speed 32
+	DamageType "Fire"
+	Projectile
+	DeathSound "Fireball"
+	Obituary "%k toasted %o with the Fire Blast!"
+}
+
+ACTOR MWeapFire : MageWeapon 13020 {
+	+BLOODSPLATTER
+	Weapon.SelectionOrder 1800
+	Weapon.AmmoType1 "Mana1"
+	Weapon.AmmoUse1 3
+	Weapon.AmmoGive1 25
+	Weapon.KickBack 150
+	Weapon.YAdjust 20
+	Inventory.PickupMessage "Scroll of Fire Blast"
+	Obituary "%k toasted %o with the Fire Blast!"
+	Tag "Fire Blast"
+	
+	AttackSound "MageShardsFire" 
+	
+	Weapon.SlotNumber 2
+
+	States {
+		Spawn:
+			WMCF ABCB 4 Bright
+			Loop
+		Select:
+			CONF AAAABBBBCCCC 1 A_Raise
+			Loop
+		Deselect:
+			CONF AAAABBBBCCCC 1 A_Lower
+			Loop
+		Ready:
+			CONF AAAABBBBCCCC 1 A_WeaponReady
+			Loop
+		Fire:
+			CONF D 3
+			CONF E 3
+		Hold:
+			CONF F 3
+			CONF G 5
+			CONF H 3 A_PlayWeaponSound("FireDemonAttack")
+		//	CONF H 0 A_FireCustomMissile("MWeapFire_Missile", 0, false ,-4, 8, FPF_NOAUTOAIM, 0) // This was removed for damage reasons.
+			CONF H 0 A_FireCustomMissile("MWeapFire_Missile", 3, false ,-4, 8, FPF_NOAUTOAIM,-1) // TODO: make these tighter to compensate(?)
+			CONF H 0 A_FireCustomMissile("MWeapFire_Missile", 0, false ,-4, 8, FPF_NOAUTOAIM,-3)
+			CONF H 0 A_FireCustomMissile("MWeapFire_Missile",-3, false ,-4, 8, FPF_NOAUTOAIM,-1)
+			CONF H 0 A_FireCustomMissile("MWeapFire_Missile", 1, false ,-4, 8, FPF_NOAUTOAIM, 2)
+			CONF H 0 A_FireCustomMissile("MWeapFire_Missile",-1, TRUE,-4, 8, FPF_NOAUTOAIM, 2)
+			CONF F 3
+			CONF E 3
+			CONF D 3
+			CONF A 2 A_ReFire
+			Goto Ready
+	}
+}

@@ -16,6 +16,11 @@ SPEED = 3.0
 LOOK_SPEED = 1.8
 
 [node name="CharacterBody3D" type="CharacterBody3D" parent="." unique_id=995130082]
+collision_layer = 2
+collision_mask = 5
+
+[node name="AudioListener3D" type="AudioListener3D" parent="CharacterBody3D" unique_id=116529856]
+current = true
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D" unique_id=688962295]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -27,14 +32,19 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.473389, 0)
 [node name="Camera" type="Camera3D" parent="CharacterBody3D/ShakeGimbal" unique_id=1370230432]
 transform = Transform3D(1, 0, 0, 0, 0.9911647, 0.13263698, 0, -0.13263698, 0.9911647, 0, 0, 0)
 
-[node name="AimRayCast" type="RayCast3D" parent="CharacterBody3D/Camera" unique_id=1414309329]
+[node name="AimRayCast" type="RayCast3D" parent="CharacterBody3D/ShakeGimbal/Camera" unique_id=1414309329]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.184246e-05, 0)
 target_position = Vector3(0, 0, -100)
+collision_mask = 5
+
+[node name="InteractRay" type="RayCast3D" parent="CharacterBody3D/ShakeGimbal/Camera" unique_id=1234567890]
+target_position = Vector3(0, 0, -2)
+collision_mask = 4
 
 [node name="WeaponManager" type="Node3D" parent="." unique_id=536228798 node_paths=PackedStringArray("aim_raycast") groups=["WeaponManager"]]
 visible = false
 script = ExtResource("2_rkbax")
-aim_raycast = NodePath("../CharacterBody3D/Camera/AimRayCast")
+aim_raycast = NodePath("../CharacterBody3D/ShakeGimbal/Camera/AimRayCast")
 primary_weapon = ExtResource("3_boad6")
 secondary_weapon = ExtResource("4_boad6")
 

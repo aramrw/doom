@@ -1,0 +1,293 @@
+[gd_scene format=3 uid="uid://b45e5hjqdka1g"]
+
+[ext_resource type="Script" uid="uid://c0seuvhjuadad" path="res://npcs/base_npc.gd" id="1_base"]
+[ext_resource type="Script" uid="uid://38lt845hd6jo" path="res://enemies/enemy_sounds.gd" id="2_sounds"]
+[ext_resource type="Texture2D" uid="uid://kr1s8fa12q6o" path="res://npcs/ShotgunMonk/sprites/MARAA1.png" id="3_tex"]
+[ext_resource type="Texture2D" uid="uid://dd5r1hm4ur2tl" path="res://npcs/ShotgunMonk/sprites/MARAB1.png" id="4_tex"]
+[ext_resource type="Texture2D" uid="uid://car7uu4u8we6i" path="res://npcs/ShotgunMonk/sprites/MARAC1.png" id="5_tex"]
+[ext_resource type="Texture2D" uid="uid://cr1f4olsbm4sr" path="res://npcs/ShotgunMonk/sprites/MARAD1.png" id="6_tex"]
+[ext_resource type="Texture2D" uid="uid://qux5fd7b38s7" path="res://npcs/ShotgunMonk/sprites/MARAE1.png" id="7_tex"]
+[ext_resource type="Texture2D" uid="uid://dju6now1bw4my" path="res://npcs/ShotgunMonk/sprites/MARAA8A2.png" id="8_tex"]
+[ext_resource type="Texture2D" uid="uid://da7sjnosvsw5w" path="res://npcs/ShotgunMonk/sprites/MARAB8B2.png" id="9_tex"]
+[ext_resource type="Texture2D" uid="uid://b2sbhykn13yep" path="res://npcs/ShotgunMonk/sprites/MARAC8C2.png" id="10_tex"]
+[ext_resource type="Texture2D" uid="uid://dtdnkg86guehd" path="res://npcs/ShotgunMonk/sprites/MARAD8D2.png" id="11_tex"]
+[ext_resource type="Texture2D" uid="uid://dbmyca1f380nn" path="res://npcs/ShotgunMonk/sprites/MARAE8E2.png" id="12_tex"]
+[ext_resource type="Texture2D" uid="uid://dplus2eb8d4eq" path="res://npcs/ShotgunMonk/sprites/MARAA7A3.png" id="13_tex"]
+[ext_resource type="Texture2D" uid="uid://m18tk7i7b1tf" path="res://npcs/ShotgunMonk/sprites/MARAB7B3.png" id="14_tex"]
+[ext_resource type="Texture2D" uid="uid://bmuqdkn5ht258" path="res://npcs/ShotgunMonk/sprites/MARAC7C3.png" id="15_tex"]
+[ext_resource type="Texture2D" uid="uid://bs2e04rt5h3up" path="res://npcs/ShotgunMonk/sprites/MARAD7D3.png" id="16_tex"]
+[ext_resource type="Texture2D" uid="uid://clm5ucnd8bum2" path="res://npcs/ShotgunMonk/sprites/MARAE7E3.png" id="17_tex"]
+[ext_resource type="Texture2D" uid="uid://dw64rup2urt4n" path="res://npcs/ShotgunMonk/sprites/MARAA6A4.png" id="18_tex"]
+[ext_resource type="Texture2D" uid="uid://dql3cmiv1mitc" path="res://npcs/ShotgunMonk/sprites/MARAB6B4.png" id="19_tex"]
+[ext_resource type="Texture2D" uid="uid://67gl6y2xt2a0" path="res://npcs/ShotgunMonk/sprites/MARAC6C4.png" id="20_tex"]
+[ext_resource type="Texture2D" uid="uid://6knnqfg1rrqc" path="res://npcs/ShotgunMonk/sprites/MARAD6D4.png" id="21_tex"]
+[ext_resource type="Texture2D" uid="uid://bi74eop08lx7k" path="res://npcs/ShotgunMonk/sprites/MARAE6E4.png" id="22_tex"]
+[ext_resource type="Texture2D" uid="uid://dg74beh43yyh3" path="res://npcs/ShotgunMonk/sprites/MARAA5.png" id="23_tex"]
+[ext_resource type="Texture2D" uid="uid://c031ibub4cjt8" path="res://npcs/ShotgunMonk/sprites/MARAB5.png" id="24_tex"]
+[ext_resource type="Texture2D" uid="uid://dern6lsnfnp6" path="res://npcs/ShotgunMonk/sprites/MARAC5.png" id="25_tex"]
+[ext_resource type="Texture2D" uid="uid://tkt1xj2dvqnk" path="res://npcs/ShotgunMonk/sprites/MARAD5.png" id="26_tex"]
+[ext_resource type="Texture2D" uid="uid://dbqn4y1v72e31" path="res://npcs/ShotgunMonk/sprites/MARAE5.png" id="27_tex"]
+[ext_resource type="Texture2D" uid="uid://c87o1bj14vqg5" path="res://npcs/ShotgunMonk/sprites/MARAF1.png" id="28_tex"]
+[ext_resource type="Texture2D" uid="uid://dtuhhr4w2k3lf" path="res://npcs/ShotgunMonk/sprites/MARAH0.png" id="29_tex"]
+[ext_resource type="Texture2D" uid="uid://bhwdnjp7a8ggh" path="res://npcs/ShotgunMonk/sprites/MARAI0.png" id="30_tex"]
+[ext_resource type="Texture2D" uid="uid://dopptboqyo3y6" path="res://npcs/ShotgunMonk/sprites/MARAJ0.png" id="31_tex"]
+[ext_resource type="Texture2D" uid="uid://cxwytj2uyr5ch" path="res://npcs/ShotgunMonk/sprites/MARAK0.png" id="32_tex"]
+[ext_resource type="Texture2D" uid="uid://cl3dajekj5m1l" path="res://npcs/ShotgunMonk/sprites/MARAL0.png" id="33_tex"]
+[ext_resource type="Texture2D" uid="uid://ca0dxy15ufc1w" path="res://npcs/ShotgunMonk/sprites/MARAM0.png" id="34_tex"]
+[ext_resource type="Texture2D" uid="uid://c0pxgha25qw1x" path="res://npcs/ShotgunMonk/sprites/MARAN0.png" id="35_tex"]
+[ext_resource type="Texture2D" uid="uid://rca5ls8oljgm" path="res://npcs/ShotgunMonk/sprites/MARAO0.png" id="36_tex"]
+[ext_resource type="Texture2D" uid="uid://bsbjnric3csr1" path="res://npcs/ShotgunMonk/sprites/MARAG1.png" id="37_tex"]
+[ext_resource type="Texture2D" uid="uid://bwvuacp17xo7o" path="res://npcs/ShotgunMonk/sprites/MARAP1.png" id="38_tex"]
+[ext_resource type="Texture2D" uid="uid://cixrwstyh5lvv" path="res://npcs/ShotgunMonk/sprites/MARAG8G2.png" id="39_tex"]
+[ext_resource type="Texture2D" uid="uid://cqpsjbkhmd3ij" path="res://npcs/ShotgunMonk/sprites/MARAP8P2.png" id="40_tex"]
+[ext_resource type="Texture2D" uid="uid://sbkbcvp3n15m" path="res://npcs/ShotgunMonk/sprites/MARAG7G3.png" id="41_tex"]
+[ext_resource type="Texture2D" uid="uid://cy53asicav5m5" path="res://npcs/ShotgunMonk/sprites/MARAP7P3.png" id="42_tex"]
+[ext_resource type="Texture2D" uid="uid://cfaib17wvc6yu" path="res://npcs/ShotgunMonk/sprites/MARAG6G4.png" id="43_tex"]
+[ext_resource type="Texture2D" uid="uid://xk8ccsp0hrx4" path="res://npcs/ShotgunMonk/sprites/MARAP6P4.png" id="44_tex"]
+[ext_resource type="Texture2D" uid="uid://ygau8v5l03db" path="res://npcs/ShotgunMonk/sprites/MARAG5.png" id="45_tex"]
+[ext_resource type="Texture2D" uid="uid://dycal7h44tsy6" path="res://npcs/ShotgunMonk/sprites/MARAP5.png" id="46_tex"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1"]
+radius = 1.1286621
+height = 2.2573242
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_1"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("37_tex")
+}, {
+"duration": 1.0,
+"texture": ExtResource("38_tex")
+}],
+"loop": false,
+"name": &"attack_1",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("39_tex")
+}, {
+"duration": 1.0,
+"texture": ExtResource("40_tex")
+}],
+"loop": false,
+"name": &"attack_2",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("41_tex")
+}, {
+"duration": 1.0,
+"texture": ExtResource("42_tex")
+}],
+"loop": false,
+"name": &"attack_3",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("43_tex")
+}, {
+"duration": 1.0,
+"texture": ExtResource("44_tex")
+}],
+"loop": false,
+"name": &"attack_4",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("45_tex")
+}, {
+"duration": 1.0,
+"texture": ExtResource("46_tex")
+}],
+"loop": false,
+"name": &"attack_5",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("29_tex")
+}, {
+"duration": 1.0,
+"texture": ExtResource("30_tex")
+}, {
+"duration": 1.0,
+"texture": ExtResource("31_tex")
+}, {
+"duration": 1.0,
+"texture": ExtResource("32_tex")
+}, {
+"duration": 1.0,
+"texture": ExtResource("33_tex")
+}, {
+"duration": 1.0,
+"texture": ExtResource("34_tex")
+}, {
+"duration": 1.0,
+"texture": ExtResource("35_tex")
+}, {
+"duration": 1.0,
+"texture": ExtResource("36_tex")
+}],
+"loop": false,
+"name": &"death_1",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("28_tex")
+}],
+"loop": false,
+"name": &"pain_1",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_tex")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_tex")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_tex")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_tex")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_tex")
+}],
+"loop": true,
+"name": &"walk_1",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("8_tex")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_tex")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_tex")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_tex")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_tex")
+}],
+"loop": true,
+"name": &"walk_2",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("13_tex")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_tex")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_tex")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_tex")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_tex")
+}],
+"loop": true,
+"name": &"walk_3",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("18_tex")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19_tex")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_tex")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_tex")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22_tex")
+}],
+"loop": true,
+"name": &"walk_4",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("23_tex")
+}, {
+"duration": 1.0,
+"texture": ExtResource("24_tex")
+}, {
+"duration": 1.0,
+"texture": ExtResource("25_tex")
+}, {
+"duration": 1.0,
+"texture": ExtResource("26_tex")
+}, {
+"duration": 1.0,
+"texture": ExtResource("27_tex")
+}],
+"loop": true,
+"name": &"walk_5",
+"speed": 8.0
+}]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_au4qf"]
+radius = 2.019645
+
+[node name="ShotgunMonk" type="CharacterBody3D" unique_id=1155083772 groups=["Enemies", "NPCs"]]
+collision_layer = 4
+collision_mask = 3
+script = ExtResource("1_base")
+follows_player = true
+npc_display_name = "散弾銃僧"
+dialogue_lines = Array[String](["生きてるか。", "ジゴクだ。はやく外に出ればいい。"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1445630673]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2227539, 0)
+shape = SubResource("CapsuleShape3D_1")
+
+[node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="." unique_id=2036543861]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+pixel_size = 0.03
+billboard = 2
+shaded = true
+texture_filter = 0
+sprite_frames = SubResource("SpriteFrames_1")
+animation = &"walk_1"
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="." unique_id=783421459]
+
+[node name="RayCast3D" type="RayCast3D" parent="." unique_id=414383251]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+target_position = Vector3(0, 0, -10)
+collision_mask = 3
+
+[node name="EnemySounds" type="AudioStreamPlayer3D" parent="." unique_id=1959173265]
+bus = &"SfxBus"
+script = ExtResource("2_sounds")
+death_folder = "res://npcs/ShotgunMonk/sounds/death"
+hurt_folder = "res://npcs/ShotgunMonk/sounds/hurt"
+taunt_folder = "res://npcs/ShotgunMonk/sounds/taunt"
+
+[node name="InteractionZone" type="Area3D" parent="." unique_id=1062173447]
+collision_layer = 4
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="InteractionZone" unique_id=937984414]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2591308, 0)
+shape = SubResource("SphereShape3D_au4qf")

@@ -63,6 +63,9 @@ func _process(delta):
 	if Input.is_action_just_pressed("reload"):
 		weapon_manager.reload()
 		
+	if Input.is_action_just_pressed("interact"):
+		handle_interaction()
+		
 	if Input.is_key_pressed(KEY_1):
 		weapon_manager.switch_to_slot("primary")
 		if weapon_manager.current_weapon:
@@ -79,6 +82,25 @@ func _process(delta):
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 		else:
 			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+
+func handle_interaction():
+	# 1. If dialogue is already open, advance it and return
+	var dialogue_ui = get_tree().get_first_node_in_group("DialogueUI")
+	if dialogue_ui and dialogue_ui.visible:
+		dialogue_ui.advance()
+		return
+		
+	# 2. Otherwise, look for something to interact with
+	var interact_ray = $CharacterBody3D/ShakeGimbal/Camera/InteractRay
+	interact_ray.force_raycast_update()
+	
+	if interact_ray.is_colliding():
+		var collider = interact_ray.get_collider()
+		# Check body and parent for interact method
+		if collider.has_method("interact"):
+			collider.interact()
+		elif collider.get_parent() and collider.get_parent().has_method("interact"):
+			collider.get_parent().interact()
 
 func _physics_process(delta: float) -> void:
 	if not body.is_on_floor():

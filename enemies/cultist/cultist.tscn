@@ -43,7 +43,7 @@
 [ext_resource type="Texture2D" uid="uid://dhj3xoinrn7lx" path="res://enemies/cultist/Sprites/CULTB4D6.png" id="37_1hb6h"]
 [ext_resource type="Texture2D" uid="uid://jfdf2leaw8du" path="res://enemies/cultist/Sprites/CULTA5C5.png" id="38_b1b5v"]
 [ext_resource type="Texture2D" uid="uid://2tkaff5m1451" path="res://enemies/cultist/Sprites/CULTB5D5.png" id="39_pexd8"]
-[ext_resource type="PackedScene" uid="uid://b51q3r7u1i6x8" path="res://enemies/cultist/cultist_projectile.tscn" id="99_proj"]
+[ext_resource type="PackedScene" uid="uid://cas8ousilaye8" path="res://enemies/cultist/cultist_projectile.tscn" id="99_proj"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ej5ua"]
 height = 1.6981964
@@ -245,7 +245,9 @@ frequency = 0.0284
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_dpth8"]
 noise = SubResource("FastNoiseLite_g0j55")
 
-[node name="Cultist" type="CharacterBody3D" unique_id=1006558139]
+[node name="Cultist" type="CharacterBody3D" unique_id=1006558139 groups=["Enemies"]]
+collision_layer = 4
+collision_mask = 3
 floor_stop_on_slope = false
 safe_margin = 0.1
 script = ExtResource("1_2cjw2")
@@ -273,6 +275,7 @@ animation = &"attack_1"
 simplify_path = true
 
 [node name="RayCast3D" type="RayCast3D" parent="." unique_id=1035914153]
+collision_mask = 3
 
 [node name="EnemySounds" type="AudioStreamPlayer3D" parent="." unique_id=22765739]
 pitch_scale = 5.0

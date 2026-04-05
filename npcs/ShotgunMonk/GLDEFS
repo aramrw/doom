@@ -1,0 +1,93 @@
+Flickerlight TNT_TOSS
+{
+    color 0.5 0.3 0.1
+    size 32
+    secondarySize 40
+    chance 0.7
+}
+Pointlight TNT_EXP_01
+{
+    color 0.8 0.7 0.3
+    size 64
+}
+Pointlight TNT_EXP_02
+{
+    color 0.8 0.7 0.3
+    size 72
+}
+Pointlight TNT_EXP_03
+{
+    color 0.8 0.6 0.3
+    size 78
+}
+Pointlight TNT_EXP_04
+{
+    color 0.8 0.5 0.2
+    size 82
+}
+Pointlight TNT_EXP_05
+{
+    color 0.8 0.5 0.1
+    size 86
+}
+Pointlight TNT_EXP_06
+{
+    color 0.8 0.5 0.1
+    size 90
+}
+Pointlight TNT_EXP_07
+{
+    color 0.6 0.3 0.1
+    size 90
+}
+Pointlight TNT_EXP_08
+{
+    color 0.6 0.3 0.1
+    size 84
+}
+Pointlight TNT_EXP_09
+{
+    color 0.5 0.2 0.1
+    size 84
+}
+Pointlight TNT_EXP_10
+{
+    color 0.5 0.2 0.1
+    size 78
+}
+Pointlight TNT_EXP_11
+{
+    color 0.5 0.2 0.1
+    size 70
+}
+Pointlight TNT_EXP_12
+{
+    color 0.4 0.1 0.1
+    size 60
+}
+Pointlight SGUN_CULTIST
+{
+    color 0.6 0.4 0.2
+    size 40
+}
+Object Dynamit
+{
+    Frame DYNA { light TNT_TOSS }
+    Frame DYEXA { light TNT_EXP_01 }
+    Frame DYEXB { light TNT_EXP_02 }
+    Frame DYEXC { light TNT_EXP_03 }
+    Frame DYEXD { light TNT_EXP_04 }
+    Frame DYEXE { light TNT_EXP_05 }
+    Frame DYEXF { light TNT_EXP_06 }
+    Frame DYEXG { light TNT_EXP_07 }
+    Frame DYEXH { light TNT_EXP_08 }
+    Frame DYEXI { light TNT_EXP_09 }
+    Frame DYEXJ { light TNT_EXP_09 }
+    Frame DYEXK { light TNT_EXP_10 }
+    Frame DYEXL { light TNT_EXP_11 }
+    Frame DYEXM { light TNT_EXP_12 }
+}
+Object ShotgunMonk
+{
+    Frame MARAG { light SGUN_CULTIST }
+}

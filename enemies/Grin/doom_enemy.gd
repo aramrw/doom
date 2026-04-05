@@ -15,6 +15,7 @@ class_name DoomEnemyBase
 @onready var sfx = $EnemySounds
 
 var player: Node3D
+var target_node: Node3D = null
 var current_anim_state: String = "walk"
 
 # --- PROJECTILE ---
@@ -47,26 +48,41 @@ func _physics_process(delta):
 	update_sprite_angle() 
 	
 	# Freeze the enemy if they are attacking OR flinching from pain
-	if not player or is_attacking or is_hit:
+	if is_attacking or is_hit:
 		velocity.x = 0
 		velocity.z = 0
 		move_and_slide() 
 		return
 
-	var distance_to_player = global_position.distance_to(player.body.global_position)
+	if not target_node:
+		# If no target, try to find player by default if we are an enemy
+		if not is_in_group("NPCs"):
+			target_node = player.body if player else null
+		
+	if not target_node:
+		current_anim_state = "walk"
+		velocity = Vector3.ZERO
+		move_and_slide()
+		return
+
+	var target_body = target_node
+	if target_node.has_node("CharacterBody3D"):
+		target_body = target_node.get_node("CharacterBody3D")
+
+	var distance_to_target = global_position.distance_to(target_body.global_position)
 	
-	los_raycast.target_position = to_local(player.body.global_position) + Vector3(0, 1, 0)
+	los_raycast.target_position = to_local(target_body.global_position) + Vector3(0, 1, 0)
 	los_raycast.force_raycast_update()
 	var ray_hit = los_raycast.get_collider()
 	
-	if distance_to_player <= detection_range: 
-		if distance_to_player <= attack_range and ray_hit == player.body: 
+	if distance_to_target <= detection_range: 
+		if distance_to_target <= attack_range and ray_hit == target_body: 
 			if not on_cooldown: 
 				attack() 
 			else: 
 				stand_and_stare() 
 		else: 
-			chase_player() 
+			chase_target() 
 	else: 
 		# Optional: Play an idle animation if the player is too far away 
 		current_anim_state = "walk" # Or "idle" if you have it 
@@ -133,9 +149,17 @@ func die():
 	queue_free()
 
 # --- MOVEMENT/ATTACK LOGIC ---
-func chase_player():
+func chase_target():
+	if not target_node or not is_instance_valid(target_node): 
+		target_node = null
+		return
+		
+	var target_body = target_node
+	if target_node.has_node("CharacterBody3D"):
+		target_body = target_node.get_node("CharacterBody3D")
+		
 	current_anim_state = "walk"
-	nav_agent.target_position = player.body.global_position
+	nav_agent.target_position = target_body.global_position
 	var next_path_pos = nav_agent.get_next_path_position()
 	
 	var current_pos = global_position
@@ -152,17 +176,33 @@ func chase_player():
 		look_at(look_target, Vector3.UP)
 
 func stand_and_stare():
+	if not target_node or not is_instance_valid(target_node):
+		target_node = null
+		return
+		
+	var target_body = target_node
+	if target_node.has_node("CharacterBody3D"):
+		target_body = target_node.get_node("CharacterBody3D")
+		
 	current_anim_state = "walk" 
 	velocity.x = 0
 	velocity.z = 0
 	
-	var dir_to_player = global_position.direction_to(player.body.global_position)
-	var look_target = global_position - dir_to_player
+	var dir_to_target = global_position.direction_to(target_body.global_position)
+	var look_target = global_position - dir_to_target
 	look_target.y = global_position.y
 	if global_position.distance_to(look_target) > 0.1:
 		look_at(look_target, Vector3.UP)
 
 func attack():
+	if not target_node or not is_instance_valid(target_node):
+		target_node = null
+		return
+		
+	var target_body = target_node
+	if target_node.has_node("CharacterBody3D"):
+		target_body = target_node.get_node("CharacterBody3D")
+		
 	is_attacking = true
 	on_cooldown = true 
 	current_anim_state = "attack" 
@@ -170,8 +210,8 @@ func attack():
 	velocity.x = 0
 	velocity.z = 0 
 	
-	var dir_to_player = global_position.direction_to(player.body.global_position)
-	var look_target = global_position - dir_to_player
+	var dir_to_target = global_position.direction_to(target_body.global_position)
+	var look_target = global_position - dir_to_target
 	look_target.y = global_position.y
 	if global_position.distance_to(look_target) > 0.1:
 		look_at(look_target, Vector3.UP)
@@ -186,16 +226,19 @@ func attack():
 			# Fire from chest height (around 1.2 meters)
 			proj.global_position = global_position + Vector3(0, 1.2, 0) 
 			
-			# Target the player's body
-			var dir = global_position.direction_to(player.body.global_position)
+			# Target the target's body
+			var dir = global_position.direction_to(target_body.global_position)
 			proj.setup(self, dir, attack_damage, 15.0) # Speed 15.0 for magic ball
 			
 			sfx.taunt()
 		else:
 			# Fallback to raycast/melee
 			los_raycast.force_raycast_update()
-			if los_raycast.get_collider() == player.body:
-				player.take_damage(attack_damage)
+			if los_raycast.get_collider() == target_body:
+				if target_body.has_method("take_damage"):
+					target_body.take_damage(attack_damage)
+				elif target_body.get_parent() and target_body.get_parent().has_method("take_damage"):
+					target_body.get_parent().take_damage(attack_damage)
 				
 				# trigger taunt
 				sfx.taunt()
@@ -248,4 +291,8 @@ func update_sprite_angle():
 		sprite.flip_h = false # Never flip the death/pain animations
 		
 		if sprite.animation != current_anim_state:
-			sprite.play(current_anim_state)
+			if sprite.sprite_frames.has_animation(current_anim_state):
+				sprite.play(current_anim_state)
+			elif sprite.sprite_frames.has_animation(current_anim_state.replace("_1", "")):
+				# Fallback if _1 suffix is missing
+				sprite.play(current_anim_state.replace("_1", ""))

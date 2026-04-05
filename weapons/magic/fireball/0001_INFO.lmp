@@ -1,0 +1,15 @@
+Name: Fire Blast
+Class: 3
+Type: Projectile
+Palette: Hexen
+Summon: MWeapFire
+Ammo Type: Blue Mana
+Altfire: No
+Powered Mode: No
+Brightmaps: No
+Added States: No
+ACS: No
+
+
+A fire-based attack for Hexen's mage, based on the Frost Shards and about that power level. Great
+if you're using damage-types and need the mage to have a fire-based attack alongside the ice one.
