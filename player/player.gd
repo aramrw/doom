@@ -21,8 +21,16 @@ var noise_y = 0.0
 @export_category("Sensitivity")
 @export var mouse_sensitivity = 0.03;
 
-@export var SPEED = 5.0
+@export var SPRINT_SPEED = 7.0
+@export var NORMAL_SPEED = 5.0
+@export var SPEED = NORMAL_SPEED
 @export var LOOK_SPEED = 2.5 
+@export var SPRINT_FOV_MOD = 1.1 # 10% increase
+@export var FOV_CHANGE_SPEED = 5.0
+
+var is_sprinting = false
+@onready var default_fov = camera.fov
+
 const BOB_FREQ = 2.7
 const BOB_AMP = 0.03
 
@@ -58,10 +66,15 @@ func _ready():
 		hud.update_health(health)
 
 func _process(delta):
-	if Input.is_action_just_pressed("shoot"): 
-		weapon_manager.fire()
-	if Input.is_action_just_pressed("reload"):
-		weapon_manager.reload()
+	# Don't allow shooting/reloading while dialogue is active
+	var dialogue_ui = get_tree().get_first_node_in_group("DialogueUI")
+	var in_dialogue = dialogue_ui and dialogue_ui.is_active
+	
+	if not in_dialogue:
+		if Input.is_action_just_pressed("shoot"): 
+			weapon_manager.fire()
+		if Input.is_action_just_pressed("reload"):
+			weapon_manager.reload()
 		
 	if Input.is_action_just_pressed("interact"):
 		handle_interaction()
@@ -106,6 +119,27 @@ func _physics_process(delta: float) -> void:
 	if not body.is_on_floor():
 		body.velocity.y -= 9.8 * delta
 
+	# Check if we should lock movement due to dialogue
+	var dialogue_ui = get_tree().get_first_node_in_group("DialogueUI")
+	var in_dialogue = dialogue_ui and dialogue_ui.is_active
+
+	if in_dialogue:
+		body.velocity.x = 0
+		body.velocity.z = 0
+		body.move_and_slide()
+		return
+
+	# 1. Update sprinting state (only if moving forward and not in dialogue)
+	var is_moving_forward = Input.is_action_pressed("move_forward")
+	is_sprinting = Input.is_action_pressed("sprint") and is_moving_forward and not in_dialogue
+
+	# 2. Set current speed
+	SPEED = SPRINT_SPEED if is_sprinting else NORMAL_SPEED
+
+	# 3. Handle FOV Change
+	var target_fov = default_fov * (SPRINT_FOV_MOD if is_sprinting else 1.0)
+	camera.fov = lerp(camera.fov, target_fov, delta * FOV_CHANGE_SPEED)
+
 	# 1. Handle Keyboard Look
 	var look_dir = Input.get_vector("look_left", "look_right", "look_up", "look_down")
 	
@@ -126,7 +160,8 @@ func _physics_process(delta: float) -> void:
 		body.velocity.z = move_toward(body.velocity.z, 0, SPEED)
 
 	# 4. Handle Head Bob (3D Camera)
-	tbob += delta * body.velocity.length() * float(body.is_on_floor())
+	var bob_multiplier = 1.5 if is_sprinting else 1.0
+	tbob += delta * body.velocity.length() * float(body.is_on_floor()) * bob_multiplier
 	camera.transform.origin = _headbob(tbob)
 	
 	# 5. Handle Weapon Bob (2D Sprite)
@@ -161,6 +196,11 @@ func _headbob(time) -> Vector3:
 	return pos
 	
 func _unhandled_input(event: InputEvent) -> void:
+	# Don't allow looking around while in dialogue
+	var dialogue_ui = get_tree().get_first_node_in_group("DialogueUI")
+	if dialogue_ui and dialogue_ui.is_active:
+		return
+		
 	# Only look around if the mouse is currently captured
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 		
