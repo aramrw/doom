@@ -17,13 +17,14 @@
 [ext_resource type="PackedScene" uid="uid://b0wwypm788ncq" path="res://assets/columns/col_blk.tscn" id="15_3v7ru"]
 [ext_resource type="Script" uid="uid://kbmsmpu4qvo8" path="res://bg_music.gd" id="16_tcnuu"]
 [ext_resource type="AudioStream" uid="uid://b3un15ghkddtr" path="res://audio/cave_ambience.mp3" id="16_tuemg"]
-[ext_resource type="PackedScene" path="res://ui/dialogue_ui.tscn" id="17_dialogue"]
+[ext_resource type="PackedScene" uid="uid://0lefihnkg1ip" path="res://ui/dialogue_ui.tscn" id="17_dialogue"]
 [ext_resource type="PackedScene" uid="uid://b45e5hjqdka1g" path="res://npcs/shotgun_monk.tscn" id="18_monk"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_i5arm"]
 shader = ExtResource("1_jka67")
 shader_parameter/pixel_size = 1.5
 shader_parameter/color_depth = 32.0
+shader_parameter/dialogue_focus = 0.0
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_a202f"]
 sky_top_color = Color(0.585246, 0.6536295, 0.7450294, 1)
@@ -82,7 +83,7 @@ data = ExtResource("9_6iypd")
 [node name="RetroFilter" type="CanvasLayer" parent="." unique_id=781796435]
 layer = 10
 
-[node name="ColorRect" type="ColorRect" parent="RetroFilter" unique_id=2075655455]
+[node name="ColorRect" type="ColorRect" parent="RetroFilter" unique_id=2075655455 groups=["RetroFilter"]]
 material = SubResource("ShaderMaterial_i5arm")
 anchors_preset = 15
 anchor_right = 1.0
@@ -190,6 +191,9 @@ transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -16.56237, 6.7422633, -12.564
 
 [node name="WallTorchBlack" parent="." unique_id=355198309 instance=ExtResource("14_wlxy5")]
 transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, -5.8310413, 5.9201093, 2.0631137)
+
+[node name="WallTorchBlack10" parent="." unique_id=411949383 instance=ExtResource("14_wlxy5")]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 2.465754, 6.136967, -2.980298)
 
 [node name="WallTorchBlack7" parent="." unique_id=220572612 instance=ExtResource("14_wlxy5")]
 transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, -22.752525, 5.9201093, 4.8539376)
