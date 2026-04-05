@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="SoundEffect" format=3 uid="uid://dmac10firesound"]
+
+[ext_resource type="Script" uid="uid://c25be5u8w2wr0" path="res://weapons/effects/sound_effect.gd" id="1_sound_script"]
+[ext_resource type="AudioStream" uid="uid://b8r5supqs0xio" path="res://weapons/smgs/dual_macs/Sounds/MACFIRE.ogg" id="2_sound"]
+
+[resource]
+script = ExtResource("1_sound_script")
+sound = ExtResource("2_sound")
+pitch_randomness = 0.05

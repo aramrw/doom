@@ -173,7 +173,7 @@ animations = [{
 }],
 "loop": false,
 "name": &"death_2",
-"speed": 8.0
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -254,6 +254,7 @@ script = ExtResource("1_2cjw2")
 speed = 1.5
 attack_range = 15.0
 attack_damage = 15
+attack_cooldown = 1.9
 detection_range = 30.0
 projectile_scene = ExtResource("99_proj")
 health = 50
@@ -265,11 +266,11 @@ shape = SubResource("CapsuleShape3D_ej5ua")
 [node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="." unique_id=2131804395]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0.6729889, 0)
 pixel_size = 0.02
-billboard = 2
+billboard = 1
 shaded = true
 texture_filter = 0
 sprite_frames = SubResource("SpriteFrames_g1gdb")
-animation = &"attack_1"
+animation = &"death_2"
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="." unique_id=255344233]
 simplify_path = true

@@ -5,10 +5,33 @@ extends CanvasLayer
 @onready var fps_label = $FpsLabel
 @onready var bullets = $Bullets
 @onready var magazines = $Mag
+@onready var crosshair = $CenterContainer/TextureRect
+@onready var damage_flash = $DamageFlash
 
 func _ready():
 	# Force the heart to start pulsing the moment the HUD loads
 	heart_anim.play("default") 
+	
+	if damage_flash:
+		damage_flash.modulate.a = 0
+	
+	# Connect to weapon manager for hit feedback
+	var wm = get_tree().get_first_node_in_group("WeaponManager")
+	if wm:
+		if not wm.enemy_hit.is_connected(flash_hitmarker):
+			wm.enemy_hit.connect(flash_hitmarker)
+
+func flash_hitmarker():
+	if crosshair:
+		var tween = create_tween()
+		crosshair.modulate = Color(10, 10, 10, 1) # Pure White Glow
+		tween.tween_property(crosshair, "modulate", Color(1, 1, 1, 1), 0.1)
+
+func flash_damage():
+	if damage_flash:
+		var tween = create_tween()
+		damage_flash.modulate.a = 1.0
+		tween.tween_property(damage_flash, "modulate:a", 0.0, 0.3)
 
 func update_health(current_health: int):
 	health_bar.value = current_health

@@ -30,13 +30,19 @@ var is_dead: bool = false # For the corpse state
 @export var health: int = 100
 var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 
-# --- OUTLINE VARIABLES ---
+# --- VISUAL VARIABLES ---
+var visual_mat: ShaderMaterial = null
 var outline_active: bool = false
-var outline_mat: ShaderMaterial = null
 
 func _ready():
 	player = get_tree().get_first_node_in_group("Player")
 	los_raycast.add_exception(self)
+	
+	# Initialize our combined visual material
+	visual_mat = ShaderMaterial.new()
+	visual_mat.shader = load("res://shaders/enemy_visuals.gdshader")
+	sprite.material_override = visual_mat
+	
 	await get_tree().physics_frame
 
 func _process(_delta):
@@ -44,25 +50,20 @@ func _process(_delta):
 	if is_dead and outline_active:
 		set_outline(false)
 		
-	if outline_active and outline_mat and sprite:
+	if sprite and visual_mat:
 		var tex = sprite.sprite_frames.get_frame_texture(sprite.animation, sprite.frame)
-		outline_mat.set_shader_parameter("tex", tex)
+		visual_mat.set_shader_parameter("tex", tex)
 
 func set_outline(active: bool, color: Color = Color.RED):
 	if is_dead: 
 		outline_active = false
-		if sprite: sprite.material_overlay = null
+		if visual_mat: visual_mat.set_shader_parameter("outline_active", false)
 		return
 		
 	outline_active = active
-	if active:
-		if not outline_mat:
-			outline_mat = ShaderMaterial.new()
-			outline_mat.shader = load("res://shaders/outline.gdshader")
-		outline_mat.set_shader_parameter("outline_color", color)
-		if sprite: sprite.material_overlay = outline_mat
-	else:
-		if sprite: sprite.material_overlay = null
+	if visual_mat:
+		visual_mat.set_shader_parameter("outline_active", active)
+		visual_mat.set_shader_parameter("outline_color", color)
 
 func _physics_process(delta):
 	# Always apply gravity, even to corpses, so they don't float
@@ -125,6 +126,7 @@ func take_damage(amount: int):
 		return 
 		
 	health -= amount
+	print("Enemy ", name, " took ", amount, " damage. Health: ", health)
 	
 	if health <= 0:
 		die()
@@ -134,11 +136,16 @@ func take_damage(amount: int):
 		current_anim_state = "pain_1" 
 		sfx.hurt()
 		
-		# --- THE CLEAN HDR HIT FLASH ---
-		# We boost the modulation to 10.0 (Pure White HDR Glow)
-		sprite.modulate = Color(10, 10, 10, 1.0) 
-		var tween = create_tween()
-		tween.tween_property(sprite, "modulate", Color(1, 1, 1, 1), 0.15)
+		# --- AGGRESSIVE HIT FLASH (Shader + Modulate) ---
+		if visual_mat:
+			# Shader Mix to White
+			var tween = create_tween()
+			tween.tween_method(func(v): visual_mat.set_shader_parameter("hit_flash", v), 1.0, 0.0, 0.2)
+		
+		# Extreme modulation boost to ensure visibility 
+		sprite.modulate = Color(15, 15, 15, 1.0) 
+		var mod_tween = create_tween()
+		mod_tween.tween_property(sprite, "modulate", Color(1, 1, 1, 1), 0.2)
 		
 		update_sprite_angle()
 		
@@ -152,7 +159,22 @@ func die():
 	is_dead = true
 	is_hit = false
 	is_attacking = false
+	
+	# --- RAPID FINAL FLASH ---
+	# Fast rapid flashes right before the death animation kicks in
+	if visual_mat:
+		var ftween = create_tween()
+		for i in range(1): # 3 very rapid flashes
+			ftween.tween_method(func(v): visual_mat.set_shader_parameter("hit_flash", v), 1.0, 0.0, 0.05)
+			ftween.tween_interval(0.02)
+		sprite.modulate = Color(20.001, 20.001, 20.001, 1.0) # One last bright white pop
+		ftween.tween_property(sprite, "modulate", Color(1, 1, 1, 1), 0.1)
+		await ftween.finished
+	
+	# Reset visuals to normal for the death sprites
 	sprite.modulate = Color(1, 1, 1)
+	if visual_mat:
+		visual_mat.set_shader_parameter("hit_flash", 0.0)
 	
 	# freeze the enemy
 	velocity.x = 0

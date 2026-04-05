@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ProjectileEffect" format=3 uid="uid://b76v1qvyyrht"]
+
+[ext_resource type="Script" uid="uid://b1y6h2b2hchjv" path="res://weapons/effects/projectile_effect.gd" id="1_script"]
+[ext_resource type="PackedScene" uid="uid://c7k2h3n5j6m8l" path="res://weapons/projectiles/fire_crystal_projectile.tscn" id="2_scene"]
+
+[resource]
+script = ExtResource("1_script")
+projectile_scene = ExtResource("2_scene")
+speed = 35.0
+damage = 25

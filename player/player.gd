@@ -89,6 +89,11 @@ func _process(delta):
 		weapon_manager.switch_to_slot("secondary")
 		if weapon_manager.current_weapon:
 			hud.update_weapon_ui(weapon_manager.current_weapon)
+	
+	if Input.is_key_pressed(KEY_3):
+		weapon_manager.switch_to_slot("third")
+		if weapon_manager.current_weapon:
+			hud.update_weapon_ui(weapon_manager.current_weapon)
 		
 	_process_camera_shake(delta)
 	if Input.is_action_just_pressed("ui_cancel"):
@@ -267,6 +272,7 @@ func take_damage(amount: int):
 	
 	if hud:
 		hud.update_health(health)
+		hud.flash_damage()
 	
 	if health <= 0:
 		die()

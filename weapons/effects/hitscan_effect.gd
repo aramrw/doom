@@ -21,5 +21,7 @@ func execute(_source_node: Node, weapon_manager: Node) -> void:
 			var target = raycast.get_collider()
 			if target.has_method("take_damage"):
 				target.take_damage(damage)
+				if weapon_manager.has_signal("enemy_hit"):
+					weapon_manager.enemy_hit.emit()
 	
 	raycast.rotation_degrees = original_rotation

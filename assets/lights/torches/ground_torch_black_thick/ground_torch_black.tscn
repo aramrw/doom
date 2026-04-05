@@ -108,7 +108,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.01965332, 0)
 shape = SubResource("CapsuleShape3D_48ixm")
 
 [node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="." unique_id=1284294408]
-billboard = 1
+texture_filter = 0
+sprite_frames = SubResource("SpriteFrames_r0tkw")
+frame_progress = 0.81560767
+
+[node name="AnimatedSprite3D2" type="AnimatedSprite3D" parent="." unique_id=1127187003]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0, 0)
 texture_filter = 0
 sprite_frames = SubResource("SpriteFrames_r0tkw")
 frame_progress = 0.81560767

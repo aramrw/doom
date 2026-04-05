@@ -1,10 +1,10 @@
 [gd_resource type="Resource" script_class="WeaponAction" format=3 uid="uid://dvtuhpimo3b4a"]
 
-[ext_resource type="Script" uid="uid://7og58pc8mae4" path="res://weapons/weapon_action.gd" id="1_action"]
-[ext_resource type="Script" uid="uid://k0g2eck3n5cy" path="res://weapons/action_step.gd" id="2_i2yv2"]
-[ext_resource type="Resource" uid="uid://dupbovc3t6lhc" path="res://weapons/pistols/auto9/auto9_fire_step.tres" id="2_step"]
+[ext_resource type="Script" uid="uid://7og58pc8mae4" path="res://weapons/weapon_action.gd" id="1_action_script"]
+[ext_resource type="Script" uid="uid://k0g2eck3n5cy" path="res://weapons/action_step.gd" id="2_step_script"]
+[ext_resource type="Resource" uid="uid://dupbovc3t6lhc" path="res://weapons/pistols/auto9/auto9_fire_step.tres" id="3_step"]
 
 [resource]
-script = ExtResource("1_action")
-steps = Array[ExtResource("2_i2yv2")]([ExtResource("2_step")])
+script = ExtResource("1_action_script")
+steps = Array[ExtResource("2_step_script")]([ExtResource("3_step")])
 loop = true

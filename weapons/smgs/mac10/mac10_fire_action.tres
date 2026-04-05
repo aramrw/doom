@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="WeaponAction" format=3 uid="uid://dmac10fireaction"]
+
+[ext_resource type="Script" uid="uid://7og58pc8mae4" path="res://weapons/weapon_action.gd" id="1_action_script"]
+[ext_resource type="Script" uid="uid://k0g2eck3n5cy" path="res://weapons/action_step.gd" id="2_step_script"]
+[ext_resource type="Resource" uid="uid://dmac10firestep" path="res://weapons/smgs/mac10/mac10_fire_step.tres" id="3_step"]
+
+[resource]
+script = ExtResource("1_action_script")
+animation_name = "shoot"
+steps = Array[ExtResource("2_step_script")]([ExtResource("3_step")])
+loop = true
+consumes_ammo = true

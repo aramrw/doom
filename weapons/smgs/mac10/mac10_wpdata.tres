@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3 uid="uid://dmac10wpdata"]
+
+[ext_resource type="Script" uid="uid://cqlple4um3rs" path="res://weapons/weapon_data.gd" id="1_script"]
+[ext_resource type="SpriteFrames" uid="uid://dgvr46i3c2bhq" path="res://weapons/smgs/mac10/mac10_spriteframes.tres" id="2_spriteframes"]
+[ext_resource type="Resource" uid="uid://cp782esrrxpp" path="res://weapons/smgs/mac10/mac10_fire_action.tres" id="3_fire"]
+
+[resource]
+script = ExtResource("1_script")
+weapon_name = "mac10"
+sprite_frames = ExtResource("2_spriteframes")
+sprite_offset = Vector2(0, 5)
+actions = {
+"primary": ExtResource("3_fire")
+}
+max_bullets = 64

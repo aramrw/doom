@@ -42,10 +42,18 @@ func _physics_process(delta):
 		global_position += direction * speed * delta
 
 func _on_body_entered(body: Node3D):
+	var hit_something = false
 	if body.has_method("take_damage"):
 		body.take_damage(damage)
+		hit_something = true
 	elif body.get_parent() and body.get_parent().has_method("take_damage"):
 		body.get_parent().take_damage(damage)
+		hit_something = true
+		
+	if hit_something and firer and firer.is_in_group("Player"):
+		var wm = get_tree().get_first_node_in_group("WeaponManager")
+		if wm and wm.has_signal("enemy_hit"):
+			wm.enemy_hit.emit()
 
 	_on_impact()
 
@@ -61,4 +69,3 @@ func _on_impact():
 		await audio_player.finished
 
 	queue_free()
-

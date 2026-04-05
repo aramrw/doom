@@ -6,12 +6,14 @@ var offhand_sprite: AnimatedSprite2D
 
 signal ammo_updated(bullet_count: int)
 signal magazine_count_updated(magazine_count: int)
+signal enemy_hit
 
 @export var aim_raycast: RayCast3D
 
 # --- Weapon Slots ---
 @export var primary_weapon: WeaponData
 @export var secondary_weapon: WeaponData
+@export var third_weapon: WeaponData
 
 var current_weapon: WeaponData
 var current_slot: String = "none"
@@ -19,7 +21,8 @@ var current_slot: String = "none"
 # Track ammo per slot
 var slot_ammo = {
 	"primary": {"bullets": 0, "magazines": 1},
-	"secondary": {"bullets": 0, "magazines": 1}
+	"secondary": {"bullets": 0, "magazines": 1},
+	"third": {"bullets": 0, "magazines": 1}
 }
 
 # We keep these here because they are the "active" counts used by the manager
@@ -51,7 +54,12 @@ func switch_to_slot(slot_name: String):
 	if slot_name == current_slot: return
 	if is_reloading or current_action: return
 	
-	var next_weapon = primary_weapon if slot_name == "primary" else secondary_weapon
+	var next_weapon = null
+	match slot_name:
+		"primary": next_weapon = primary_weapon
+		"secondary": next_weapon = secondary_weapon
+		"third": next_weapon = third_weapon
+	
 	if not next_weapon: return
 	
 	# Save current ammo if we are switching from a valid slot
@@ -146,10 +154,15 @@ func process_step():
 				if effect is HitscanEffect or effect is ProjectileEffect:
 					if current_action.consumes_ammo:
 						bullets -= 1
+						print("WeaponManager: Consumed ammo. Remaining: ", bullets)
 						ammo_updated.emit(bullets)
+					else:
+						print("WeaponManager: Effect triggered but action does not consume ammo.")
 					
 					current_shot_count += 1
 					last_shot_time = Time.get_ticks_msec() / 1000.0
+				else:
+					print("WeaponManager: Executed non-firing effect: ", effect.get_class())
 
 func reload():
 	if is_reloading or current_action or magazine_count <= 0:

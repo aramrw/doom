@@ -1,0 +1,42 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://bg6c08ctwiq8d"]
+
+[ext_resource type="Texture2D" uid="uid://cp74hyqoktfpa" path="res://weapons/magic/fire_crystal_staff/attack_sprites/0005_FWNDA0.lmp.png" id="1_fwnda"]
+[ext_resource type="Texture2D" uid="uid://nthoh8v2kk61" path="res://weapons/magic/fire_crystal_staff/attack_sprites/0006_FWNDB0.lmp.png" id="2_fwndb"]
+[ext_resource type="Texture2D" uid="uid://cprmahijmb3yi" path="res://weapons/magic/fire_crystal_staff/attack_sprites/0007_FWNDC0.lmp.png" id="3_fwndc"]
+[ext_resource type="Texture2D" uid="uid://bt6bxg0arsnog" path="res://weapons/magic/fire_crystal_staff/attack_sprites/0008_FWNDD0.lmp.png" id="4_fwndd"]
+[ext_resource type="Texture2D" uid="uid://bgkuiwt4787u5" path="res://weapons/magic/fire_crystal_staff/attack_sprites/0009_FWNDE0.lmp.png" id="5_fwnde"]
+[ext_resource type="Texture2D" uid="uid://08lu4pty0mn2" path="res://weapons/magic/fire_crystal_staff/attack_sprites/0010_FWNDF0.lmp.png" id="6_fwndf"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_fwnda")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_fwnda")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_fwndb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_fwndc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_fwndd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_fwnde")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_fwndf")
+}],
+"loop": false,
+"name": &"shoot",
+"speed": 6.0
+}]

@@ -19,6 +19,7 @@
 [ext_resource type="AudioStream" uid="uid://b3un15ghkddtr" path="res://audio/cave_ambience.mp3" id="16_tuemg"]
 [ext_resource type="PackedScene" uid="uid://0lefihnkg1ip" path="res://ui/dialogue_ui.tscn" id="17_dialogue"]
 [ext_resource type="PackedScene" uid="uid://b45e5hjqdka1g" path="res://npcs/shotgun_monk.tscn" id="18_monk"]
+[ext_resource type="PackedScene" uid="uid://by41h2dwu1l1k" path="res://assets/lights/torches/fire/fire.tscn" id="20_jsnrv"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_i5arm"]
 shader = ExtResource("1_jka67")
@@ -95,7 +96,7 @@ grow_vertical = 2
 environment = SubResource("Environment_4xowi")
 
 [node name="Player" parent="." unique_id=432180329 instance=ExtResource("2_noarx")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8257423, 6.051029, -6.9778805)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -42.233692, 6.051029, 11.934803)
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="." unique_id=236648503]
 navigation_mesh = SubResource("NavigationMesh_wc5p8")
@@ -222,3 +223,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.3531837, 5.7549996, -4.1861
 follows_player = false
 attack_range = 4.0
 health = 500
+
+[node name="Fire" parent="." unique_id=494991560 instance=ExtResource("20_jsnrv")]
+transform = Transform3D(60, 0, 0, 0, 60, 0, 0, 0, 60, -12.998892, 16.566061, 8.25909)
+
+[node name="Fire2" parent="." unique_id=1944567405 instance=ExtResource("20_jsnrv")]
+transform = Transform3D(24.290804, 0, -17.605587, 0, 29.999998, 0, 17.605587, 0, 24.290804, -8.910022, 10.895618, -11.1331415)

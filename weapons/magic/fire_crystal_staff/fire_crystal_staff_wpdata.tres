@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3 uid="uid://03baw4lvekcn"]
+
+[ext_resource type="Script" uid="uid://cqlple4um3rs" path="res://weapons/weapon_data.gd" id="1_osl3q"]
+[ext_resource type="SpriteFrames" uid="uid://bg6c08ctwiq8d" path="res://weapons/magic/fire_crystal_staff/fire_crystal_staff_anims.tres" id="2_anims"]
+[ext_resource type="Resource" uid="uid://e76v1qvyyrht" path="res://weapons/magic/fire_crystal_staff/fire_crystal_staff_action.tres" id="3_action"]
+
+[resource]
+script = ExtResource("1_osl3q")
+weapon_name = "Fire Crystal Staff"
+sprite_frames = ExtResource("2_anims")
+actions = {
+"primary": ExtResource("3_action")
+}
+hud_hint = "MANA"
+max_bullets = 50

@@ -1,0 +1,9 @@
+Name: Fire Crystal
+Class: 1-2
+Type: Melee
+Palette: Heretic / png palette
+Summon: FireCrystal
+Ammo Type: None
+Altfire: No
+Powered Mode: Yes
+Added States: No

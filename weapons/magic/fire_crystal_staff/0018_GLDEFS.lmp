@@ -1,0 +1,19 @@
+
+//Fire Wand
+flickerlight FIREWANDLIGHT
+{
+    color 0.8 0.6 0.0
+    size 10
+    secondarySize 14
+    chance 0.4
+    offset 0 0 0
+}
+
+object FireWave
+{
+    frame FATT { light FIREWANDLIGHT }
+}
+object FireWavePowered
+{
+    frame FATT { light FIREWANDLIGHT }
+}

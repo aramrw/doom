@@ -1,0 +1,23 @@
+Name: Dual MAC-10
+Class: 4
+Type: Hitscan
+Palette: Doom
+Summon: DualMAC
+Ammo Type: Bullets
+Altfire: No
+Powered Mode: No
+Brightmaps: No
+Actor modification: No
+Idea: Companion piece to the Dual Berettas
+ACS: No
+
+Credits:
+Code: LossForWords
+Sounds: Valve, Hyperix
+Sprites: LossForWords, Joblez, Eurocom, iD Software.
+
+Description:
+The MAC-10 is a cheap, mass-produceable compact submachinegun, on the same vein of weapons like the STEN or the Uzi.
+It's not the sleekest, but it's boxy design has a certain charm to it, and it's size and weight makes it very easy to dual-wield.
+While it's firerate and capacity are excellent, it's accuracy (especially it's accuracy) and reload speed are not, and it's ammo consumption is off the charts.
+But so is it's style. Right below red aviators and black trenchcoats.
