@@ -21,9 +21,9 @@ var noise_y = 0.0
 @export_category("Sensitivity")
 @export var mouse_sensitivity = 0.03;
 
-@export var SPRINT_SPEED = 7.0
-@export var NORMAL_SPEED = 5.0
-@export var SPEED = NORMAL_SPEED
+@export var runspeed = 7.0
+@export var speed = 5.0
+@export var SPEED = speed
 @export var LOOK_SPEED = 2.5 
 @export var SPRINT_FOV_MOD = 1.1 # 10% increase
 @export var FOV_CHANGE_SPEED = 5.0
@@ -186,7 +186,7 @@ func _physics_process(delta: float) -> void:
 	is_sprinting = Input.is_action_pressed("sprint") and is_moving_forward and not in_dialogue
 
 	# 2. Set current speed
-	SPEED = SPRINT_SPEED if is_sprinting else NORMAL_SPEED
+	SPEED = runspeed if is_sprinting else speed
 
 	# 3. Handle FOV Change
 	var target_fov = default_fov * (SPRINT_FOV_MOD if is_sprinting else 1.0)
