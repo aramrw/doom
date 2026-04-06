@@ -5,9 +5,29 @@ pub enum Token {
     StringLiteral(String),
     BraceOpen,
     BraceClose,
+    ParenthesisOpen,
+    ParenthesisClose,
+    BracketOpen,
+    BracketClose,
     Colon,
     Comma,
     SemiColon,
+    Equals,
+    Dot,
+    Plus,
+    Minus,
+    Star,
+    Slash,
+    Percent,
+    Exclamation,
+    Ampersand,
+    Pipe,
+    Caret,
+    Tilde,
+    Less,
+    Greater,
+    Question,
+    Hash,
     Quote,
     Operator(String),
     Eof,
@@ -50,13 +70,151 @@ impl Lexer {
         match ch {
             '{' => { self.pos += 1; Token::BraceOpen }
             '}' => { self.pos += 1; Token::BraceClose }
+            '(' => { self.pos += 1; Token::ParenthesisOpen }
+            ')' => { self.pos += 1; Token::ParenthesisClose }
+            '[' => { self.pos += 1; Token::BracketOpen }
+            ']' => { self.pos += 1; Token::BracketClose }
             ':' => { self.pos += 1; Token::Colon }
             ',' => { self.pos += 1; Token::Comma }
             ';' => { self.pos += 1; Token::SemiColon }
+            '.' => {
+                if self.pos + 1 < self.input.len() && self.input[self.pos + 1].is_digit(10) {
+                    self.read_number()
+                } else {
+                    self.read_identifier()
+                }
+            }
+            '=' => {
+                self.pos += 1;
+                if self.pos < self.input.len() && self.input[self.pos] == '=' {
+                    self.pos += 1;
+                    Token::Operator("==".to_string())
+                } else {
+                    Token::Equals
+                }
+            }
+            '!' => {
+                self.pos += 1;
+                if self.pos < self.input.len() && self.input[self.pos] == '=' {
+                    self.pos += 1;
+                    Token::Operator("!=".to_string())
+                } else {
+                    Token::Exclamation
+                }
+            }
+            '+' => {
+                self.pos += 1;
+                if self.pos < self.input.len() && self.input[self.pos] == '+' {
+                    self.pos += 1;
+                    Token::Operator("++".to_string())
+                } else if self.pos < self.input.len() && self.input[self.pos] == '=' {
+                    self.pos += 1;
+                    Token::Operator("+=".to_string())
+                } else if self.pos < self.input.len() && (self.input[self.pos].is_alphabetic() || self.input[self.pos] == '_') {
+                    self.pos -= 1; // back to '+'
+                    self.read_identifier()
+                } else {
+                    Token::Plus
+                }
+            }
+            '-' => {
+                self.pos += 1;
+                if self.pos < self.input.len() && self.input[self.pos].is_digit(10) {
+                    self.pos -= 1; // back to '-'
+                    self.read_number()
+                } else if self.pos < self.input.len() && self.input[self.pos] == '-' {
+                    self.pos += 1;
+                    Token::Operator("--".to_string())
+                } else if self.pos < self.input.len() && self.input[self.pos] == '=' {
+                    self.pos += 1;
+                    Token::Operator("-=".to_string())
+                } else if self.pos < self.input.len() && self.input[self.pos] == '>' {
+                    self.pos += 1;
+                    Token::Operator("->".to_string())
+                } else if self.pos < self.input.len() && (self.input[self.pos].is_alphabetic() || self.input[self.pos] == '_') {
+                    self.pos -= 1; // back to '-'
+                    self.read_identifier()
+                } else {
+                    Token::Minus
+                }
+            }
+            '*' => {
+                self.pos += 1;
+                if self.pos < self.input.len() && self.input[self.pos] == '=' {
+                    self.pos += 1;
+                    Token::Operator("*=".to_string())
+                } else {
+                    Token::Star
+                }
+            }
+            '/' => {
+                self.pos += 1;
+                if self.pos < self.input.len() && self.input[self.pos] == '=' {
+                    self.pos += 1;
+                    Token::Operator("/=".to_string())
+                } else {
+                    Token::Slash
+                }
+            }
+            '%' => {
+                self.pos += 1;
+                if self.pos < self.input.len() && self.input[self.pos] == '=' {
+                    self.pos += 1;
+                    Token::Operator("%=".to_string())
+                } else {
+                    Token::Percent
+                }
+            }
+            '<' => {
+                self.pos += 1;
+                if self.pos < self.input.len() && self.input[self.pos] == '=' {
+                    self.pos += 1;
+                    Token::Operator("<=".to_string())
+                } else if self.pos < self.input.len() && self.input[self.pos] == '<' {
+                    self.pos += 1;
+                    Token::Operator("<<".to_string())
+                } else {
+                    Token::Less
+                }
+            }
+            '>' => {
+                self.pos += 1;
+                if self.pos < self.input.len() && self.input[self.pos] == '=' {
+                    self.pos += 1;
+                    Token::Operator(">=".to_string())
+                } else if self.pos < self.input.len() && self.input[self.pos] == '>' {
+                    self.pos += 1;
+                    Token::Operator(">>".to_string())
+                } else {
+                    Token::Greater
+                }
+            }
+            '&' => {
+                self.pos += 1;
+                if self.pos < self.input.len() && self.input[self.pos] == '&' {
+                    self.pos += 1;
+                    Token::Operator("&&".to_string())
+                } else {
+                    Token::Ampersand
+                }
+            }
+            '|' => {
+                self.pos += 1;
+                if self.pos < self.input.len() && self.input[self.pos] == '|' {
+                    self.pos += 1;
+                    Token::Operator("||".to_string())
+                } else {
+                    Token::Pipe
+                }
+            }
+            '^' => { self.pos += 1; Token::Caret }
+            '~' => { self.pos += 1; Token::Tilde }
+            '?' => { self.pos += 1; Token::Question }
+            '#' => { self.pos += 1; Token::Hash }
+            '$' => self.read_identifier(),
             '"' => self.read_string(),
             _ if ch.is_digit(10) => self.read_number(),
-            _ if ch == '-' && self.pos + 1 < self.input.len() && self.input[self.pos + 1].is_digit(10) => self.read_number(),
-            _ if ch.is_alphabetic() || ch == '_' || ch == '+' || ch == '-' || ch == '$' || ch == '.' => self.read_identifier(),
+            _ if ch.is_alphabetic() || ch == '_' => self.read_identifier(),
             _ => {
                 self.pos += 1;
                 Token::Operator(ch.to_string())

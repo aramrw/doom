@@ -81,23 +81,36 @@ impl Parser {
             self.next_token();
         }
 
-        // Inheritance or ED Number
-        if let Token::Colon = self.cur_token {
-            self.next_token();
-            if let Token::Identifier(parent) = self.cur_token.clone() {
-                actor.parent = Some(parent);
-                self.next_token();
+        // Inheritance, ED Number, or replaces
+        loop {
+            match self.cur_token.clone() {
+                Token::Colon => {
+                    self.next_token();
+                    if let Token::Identifier(parent) = self.cur_token.clone() {
+                        actor.parent = Some(parent);
+                        self.next_token();
+                    }
+                }
+                Token::Identifier(ref id) if id.to_lowercase() == "replaces" => {
+                    self.next_token();
+                    if let Token::Identifier(_) = self.cur_token {
+                        self.next_token();
+                    }
+                }
+                Token::NumberStr(ref num) => {
+                    actor.ed_number = num.parse().ok();
+                    self.next_token();
+                }
+                Token::Identifier(ref id) => {
+                    let lower = id.to_lowercase();
+                    if lower == "native" || lower == "static" || lower == "internal" || lower == "abstract" {
+                        self.next_token();
+                    } else {
+                        break;
+                    }
+                }
+                _ => break,
             }
-        }
-
-        if let Token::NumberStr(ref num) = self.cur_token {
-            actor.ed_number = num.parse().ok();
-            self.next_token();
-        }
-
-        // ZScript sometimes has "native" or other keywords here
-        while let Token::Identifier(_) = self.cur_token {
-            self.next_token();
         }
 
         if self.cur_token != Token::BraceOpen {
@@ -118,19 +131,27 @@ impl Parser {
                             while self.cur_token != Token::BraceClose && self.cur_token != Token::Eof {
                                 self.parse_actor_property(&mut actor);
                             }
-                            self.next_token(); // skip brace close
+                            if self.cur_token == Token::BraceClose {
+                                self.next_token();
+                            }
                         }
                     } else if id.starts_with('+') {
                         actor.flags.push(id[1..].to_string());
                         self.next_token();
                     } else if id.starts_with('-') {
+                        // Just skip negative flags
                         self.next_token();
                     } else {
+                        // In DECORATE, properties/flags are directly in the actor block
                         self.parse_actor_property(&mut actor);
                     }
                 }
                 _ => self.next_token(),
             }
+        }
+        
+        if self.cur_token == Token::BraceClose {
+            self.next_token();
         }
 
         Some(actor)
@@ -142,31 +163,87 @@ impl Parser {
                 actor.flags.push(id[1..].to_string());
                 self.next_token();
                 return;
-            }
-            if id.starts_with('-') {
+            } else if id.starts_with('-') {
                 self.next_token();
                 return;
             }
-            
+
             self.next_token();
-            let mut value = String::new();
-            while self.cur_token != Token::SemiColon && !matches!(self.cur_token, Token::Identifier(_)) && self.cur_token != Token::BraceClose {
-                match &self.cur_token {
-                    Token::NumberStr(s) => value.push_str(s),
-                    Token::Identifier(s) => value.push_str(s),
-                    Token::StringLiteral(s) => value.push_str(s),
-                    Token::Comma => value.push(','),
-                    _ => {}
-                }
-                value.push(' ');
+            
+            // Optional colon in ZScript properties
+            if self.cur_token == Token::Colon {
                 self.next_token();
             }
+
+            // Parse property values
+            let mut values = Vec::new();
+            loop {
+                if let Some(val) = self.parse_gz_value() {
+                    values.push(val);
+                }
+
+                if self.cur_token == Token::Comma {
+                    self.next_token();
+                } else {
+                    break;
+                }
+            }
+
+            if !values.is_empty() {
+                if values.len() == 1 {
+                    actor.properties.insert(id, values[0].clone());
+                } else {
+                    let joined = values.iter()
+                        .map(|v| v.to_string_lossy())
+                        .collect::<Vec<_>>()
+                        .join(", ");
+                    actor.properties.insert(id, crate::realm667::actor::GZValue::String(joined));
+                }
+            }
+
             if self.cur_token == Token::SemiColon {
                 self.next_token();
             }
-            actor.properties.insert(id, crate::realm667::actor::GZValue::String(value.trim().to_string()));
         } else {
             self.next_token();
+        }
+    }
+
+    fn parse_gz_value(&mut self) -> Option<crate::realm667::actor::GZValue> {
+        match self.cur_token.clone() {
+            Token::NumberStr(n) => {
+                let val = if n.contains('.') {
+                    crate::realm667::actor::GZValue::Float(n.parse().unwrap_or(0.0))
+                } else {
+                    crate::realm667::actor::GZValue::Integer(n.parse().unwrap_or(0))
+                };
+                self.next_token();
+                Some(val)
+            }
+            Token::StringLiteral(s) => {
+                self.next_token();
+                Some(crate::realm667::actor::GZValue::String(s))
+            }
+            Token::Identifier(id) => {
+                self.next_token();
+                Some(crate::realm667::actor::GZValue::Identifier(id))
+            }
+            Token::Minus => {
+                self.next_token();
+                if let Token::NumberStr(n) = self.cur_token.clone() {
+                    let neg_n = format!("-{}", n);
+                    let val = if neg_n.contains('.') {
+                        crate::realm667::actor::GZValue::Float(neg_n.parse().unwrap_or(0.0))
+                    } else {
+                        crate::realm667::actor::GZValue::Integer(neg_n.parse().unwrap_or(0))
+                    };
+                    self.next_token();
+                    Some(val)
+                } else {
+                    Some(crate::realm667::actor::GZValue::Identifier("-".to_string()))
+                }
+            }
+            _ => None,
         }
     }
 
@@ -178,25 +255,73 @@ impl Parser {
         }
         self.next_token();
 
-        let mut current_label = String::new();
+        let mut current_labels = Vec::new();
 
         while self.cur_token != Token::BraceClose && self.cur_token != Token::Eof {
             match self.cur_token.clone() {
                 Token::Identifier(id) => {
                     if self.peek_token == Token::Colon {
-                        current_label = id;
+                        current_labels.push(id);
                         self.next_token(); // skip id
                         self.next_token(); // skip colon
+
+                        // Collect multiple labels if they are consecutive
+                        while let Token::Identifier(next_id) = self.cur_token.clone() {
+                            if self.peek_token == Token::Colon {
+                                current_labels.push(next_id);
+                                self.next_token();
+                                self.next_token();
+                            } else {
+                                break;
+                            }
+                        }
                     } else {
-                        // This is a state line
-                        let frames = self.parse_state_line();
-                        states.entry(current_label.clone()).or_insert_with(Vec::new).extend(frames);
+                        let lower = id.to_lowercase();
+                        if lower == "loop" || lower == "wait" || lower == "stop" || lower == "fail" {
+                            // These are state flow control keywords.
+                            // We could store them as special frames or just skip.
+                            // For now, let's just clear labels as they mark the end of a block.
+                            self.next_token();
+                            current_labels.clear();
+                        } else if lower == "goto" {
+                            self.next_token();
+                            // Skip goto target (usually Identifier or Identifier + Colon + Identifier)
+                            while self.cur_token != Token::SemiColon && self.cur_token != Token::BraceClose && !matches!(self.cur_token, Token::Identifier(_)) {
+                                self.next_token();
+                            }
+                            if let Token::Identifier(_) = self.cur_token {
+                                self.next_token();
+                            }
+                            current_labels.clear();
+                        } else {
+                            // This looks like a state line: Sprite Frames Duration [Bright] [Action]
+                            let frames = self.parse_state_line();
+                            for label in &current_labels {
+                                states.entry(label.clone()).or_insert_with(Vec::new).extend(frames.clone());
+                            }
+                            
+                            // If the next token is a label, we should NOT clear current_labels yet?
+                            // Actually, in DECORATE, a label applies to all following lines until another label or flow control.
+                            // But usually, we only want to associate the label with the START of the sequence.
+                            // For our purposes (importer), associating it with the first line is usually enough.
+                            // If we want to be thorough, we'd keep current_labels until a flow control keyword.
+                            
+                            // Check if next is a label
+                            if let Token::Identifier(_) = self.cur_token {
+                                if self.peek_token == Token::Colon {
+                                    current_labels.clear();
+                                }
+                            }
+                        }
                     }
                 }
+                Token::SemiColon => self.next_token(),
                 _ => self.next_token(),
             }
         }
-        self.next_token(); // skip closing brace
+        if self.cur_token == Token::BraceClose {
+            self.next_token();
+        }
         states
     }
 
@@ -207,77 +332,146 @@ impl Parser {
         let prefix = if let Token::Identifier(p) = self.cur_token.clone() {
             p
         } else {
-            self.next_token();
+            // Not a valid state line
             return frames_out;
         };
         self.next_token();
 
         // Frames (e.g., "ABCD")
-        let frames = if let Token::Identifier(f) = self.cur_token.clone() {
+        let frame_chars = if let Token::Identifier(f) = self.cur_token.clone() {
             f
         } else {
+            // Might be a sprite with only 1 frame that looks like a keyword? 
+            // Or just invalid.
             return frames_out;
         };
         self.next_token();
 
         // Duration (tics)
-        let duration = if let Token::NumberStr(ref d) = self.cur_token {
-            d.parse().unwrap_or(0)
-        } else {
-            0
-        };
-        self.next_token();
-
-        // Optional Action (e.g., "A_Look")
-        let mut action = None;
-        if let Token::Identifier(a) = self.cur_token.clone() {
-            if a.starts_with("A_") {
-                let mut args = Vec::new();
+        let duration = match self.cur_token.clone() {
+            Token::NumberStr(d) => {
+                let val = d.parse().unwrap_or(0);
                 self.next_token();
-                // Handle optional parameters in parentheses
-                if self.cur_token == Token::Operator("(".to_string()) {
-                    self.next_token(); // skip (
-                    while self.cur_token != Token::Operator(")".to_string()) && self.cur_token != Token::Eof {
-                        match self.cur_token.clone() {
-                            Token::NumberStr(n) => {
-                                if let Ok(val) = n.parse::<i32>() {
-                                    args.push(crate::realm667::actor::GZValue::Integer(val));
-                                } else if let Ok(val) = n.parse::<f64>() {
-                                    args.push(crate::realm667::actor::GZValue::Float(val));
+                val
+            }
+            Token::Identifier(id) if id == "-1" => {
+                self.next_token();
+                -1
+            }
+            Token::Minus => {
+                self.next_token();
+                if let Token::NumberStr(d) = self.cur_token.clone() {
+                    self.next_token();
+                    -(d.parse::<i32>().unwrap_or(0))
+                } else {
+                    0
+                }
+            }
+            _ => 0,
+        };
+
+        // Optional keywords/Action
+        let mut is_bright = false;
+        let mut action = None;
+
+        while self.cur_token != Token::SemiColon && self.cur_token != Token::BraceClose && self.cur_token != Token::Eof {
+            match self.cur_token.clone() {
+                Token::Identifier(id) => {
+                    let lower = id.to_lowercase();
+                    if lower == "bright" {
+                        is_bright = true;
+                        self.next_token();
+                    } else if lower == "offset" {
+                        // Skip offset(x, y)
+                        self.next_token();
+                        if self.cur_token == Token::ParenthesisOpen {
+                            self.next_token();
+                            while self.cur_token != Token::ParenthesisClose && self.cur_token != Token::Eof {
+                                self.next_token();
+                            }
+                            self.next_token();
+                        }
+                    } else if lower == "canraise" || lower == "light" {
+                        // Skip other keywords
+                        self.next_token();
+                        if self.cur_token == Token::ParenthesisOpen {
+                            self.next_token();
+                            while self.cur_token != Token::ParenthesisClose && self.cur_token != Token::Eof {
+                                self.next_token();
+                            }
+                            self.next_token();
+                        }
+                    } else {
+                        // Likely an action function
+                        let mut is_action = id.starts_with("A_");
+                        if self.peek_token == Token::ParenthesisOpen || self.peek_token == Token::BraceOpen {
+                            is_action = true;
+                        }
+
+                        if is_action {
+                            let action_name = id;
+                            self.next_token();
+                            let mut args = Vec::new();
+
+                            if self.cur_token == Token::ParenthesisOpen {
+                                self.next_token();
+                                while self.cur_token != Token::ParenthesisClose && self.cur_token != Token::Eof {
+                                    if let Some(val) = self.parse_gz_value() {
+                                        args.push(val);
+                                    }
+                                    if self.cur_token == Token::Comma {
+                                        self.next_token();
+                                    } else if self.cur_token != Token::ParenthesisClose {
+                                        self.next_token();
+                                    }
                                 }
+                                if self.cur_token == Token::ParenthesisClose {
+                                    self.next_token();
+                                }
+                            } else if self.cur_token == Token::BraceOpen {
+                                // ZScript anonymous function block - skip for now
+                                let mut brace_count = 1;
                                 self.next_token();
+                                while brace_count > 0 && self.cur_token != Token::Eof {
+                                    if self.cur_token == Token::BraceOpen { brace_count += 1; }
+                                    else if self.cur_token == Token::BraceClose { brace_count -= 1; }
+                                    self.next_token();
+                                }
                             }
-                            Token::StringLiteral(s) => {
-                                args.push(crate::realm667::actor::GZValue::String(s));
-                                self.next_token();
-                            }
-                            Token::Identifier(id) => {
-                                args.push(crate::realm667::actor::GZValue::Identifier(id));
-                                self.next_token();
-                            }
-                            Token::Comma => {
-                                self.next_token();
-                            }
-                            _ => self.next_token(),
+
+                            action = Some(crate::realm667::actor::GZFunctionCall {
+                                name: action_name,
+                                args,
+                            });
+                            // Usually an action is the last thing on a line (before semicolon)
+                        } else {
+                            // Unknown identifier, break to avoid infinite loop
+                            break;
                         }
                     }
-                    if self.cur_token == Token::Operator(")".to_string()) {
-                        self.next_token(); // skip )
+                }
+                Token::BraceOpen => {
+                    // Anonymous function block
+                    let mut brace_count = 1;
+                    self.next_token();
+                    while brace_count > 0 && self.cur_token != Token::Eof {
+                        if self.cur_token == Token::BraceOpen { brace_count += 1; }
+                        else if self.cur_token == Token::BraceClose { brace_count -= 1; }
+                        self.next_token();
                     }
                 }
-                action = Some(crate::realm667::actor::GZFunctionCall {
-                    name: a,
-                    args,
-                });
+                _ => break,
             }
         }
 
+        // For now, we'll store all frames in one StateFrame if they share everything else.
+        // This matches the current StateFrame struct.
         frames_out.push(StateFrame {
             sprite_prefix: prefix,
-            frames,
+            frames: frame_chars,
             duration,
             action,
-            is_bright: false, // Bright detection can be added later
+            is_bright,
         });
 
         frames_out
