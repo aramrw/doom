@@ -1,0 +1,115 @@
+Class SMCBlaster : Weapon
+{
+	Default
+	{
+		//$Category Weapons
+		//$Title "SMC Blaster"
+		Weapon.SlotNumber 2;
+		+WEAPON.AMMO_OPTIONAL;
+		Inventory.PickupSound "misc/w_pkup";
+		Inventory.PickupMessage "You got the SMC Blaster!";
+		obituary "%o was wasted by %k's SMC Blaster.";
+	}
+	States
+	{
+	Spawn:
+		Q2BL P -1;
+		Stop;
+	Ready:
+		Q2BL A 1 A_WeaponReady;
+		Loop;
+	Deselect:
+		Q2BL A 1 A_Lower;
+		Loop;
+	Select:
+		Q2BL A 1 A_Raise;
+		Loop;
+	Fire:
+		Q2BL F 4	// the original Blaster from Quake 2 has no muzzleflash, replace frame F with A to remove it
+		{
+			A_Gunflash();	// also remove this line if no muzzleflash is desired
+			A_FireProjectile("SMCBlast",0.1,0,4.0,5.0);
+		}
+		Q2BL B 3;
+		Q2BL C 6;
+		Q2BL B 3;
+		Q2BL A 3;
+		Goto Ready;
+	Flash:
+		TNT1 A 3 Bright A_AttachLightDef("Q2BL","SMCBlasterLight");
+		TNT1 A 0 Bright A_RemoveLight("Q2BL");
+		Goto LightDone;
+	}
+}
+
+Class SMCBlast : Actor
+{
+	Default
+	{
+		Radius 3;
+		Height 3;
+		Speed 48;
+		Projectile;
+		DamageFunction random(12,22);
+		+SPAWNSOUNDSOURCE;
+		RenderStyle "Add";
+		Alpha 0.5;
+		Scale 0.5;
+		SeeSound "SMCBlaster/shot";
+		DeathSound "SMCBlaster/impact";
+		Decal "SMCBlasterScorch";
+	}
+	States
+	{
+		Spawn:
+			Q2BP AAAABBBB 1 Nodelay Bright
+			{
+				for (int i = 2; i > 0; i--)
+				{
+					A_SpawnParticle("FF9900",
+						flags:SPF_RELATIVE|SPF_FULLBRIGHT,lifetime:20,size:3,
+						velx:frandom(0,3.0),
+						vely:frandom(-0.2,0.2),
+						velz:frandom(-0.2,0.2),
+						startalphaf:1.0,fadestepf:0.05);
+					A_SpawnParticle("FFBB33",
+						flags:SPF_RELATIVE|SPF_FULLBRIGHT,lifetime:20,size:3,
+						velx:frandom(0,3.0),
+						vely:frandom(-0.2,0.2),
+						velz:frandom(-0.2,0.2),
+						startalphaf:1.0,fadestepf:0.05);
+				}
+			}
+			Loop;
+		Death:
+			Q2BP CCC 1 Bright
+			{
+				for (int i = 5; i > 0; i--)
+				{
+					A_SpawnParticle("FF9900",flags:SPF_RELATIVE|SPF_FULLBRIGHT,lifetime:10,size:3,
+						velx:frandom(-2.0,2.0),
+						vely:frandom(-2.0,2.0),
+						velz:frandom(-2.0,2.0),
+						startalphaf:1.0,fadestepf:-1);
+					A_SpawnParticle("FF5500",flags:SPF_RELATIVE|SPF_FULLBRIGHT,lifetime:10,size:3,
+						velx:frandom(-2.0,2.0),
+						vely:frandom(-2.0,2.0),
+						velz:frandom(-2.0,2.0),
+						startalphaf:1.0,fadestepf:-1);
+				}
+			}
+			Q2BP D 3 A_SetRenderstyle(0.5,STYLE_Translucent);
+			Q2BP E 3;
+			Stop;
+	}
+}
+
+Class SMCBlasterDoomPlayer : DoomPlayer
+{
+	Default
+	{
+		Player.StartItem "SMCBlaster";
+		Player.StartItem "Fist";
+		Player.WeaponSlot 2, "SMCBlaster";
+	}
+}

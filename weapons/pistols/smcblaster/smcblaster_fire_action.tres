@@ -1,9 +1,0 @@
-[gd_resource type="Resource" script_class="WeaponAction" format=3]
-[ext_resource type="Script" path="res://weapons/weapon_action.gd" id="1_script"]
-[ext_resource type="Resource" path="res://weapons/pistols/smcblaster/smcblaster_fire_step.tres" id="2_step"]
-[resource]
-script = ExtResource("1_script")
-animation_name = "shoot"
-steps = [ExtResource("2_step")]
-loop = true
-consumes_ammo = true

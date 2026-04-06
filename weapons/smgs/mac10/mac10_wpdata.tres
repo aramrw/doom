@@ -12,4 +12,4 @@ sprite_offset = Vector2(0, 5)
 actions = {
 "primary": ExtResource("3_fire")
 }
-max_bullets = 64
+ammo_give = 64

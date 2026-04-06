@@ -11,7 +11,7 @@ Weapons are defined as a hierarchy of Godot resources (`.tres` files), making th
 1.  **WeaponData (`weapon_data.gd`)**: The root resource.
     *   Links to `SpriteFrames`.
     *   Contains a dictionary of `WeaponAction` resources (e.g., "primary", "secondary").
-    *   Defines `max_bullets`, `weapon_name`, and visual offsets.
+    *   Defines `ammo_give`, `weapon_name`, and visual offsets.
 2.  **SpriteFrames (`.tres`)**: Defines the animations (`idle`, `shoot`, `reload`).
 3.  **WeaponAction (`weapon_action.gd`)**: Defines a high-level behavior.
     *   Links to an array of `ActionStep` resources.
@@ -52,7 +52,7 @@ Create `[weapon_name]_spriteframes.tres`.
 Create `[weapon_name]_wpdata.tres`.
 *   Link the `SpriteFrames`.
 *   Populate the `actions` dictionary: `{"primary": ExtResource("...fire_action.tres")}`.
-*   Set `max_bullets` and `hud_hint`.
+*   Set `ammo_give` and `hud_hint`.
 
 ### Phase 5: Player Registration
 1.  Open `player.tscn`.

@@ -1,0 +1,13 @@
+plaguerat/sight								PLRTSEE1
+plaguerat/active							PLRTACT1
+plaguerat/pain								PLRTPAIN
+plaguerat/attack							PLRTATK1
+plaguerat/death								PLRTDTH1
+plaguerat/xdeath							PLRTDTHX
+$random				plaguerat/step			{ PLRTSTP1 PLRTSTP2 PLRTSTP4 }
+PLRTSTP1									PLRTSTP1
+PLRTSTP2									PLRTSTP2
+PLRTSTP4									PLRTSTP4
+$volume				plaguerat/step			0.1
+$attenuation		plaguerat/step			2.0
+plaguerat/bite								DSRATBIT

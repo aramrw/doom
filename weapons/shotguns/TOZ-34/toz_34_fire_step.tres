@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="ActionStep" format=3 uid="uid://vsewbtggubdi"]
 
-[ext_resource type="Script" uid="uid://dbrkdla20teuq" path="res://weapons/weapon_effect.gd" id="1_km0js"]
+[ext_resource type="Script" uid="uid://dbrkdla20teuq" path="res://weapons/effects/weapon_effect.gd" id="1_km0js"]
 [ext_resource type="Script" uid="uid://k0g2eck3n5cy" path="res://weapons/action_step.gd" id="1_step"]
 [ext_resource type="Resource" uid="uid://m0ds7bad1vrj" path="res://weapons/shotguns/TOZ-34/toz_34_fire_effect.tres" id="2_effect"]
 [ext_resource type="Resource" path="res://weapons/shotguns/TOZ-34/toz_34_fire_sound.tres" id="3_sound"]

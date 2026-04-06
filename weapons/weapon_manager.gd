@@ -77,7 +77,7 @@ func switch_to_slot(slot_name: String):
 	
 	# If this is the first time equipping, fill it up
 	if bullets == 0 and magazine_count > 0:
-		bullets = current_weapon.max_bullets
+		bullets = current_weapon.ammo_give
 	
 	equip_weapon(current_weapon)
 
@@ -168,6 +168,15 @@ func reload():
 	if is_reloading or current_action or magazine_count <= 0:
 		return
 
+	# If the weapon has no reload action AND no reload animation, do a fast refill
+	if not current_weapon.actions.has("reload") and not gun_sprite.sprite_frames.has_animation("reload"):
+		is_reloading = false
+		bullets = current_weapon.ammo_give
+		magazine_count -= 1
+		ammo_updated.emit(bullets)
+		magazine_count_updated.emit(magazine_count)
+		return
+
 	is_reloading = true
 	# Look for a reload action, otherwise fallback to animation name "reload"
 	if current_weapon.actions.has("reload"):
@@ -188,7 +197,7 @@ func _on_gun_sprite_animation_finished() -> void:
 			
 	elif gun_sprite.animation == "reload":
 		is_reloading = false
-		bullets = current_weapon.max_bullets
+		bullets = current_weapon.ammo_give
 		magazine_count -= 1
 		
 		ammo_updated.emit(bullets)

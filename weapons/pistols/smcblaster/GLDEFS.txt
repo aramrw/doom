@@ -1,0 +1,55 @@
+Pointlight SMCBlasterLight
+{
+	color  1.0 0.6 0.0 
+	size 128
+	offset 0 32 0
+}
+Object SMCBlaster
+{
+	Frame Q2BLF0	{Light SMCBlasterLight}
+}
+
+FlickerLight SMCBlastLight
+{
+	color  1.0 0.6 0.0
+	size 48
+	secondarySize 56
+    chance 0.5
+	offset 0 0 0
+}
+
+Pointlight SMCBlastLightX1
+{
+	color  1.0 0.5 0.5
+	size 60
+	offset 0 0 0
+	attenuate 1
+}
+Pointlight SMCBlastLightX2
+{
+	color  0.8 0.3 0.3
+	size 80
+	offset 0 0 0
+	attenuate 1
+}
+Pointlight SMCBlastLightX3
+{
+	color  0.5 0.25 0.25
+	size 120
+	offset 0 0 0
+	attenuate 1
+}
+Object SMCBlast
+{
+	Frame Q2BPA	{Light SMCBlastLight}
+	Frame Q2BPB	{Light SMCBlastLight}
+	Frame Q2BPC	{Light SMCBlastLightX1}
+	Frame Q2BPD	{Light SMCBlastLightX2}
+	Frame Q2BPE	{Light SMCBlastLightX3}
+}
+
+BrightMap Sprite Q2BLA0 { Map bmQ2BLA0 }
+BrightMap Sprite Q2BLB0 { Map bmQ2BLB0 }
+BrightMap Sprite Q2BLC0 { Map bmQ2BLC0 }
+BrightMap Sprite Q2BLF0 { Map bmQ2BLF0 }
+BrightMap Sprite Q2BLP0 { Map bmQ2BLP0 }

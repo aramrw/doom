@@ -1,0 +1,8 @@
+DoomEdNums
+{
+	13466 = SMCBlaster
+}
+GameInfo
+{
+//	PlayerClasses = "SMCBlasterDoomPlayer" //uncomment to replace the standard Doom pistol with the SMC Blaster
+}

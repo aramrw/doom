@@ -2,10 +2,11 @@ extends CharacterBody3D
 class_name DoomEnemyBase
 
 @export var speed: float = 4.0
-@export var attack_range: float = 2.0 
-@export var attack_damage: int = 5
-@export var attack_cooldown: float = 1.5 
+@export var meleerange: float = 2.0 
+@export var damage: int = 5
+@export var reactiontime: float = 1.5 
 @export var detection_range: float = 20.0 # Only wake up if player is within 20 meters
+@export var pain_chance: int = 50
 
 @onready var sprite = $AnimatedSprite3D
 @onready var nav_agent = $NavigationAgent3D
@@ -106,7 +107,7 @@ func _physics_process(delta):
 	var ray_hit = los_raycast.get_collider()
 	
 	if distance_to_target <= detection_range: 
-		if distance_to_target <= attack_range and ray_hit == target_body: 
+		if distance_to_target <= meleerange and ray_hit == target_body: 
 			if not on_cooldown: 
 				attack() 
 			else: 
@@ -279,7 +280,7 @@ func attack():
 			
 			# Target the target's body
 			var dir = global_position.direction_to(target_body.global_position)
-			proj.setup(self, dir, attack_damage, 15.0) # Speed 15.0 for magic ball
+			proj.setup(self, dir, damage, 15.0) # Speed 15.0 for magic ball
 			
 			sfx.taunt()
 		else:
@@ -287,16 +288,16 @@ func attack():
 			los_raycast.force_raycast_update()
 			if los_raycast.get_collider() == target_body:
 				if target_body.has_method("take_damage"):
-					target_body.take_damage(attack_damage)
+					target_body.take_damage(damage)
 				elif target_body.get_parent() and target_body.get_parent().has_method("take_damage"):
-					target_body.get_parent().take_damage(attack_damage)
+					target_body.get_parent().take_damage(damage)
 				
 				# trigger taunt
 				sfx.taunt()
 		
 	is_attacking = false
 	
-	await get_tree().create_timer(attack_cooldown).timeout
+	await get_tree().create_timer(reactiontime).timeout
 	on_cooldown = false
 
 # --- VISUALS ---

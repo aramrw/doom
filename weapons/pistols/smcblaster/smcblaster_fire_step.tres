@@ -1,8 +1,0 @@
-[gd_resource type="Resource" script_class="ActionStep" format=3]
-[ext_resource type="Script" path="res://weapons/action_step.gd" id="1_script"]
-[ext_resource type="Resource" path="res://weapons/pistols/smcblaster/smcblaster_fire_effect.tres" id="2_effect"]
-[ext_resource type="Resource" path="res://weapons/pistols/smcblaster/smcblaster_fire_sound.tres" id="3_sound"]
-[resource]
-script = ExtResource("1_script")
-frame_index = 0
-effects = [ExtResource("2_effect"), ExtResource("3_sound")]

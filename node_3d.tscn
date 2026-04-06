@@ -20,6 +20,7 @@
 [ext_resource type="PackedScene" uid="uid://0lefihnkg1ip" path="res://ui/dialogue_ui.tscn" id="17_dialogue"]
 [ext_resource type="PackedScene" uid="uid://b45e5hjqdka1g" path="res://npcs/shotgun_monk.tscn" id="18_monk"]
 [ext_resource type="PackedScene" uid="uid://by41h2dwu1l1k" path="res://assets/lights/torches/fire/fire.tscn" id="20_jsnrv"]
+[ext_resource type="PackedScene" path="res://enemies/plaguerat/godot_data/plaguerat.tscn" id="21_lggff"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_i5arm"]
 shader = ExtResource("1_jka67")
@@ -164,7 +165,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2597854, 0.5225768, -3.6403
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.638075, 5.7639313, 11.138747)
 
 [node name="Cultist3" parent="." unique_id=1006558139 instance=ExtResource("11_tereu")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.059624, 5.7639313, -2.2949705)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.149233, 5.7639313, -2.2949705)
 
 [node name="Cultist2" parent="." unique_id=1111420264 instance=ExtResource("11_tereu")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -61.904438, 0.50049996, 17.022404)
@@ -221,7 +222,7 @@ layer = 100
 [node name="ShotgunMonk2" parent="." unique_id=295704134 instance=ExtResource("18_monk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.3531837, 5.7549996, -4.1861115)
 follows_player = false
-attack_range = 4.0
+meleerange = 4.0
 health = 500
 
 [node name="Fire" parent="." unique_id=494991560 instance=ExtResource("20_jsnrv")]
@@ -229,3 +230,6 @@ transform = Transform3D(60, 0, 0, 0, 60, 0, 0, 0, 60, -12.998892, 16.566061, 8.2
 
 [node name="Fire2" parent="." unique_id=1944567405 instance=ExtResource("20_jsnrv")]
 transform = Transform3D(24.290804, 0, -17.605587, 0, 29.999998, 0, 17.605587, 0, 24.290804, -8.910022, 10.895618, -11.1331415)
+
+[node name="DoomEnemy" parent="." unique_id=715377368 instance=ExtResource("21_lggff")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -42.780758, 5.165, 4.4505496)

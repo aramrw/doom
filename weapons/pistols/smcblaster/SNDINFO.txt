@@ -1,0 +1,2 @@
+SMCBlaster/shot Q2BLAST
+SMCBlaster/impact Q2BLASTX

@@ -199,6 +199,9 @@ impl Parser {
                         .join(", ");
                     actor.properties.insert(id, crate::realm667::actor::GZValue::String(joined));
                 }
+            } else {
+                // No values - standalone flag like "Projectile;"
+                actor.properties.insert(id, crate::realm667::actor::GZValue::Identifier("true".to_string()));
             }
 
             if self.cur_token == Token::SemiColon {
@@ -429,21 +432,52 @@ impl Parser {
                                     self.next_token();
                                 }
                             } else if self.cur_token == Token::BraceOpen {
-                                // ZScript anonymous function block - skip for now
+                                // ZScript anonymous function block - scan for actions inside!
                                 let mut brace_count = 1;
-                                self.next_token();
+                                self.next_token(); // skip {
                                 while brace_count > 0 && self.cur_token != Token::Eof {
-                                    if self.cur_token == Token::BraceOpen { brace_count += 1; }
-                                    else if self.cur_token == Token::BraceClose { brace_count -= 1; }
-                                    self.next_token();
+                                    match self.cur_token.clone() {
+                                        Token::BraceOpen => {
+                                            brace_count += 1;
+                                            self.next_token();
+                                        }
+                                        Token::BraceClose => {
+                                            brace_count -= 1;
+                                            self.next_token();
+                                        }
+                                        Token::Identifier(sub_id) => {
+                                            if sub_id.starts_with("A_Fire") || sub_id.starts_with("A_Custom") || sub_id.starts_with("A_Explode") {
+                                                let mut sub_args = Vec::new();
+                                                self.next_token();
+                                                if self.cur_token == Token::ParenthesisOpen {
+                                                    self.next_token();
+                                                    while self.cur_token != Token::ParenthesisClose && self.cur_token != Token::Eof {
+                                                        if let Some(val) = self.parse_gz_value() { sub_args.push(val); }
+                                                        if self.cur_token == Token::Comma { self.next_token(); } else if self.cur_token != Token::ParenthesisClose { self.next_token(); }
+                                                    }
+                                                    if self.cur_token == Token::ParenthesisClose { self.next_token(); }
+                                                }
+                                                action = Some(crate::realm667::actor::GZFunctionCall {
+                                                    name: sub_id,
+                                                    args: sub_args,
+                                                });
+                                            } else {
+                                                self.next_token();
+                                            }
+                                        }
+                                        _ => {
+                                            self.next_token();
+                                        }
+                                    }
                                 }
                             }
 
-                            action = Some(crate::realm667::actor::GZFunctionCall {
-                                name: action_name,
-                                args,
-                            });
-                            // Usually an action is the last thing on a line (before semicolon)
+                            if action.is_none() {
+                                action = Some(crate::realm667::actor::GZFunctionCall {
+                                    name: action_name,
+                                    args,
+                                });
+                            }
                         } else {
                             // Unknown identifier, break to avoid infinite loop
                             break;
@@ -451,13 +485,43 @@ impl Parser {
                     }
                 }
                 Token::BraceOpen => {
-                    // Anonymous function block
+                    // Anonymous function block (not after an identifier)
                     let mut brace_count = 1;
-                    self.next_token();
+                    self.next_token(); // skip {
                     while brace_count > 0 && self.cur_token != Token::Eof {
-                        if self.cur_token == Token::BraceOpen { brace_count += 1; }
-                        else if self.cur_token == Token::BraceClose { brace_count -= 1; }
-                        self.next_token();
+                        match self.cur_token.clone() {
+                            Token::BraceOpen => {
+                                brace_count += 1;
+                                self.next_token();
+                            }
+                            Token::BraceClose => {
+                                brace_count -= 1;
+                                self.next_token();
+                            }
+                            Token::Identifier(sub_id) => {
+                                if sub_id.starts_with("A_Fire") || sub_id.starts_with("A_Custom") || sub_id.starts_with("A_Explode") {
+                                    let mut sub_args = Vec::new();
+                                    self.next_token();
+                                    if self.cur_token == Token::ParenthesisOpen {
+                                        self.next_token();
+                                        while self.cur_token != Token::ParenthesisClose && self.cur_token != Token::Eof {
+                                            if let Some(val) = self.parse_gz_value() { sub_args.push(val); }
+                                            if self.cur_token == Token::Comma { self.next_token(); } else if self.cur_token != Token::ParenthesisClose { self.next_token(); }
+                                        }
+                                        if self.cur_token == Token::ParenthesisClose { self.next_token(); }
+                                    }
+                                    action = Some(crate::realm667::actor::GZFunctionCall {
+                                        name: sub_id,
+                                        args: sub_args,
+                                    });
+                                } else {
+                                    self.next_token();
+                                }
+                            }
+                            _ => {
+                                self.next_token();
+                            }
+                        }
                     }
                 }
                 _ => break,

@@ -1,4 +1,0 @@
-[gd_scene format=3 uid="uid://b8x6l0pho2vbp"]
-
-[node name="smc_blaster" type="Realm667Importer" unique_id=1185607918]
-pk3_path = "res://weapons/pistols/SMCBlaster.pk3.zip"

@@ -13,4 +13,4 @@ actions = {
 "primary": ExtResource("2_fire")
 }
 hud_hint = "SHELLS"
-max_bullets = 2
+ammo_give = 2

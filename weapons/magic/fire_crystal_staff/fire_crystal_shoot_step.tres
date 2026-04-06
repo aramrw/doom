@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="ActionStep" format=3 uid="uid://d76v1qvyyrht"]
 
 [ext_resource type="Script" uid="uid://k0g2eck3n5cy" path="res://weapons/action_step.gd" id="1_step_script"]
-[ext_resource type="Script" uid="uid://dbrkdla20teuq" path="res://weapons/weapon_effect.gd" id="2_effect_script"]
+[ext_resource type="Script" uid="uid://dbrkdla20teuq" path="res://weapons/effects/weapon_effect.gd" id="2_effect_script"]
 [ext_resource type="Resource" path="res://weapons/magic/fire_crystal_staff/fire_crystal_projectile_effect.tres" id="3_proj"]
 [ext_resource type="Resource" path="res://weapons/magic/fire_crystal_staff/fire_crystal_sound_effect.tres" id="4_sound"]
 

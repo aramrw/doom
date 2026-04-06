@@ -1,0 +1,282 @@
+Class PlagueRat : Actor
+{
+	Default
+	{
+		Health 30;
+		Speed 5;
+		Radius 12;
+		Height 22;
+		Scale 0.8;
+		PainChance 256;
+		Monster;
+		+JUMPDOWN
+		+FLOORCLIP
+		SeeSound "plaguerat/sight";
+		PainSound "plaguerat/pain";
+		ActiveSound "plaguerat/active";
+		DeathSound "plaguerat/death";
+		Obituary "%o got a disease by playing with a rat.";
+		Tag "Plague Rat";
+	}
+	States
+	{
+	Spawn:
+	Idle:
+		PLRT BBCCDDEE 2 {
+			A_Wander();
+			A_LookEx(0, 0, 1024, 1024, 180);
+		}
+		Loop;
+	See:
+		TNT1 A 0 {
+			if(bFRIGHTENED) bFRIGHTENED = false;
+		}
+		PLRT BBBCCCDDDEEE 1 A_Chase();
+		Loop;
+	Melee:
+		PLRT F 4 A_FaceTarget();
+		PLRT G 4 A_StartSound("plaguerat/attack");
+		PLRT H 4 {
+			if(random() < 192)
+				A_CustomMeleeAttack(random(1,5), "plaguerat/bite", "none", "Pierce", 1);
+			else
+				A_VenomMeleeAttack(random(1,5), 'Pierce', 1, 7, 35, 'Poison', "plaguerat/bite");
+		}
+		PLRT A 4 A_FaceTarget();
+		Goto See;
+	Pain:
+		PLRT F 4;
+		TNT1 A 0 {
+			A_Pain();
+			if(A_CheckPack(6, 512.))
+				return ResolveState("See");
+			
+			bFRIGHTENED = true;
+			return ResolveState("Run");
+		}
+		goto Run;
+	Run:
+		PLRT BBBCCCDDDEEE 1 {
+			A_Chase();
+			A_TryHide();
+		}
+		Loop;
+	Hide:
+		TNT1 A 0 {
+			bFRIGHTENED = false;
+			A_FaceTarget();
+		}
+	Trap:
+		PLRT A 1 A_FaceTarget();
+		TNT1 A 0 A_CheckSight("Trap");
+		Goto Leap;
+	Leap:
+		PLRT AAAAAA 1 A_FaceTarget();
+		PLRT A 1 A_Leap(10., 6., 256., "plaguerat/attack");
+	Land:
+		PLRT A 1 A_JumpIf(A_CheckSolidFooting(), "See");
+		Loop;
+	Death:
+		PLRT I 5 A_Scream();
+		PLRT J 4 A_Fall();
+		PLRT K 3;
+		PLRT L -1;
+		Stop;
+	XDeath:
+		PLRT M 2 A_StartSound("plaguerat/xdeath");
+		PLRT N 2 A_Fall();
+		PLRT OP 4;
+		PLRT Q 3;
+		PLRT R -1;
+		Stop;
+	Raise:
+		PLRT KJI 4;
+		Goto See;
+	}
+	
+	override void Tick()
+	{
+		Super.Tick();
+			
+		if(frame == 2 || frame == 4) //play a step sound everytime the actor enters these frames
+			A_StartSound("plaguerat/step", frame+10, CHANF_NOSTOP);
+		
+		if(GetAge() % 105 != 0) //check every 3 seconds
+			return;
+		
+		string ratspeed = "PowerRatSpeed";
+		if(A_CheckPack(6, 256.) || InStateSequence(curstate, ResolveState("Run"))) //if in a pack or in the 'run' state
+		{
+			if(!CountInv(ratspeed)) //increase the speed it's not already
+				A_GiveInventory(ratspeed, 1);
+		}
+		else
+		{
+			if(CountInv(ratspeed))
+				A_TakeInventory(ratspeed);
+		}
+	}
+	
+	override void Die(Actor source, Actor inflictor, int dmgflags, Name MeansOfDeath)
+	{
+		if(source && source.Health > 0 && (source.bISMONSTER || source.player)) //set the killer as the target if valid
+			target = source; 
+			
+		A_CheckPack(6, 512.); //let the pack chase the killer
+		
+		super.Die(source, inflictor, dmgflags, MeansOfDeath);
+	}
+	//check if an actor is on top of something solid (credits: https://zdoom.org/wiki/A_CheckSolidFooting)
+	enum ECheckSolidFootingFlags
+	{
+		CSF_SOLIDGROUND = 1,
+		CSF_SOLIDACTORS = 2,
+		CSF_ALL = CSF_SOLIDGROUND|CSF_SOLIDACTORS,
+	}
+	action bool A_CheckSolidFooting(int flags = CSF_ALL)
+	{
+		if(vel.z != 0)
+			return false;
+		
+		if(abs(pos.z - GetZAt()) <= 1)
+		{
+			if(flags & CSF_SOLIDGROUND)
+				return true;
+		}
+
+		bool ok; Actor below;
+		[ok, below] = TestMobjZ(true);
+		if(below)
+		{
+			if(flags & CSF_SOLIDACTORS)
+				return true;
+		}
+
+		if (vel.z == 0 && (flags & CSF_SOLIDGROUND))
+			return true;
+
+		return false;
+	}
+	//Leap function
+	void A_Leap(double forwardthrust, double verticalthrust, double maxdistance, sound leapsound = "")
+	{
+		if(!target || target.Health <= 0 || Distance2D(target) > maxdistance) //check if target's alive and within distance
+			return;
+		
+		if(!A_CheckSolidFooting()) //check if the actor's on something solid
+			return;
+		
+		A_FaceTarget();
+		A_StartSound(leapsound);
+		Thrust(forwardthrust);
+		Vel.z += verticalthrust;
+	}	
+	//Try to hide function
+	int hide;
+	void A_TryHide(StateLabel hidestate = "Hide")
+	{
+		if(!target || target.health <= 0) //check for target
+			return;
+		
+		if(CheckIfInTargetLOS(0, JLOSF_DEADNOJUMP)) //if inside target FOV
+			hide = 0; //reset hide counter
+		
+		if(hide >= 12 / tics) //if hidden for enough time based on animation tics
+		{
+			hide = 0; //reset counter
+			SetStateLabel(hidestate); //hide
+			return; //stop
+		}
+		hide++; //increase counter if hidden
+	}
+	//Venomous Melee attack
+	void A_VenomMeleeAttack(int damage, name damagetype, int poisondamage, int duration, int period, name poisontype = 'Poison', sound HitSound = "", sound MissSound = "")
+	{
+		if(!target || target.health <= 0) //check for target
+			return;
+			
+		A_FaceTarget();
+		if(!CheckMeleeRange()) //if not in range
+		{
+			A_StartSound(MissSound, 0); //play miss sound
+			return; //and stop
+		}
+		A_StartSound(HitSound, 0); //if in range, play hit sound
+		
+		int dmg = target.DamageMobj(self, self, abs(damage), damagetype); //get the damage to deal and type
+		target.TraceBleed(dmg > 0 ? dmg : abs(damage), self); //and the bleeding to cause
+		
+		target.PoisonMobj(self, self, abs(poisondamage), duration, period, poisontype); //poison the victim
+	}
+	//check if part of a pack
+	bool A_CheckPack(int minmembers, double radius, int ptr = AAPTR_TARGET, bool wakemembers = true)
+	{
+		let victim = GetPointer(ptr);
+		
+		if(!victim || victim.Health <= 0) //check for target
+			return false;
+		
+		Array<Actor> members; //pack members array
+		BlockThingsIterator it = BlockThingsIterator.Create(self, radius); //check for every solid actor in a radius
+		while (it.Next())
+		{
+			let mo = it.thing;
+			if((mo.SpawnFlags & MTF_DORMANT) || mo.Health <= 0 || mo.bFRIENDLY) //if the found actor is dormant, dead, or friendly
+				continue; //look for others
+			
+			if(mo.GetClass() is GetClass() && Distance3D(mo) <= radius)	
+				members.Push(mo); //only add actors of the same class or children classes
+		}
+		
+		if(members.Size() < minmembers) //if not enough members
+			return false; //fail
+		
+		for(int i = 0; i < members.Size(); i++)
+		{
+			let m = members[i];
+			if(!m.target || m.target != victim)
+				m.target = victim; //set the target of every member to be the same of the caller
+			
+			if(wakemembers) //check if not aware members should awake
+			{
+				if(m.SpawnFlags & MTF_AMBUSH) //if the other members are set to ambush
+					m.bAMBUSH = false; //wake them up
+				
+				//state seestate = m.FindState("See");
+				//if(m.curstate != seestate)
+				//	m.SetState(seestate); //force them into their see state
+				
+				//if(!m.bINCHASE)
+				//	m.bINCHASE; //and in chase
+			}
+		}
+		return true;
+	}
+}
+
+Class PowerRatSpeed : Powerup //monsters speed powerups
+{
+	Default
+	{
+		Powerup.Duration 0x7FFFFFFF;
+		Speed 1.4;
+	}
+	
+	override void InitEffect()
+	{
+		Super.InitEffect();
+		if(!owner)
+			return;
+		
+		owner.Speed *= Speed; //Apply the speed factor
+	}
+	
+	override void EndEffect()
+	{
+		Super.EndEffect();
+		if(!owner)
+			return;
+			
+		owner.Speed /= Speed; //Bring back the previous speed
+	}
+}

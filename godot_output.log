@@ -1,0 +1,137 @@
+Initialize godot-rust (API v4.6.stable.official, runtime v4.6.1.stable.official, safeguards strict)
+Godot Engine v4.6.1.stable.official.14d19694e - https://godotengine.org
+Metal 4.0 - Forward+ - Using Device #0: Apple - Apple M3 (Apple9)
+
+GDExtension initialized! (Scene stage)
+WARNING: res://weapons/pistols/auto9/auto9_fire_step.tres:3 - ext_resource, invalid UID: uid://dbrkdla20teuq - using text path instead: res://weapons/effects/weapon_effect.gd
+     at: load (scene/resources/resource_format_text.cpp:500)
+WARNING: res://weapons/smgs/mac10/mac10_fire_step.tres:3 - ext_resource, invalid UID: uid://dbrkdla20teuq - using text path instead: res://weapons/effects/weapon_effect.gd
+     at: load (scene/resources/resource_format_text.cpp:500)
+ERROR: No loader found for resource: res://weapons/pistols/smcblaster/godot_data/sprites/smcblaster/shoot/Q2BLB0.png (expected type: Texture2D)
+   at: _load (core/io/resource_loader.cpp:358)
+ERROR: No loader found for resource: res://weapons/pistols/smcblaster/godot_data/sprites/smcblaster/shoot/Q2BLC0.png (expected type: Texture2D)
+   at: _load (core/io/resource_loader.cpp:358)
+ERROR: No loader found for resource: res://weapons/pistols/smcblaster/godot_data/sprites/smcblaster/shoot/Q2BLA0.png (expected type: Texture2D)
+   at: _load (core/io/resource_loader.cpp:358)
+ERROR: res://weapons/pistols/smcblaster/godot_data/smcblaster_spriteframes.tres:25 - Parse Error: [ext_resource] referenced non-existent resource at: res://weapons/pistols/smcblaster/godot_data/sprites/smcblaster/shoot/Q2BLB0.png.
+   at: _printerr (scene/resources/resource_format_text.cpp:40)
+ERROR: res://weapons/pistols/smcblaster/godot_data/smcblaster_spriteframes.tres:28 - Parse Error: [ext_resource] referenced non-existent resource at: res://weapons/pistols/smcblaster/godot_data/sprites/smcblaster/shoot/Q2BLC0.png.
+   at: _printerr (scene/resources/resource_format_text.cpp:40)
+ERROR: res://weapons/pistols/smcblaster/godot_data/smcblaster_spriteframes.tres:31 - Parse Error: [ext_resource] referenced non-existent resource at: res://weapons/pistols/smcblaster/godot_data/sprites/smcblaster/shoot/Q2BLB0.png.
+   at: _printerr (scene/resources/resource_format_text.cpp:40)
+ERROR: res://weapons/pistols/smcblaster/godot_data/smcblaster_spriteframes.tres:34 - Parse Error: [ext_resource] referenced non-existent resource at: res://weapons/pistols/smcblaster/godot_data/sprites/smcblaster/shoot/Q2BLA0.png.
+   at: _printerr (scene/resources/resource_format_text.cpp:40)
+ERROR: No loader found for resource: res://weapons/pistols/smcblaster/godot_data/sprites/smcblast/death/Q2BPC0.png (expected type: Texture2D)
+   at: _load (core/io/resource_loader.cpp:358)
+ERROR: No loader found for resource: res://weapons/pistols/smcblaster/godot_data/sprites/smcblast/death/Q2BPD0.png (expected type: Texture2D)
+   at: _load (core/io/resource_loader.cpp:358)
+ERROR: No loader found for resource: res://weapons/pistols/smcblaster/godot_data/sprites/smcblast/death/Q2BPE0.png (expected type: Texture2D)
+   at: _load (core/io/resource_loader.cpp:358)
+ERROR: No loader found for resource: res://weapons/pistols/smcblaster/godot_data/sprites/smcblast/spawn/Q2BPA0.png (expected type: Texture2D)
+   at: _load (core/io/resource_loader.cpp:358)
+ERROR: No loader found for resource: res://weapons/pistols/smcblaster/godot_data/sprites/smcblast/spawn/Q2BPB0.png (expected type: Texture2D)
+   at: _load (core/io/resource_loader.cpp:358)
+ERROR: res://weapons/pistols/smcblaster/godot_data/smcblast_spriteframes.tres:21 - Parse Error: [ext_resource] referenced non-existent resource at: res://weapons/pistols/smcblaster/godot_data/sprites/smcblast/death/Q2BPC0.png.
+   at: _printerr (scene/resources/resource_format_text.cpp:40)
+ERROR: res://weapons/pistols/smcblaster/godot_data/smcblast_spriteframes.tres:24 - Parse Error: [ext_resource] referenced non-existent resource at: res://weapons/pistols/smcblaster/godot_data/sprites/smcblast/death/Q2BPC0.png.
+   at: _printerr (scene/resources/resource_format_text.cpp:40)
+ERROR: res://weapons/pistols/smcblaster/godot_data/smcblast_spriteframes.tres:27 - Parse Error: [ext_resource] referenced non-existent resource at: res://weapons/pistols/smcblaster/godot_data/sprites/smcblast/death/Q2BPC0.png.
+   at: _printerr (scene/resources/resource_format_text.cpp:40)
+ERROR: res://weapons/pistols/smcblaster/godot_data/smcblast_spriteframes.tres:30 - Parse Error: [ext_resource] referenced non-existent resource at: res://weapons/pistols/smcblaster/godot_data/sprites/smcblast/death/Q2BPD0.png.
+   at: _printerr (scene/resources/resource_format_text.cpp:40)
+ERROR: res://weapons/pistols/smcblaster/godot_data/smcblast_spriteframes.tres:33 - Parse Error: [ext_resource] referenced non-existent resource at: res://weapons/pistols/smcblaster/godot_data/sprites/smcblast/death/Q2BPE0.png.
+   at: _printerr (scene/resources/resource_format_text.cpp:40)
+ERROR: res://weapons/pistols/smcblaster/godot_data/smcblast_spriteframes.tres:41 - Parse Error: [ext_resource] referenced non-existent resource at: res://weapons/pistols/smcblaster/godot_data/sprites/smcblast/spawn/Q2BPA0.png.
+   at: _printerr (scene/resources/resource_format_text.cpp:40)
+ERROR: res://weapons/pistols/smcblaster/godot_data/smcblast_spriteframes.tres:44 - Parse Error: [ext_resource] referenced non-existent resource at: res://weapons/pistols/smcblaster/godot_data/sprites/smcblast/spawn/Q2BPA0.png.
+   at: _printerr (scene/resources/resource_format_text.cpp:40)
+ERROR: res://weapons/pistols/smcblaster/godot_data/smcblast_spriteframes.tres:47 - Parse Error: [ext_resource] referenced non-existent resource at: res://weapons/pistols/smcblaster/godot_data/sprites/smcblast/spawn/Q2BPA0.png.
+   at: _printerr (scene/resources/resource_format_text.cpp:40)
+ERROR: res://weapons/pistols/smcblaster/godot_data/smcblast_spriteframes.tres:50 - Parse Error: [ext_resource] referenced non-existent resource at: res://weapons/pistols/smcblaster/godot_data/sprites/smcblast/spawn/Q2BPA0.png.
+   at: _printerr (scene/resources/resource_format_text.cpp:40)
+ERROR: res://weapons/pistols/smcblaster/godot_data/smcblast_spriteframes.tres:53 - Parse Error: [ext_resource] referenced non-existent resource at: res://weapons/pistols/smcblaster/godot_data/sprites/smcblast/spawn/Q2BPB0.png.
+   at: _printerr (scene/resources/resource_format_text.cpp:40)
+ERROR: res://weapons/pistols/smcblaster/godot_data/smcblast_spriteframes.tres:56 - Parse Error: [ext_resource] referenced non-existent resource at: res://weapons/pistols/smcblaster/godot_data/sprites/smcblast/spawn/Q2BPB0.png.
+   at: _printerr (scene/resources/resource_format_text.cpp:40)
+ERROR: res://weapons/pistols/smcblaster/godot_data/smcblast_spriteframes.tres:59 - Parse Error: [ext_resource] referenced non-existent resource at: res://weapons/pistols/smcblaster/godot_data/sprites/smcblast/spawn/Q2BPB0.png.
+   at: _printerr (scene/resources/resource_format_text.cpp:40)
+ERROR: res://weapons/pistols/smcblaster/godot_data/smcblast_spriteframes.tres:62 - Parse Error: [ext_resource] referenced non-existent resource at: res://weapons/pistols/smcblaster/godot_data/sprites/smcblast/spawn/Q2BPB0.png.
+   at: _printerr (scene/resources/resource_format_text.cpp:40)
+Player Health: 85
+Player Health: 70
+Enemy Cultist3 took 10 damage. Health: 40
+WeaponManager: Consumed ammo. Remaining: 63
+WeaponManager: Executed non-firing effect: Resource
+Enemy Cultist3 took 10 damage. Health: 30
+WeaponManager: Consumed ammo. Remaining: 62
+WeaponManager: Executed non-firing effect: Resource
+WeaponManager: Consumed ammo. Remaining: 61
+WeaponManager: Executed non-firing effect: Resource
+WeaponManager: Consumed ammo. Remaining: 60
+WeaponManager: Executed non-firing effect: Resource
+WeaponManager: Consumed ammo. Remaining: 59
+WeaponManager: Executed non-firing effect: Resource
+WeaponManager: Consumed ammo. Remaining: 58
+WeaponManager: Executed non-firing effect: Resource
+Enemy Cultist3 took 10 damage. Health: 20
+WeaponManager: Consumed ammo. Remaining: 57
+WeaponManager: Executed non-firing effect: Resource
+WeaponManager: Consumed ammo. Remaining: 56
+WeaponManager: Executed non-firing effect: Resource
+WeaponManager: Consumed ammo. Remaining: 55
+WeaponManager: Executed non-firing effect: Resource
+WeaponManager: Consumed ammo. Remaining: 54
+WeaponManager: Executed non-firing effect: Resource
+WeaponManager: Consumed ammo. Remaining: 53
+WeaponManager: Executed non-firing effect: Resource
+WeaponManager: Consumed ammo. Remaining: 52
+WeaponManager: Executed non-firing effect: Resource
+WeaponManager: Consumed ammo. Remaining: 51
+WeaponManager: Executed non-firing effect: Resource
+Enemy Cultist3 took 10 damage. Health: 10
+WeaponManager: Consumed ammo. Remaining: 50
+WeaponManager: Executed non-firing effect: Resource
+WeaponManager: Consumed ammo. Remaining: 49
+WeaponManager: Executed non-firing effect: Resource
+Enemy Cultist3 took 10 damage. Health: 0
+WeaponManager: Consumed ammo. Remaining: 48
+WeaponManager: Executed non-firing effect: Resource
+WeaponManager: Consumed ammo. Remaining: 47
+WeaponManager: Executed non-firing effect: Resource
+WeaponManager: Consumed ammo. Remaining: 46
+WeaponManager: Executed non-firing effect: Resource
+WeaponManager: Consumed ammo. Remaining: 45
+WeaponManager: Executed non-firing effect: Resource
+WeaponManager: Consumed ammo. Remaining: 44
+WeaponManager: Executed non-firing effect: Resource
+Player Health: 55
+Enemy Cultist took 15 damage. Health: 35
+WeaponManager: Consumed ammo. Remaining: 24
+WeaponManager: Executed non-firing effect: Resource
+Enemy Cultist took 15 damage. Health: 20
+WeaponManager: Consumed ammo. Remaining: 23
+WeaponManager: Executed non-firing effect: Resource
+Enemy Cultist took 15 damage. Health: 5
+WeaponManager: Consumed ammo. Remaining: 22
+WeaponManager: Executed non-firing effect: Resource
+Enemy Cultist took 15 damage. Health: -10
+WeaponManager: Consumed ammo. Remaining: 21
+WeaponManager: Executed non-firing effect: Resource
+WeaponManager: Consumed ammo. Remaining: 20
+WeaponManager: Executed non-firing effect: Resource
+WeaponManager: Consumed ammo. Remaining: 29
+WeaponManager: Executed non-firing effect: Resource
+WeaponManager: Consumed ammo. Remaining: 28
+WeaponManager: Executed non-firing effect: Resource
+WeaponManager: Consumed ammo. Remaining: 29
+WeaponManager: Executed non-firing effect: Resource
+WeaponManager: Consumed ammo. Remaining: 28
+WeaponManager: Executed non-firing effect: Resource
+WeaponManager: Consumed ammo. Remaining: 27
+WeaponManager: Executed non-firing effect: Resource
+WeaponManager: Consumed ammo. Remaining: 26
+WeaponManager: Executed non-firing effect: Resource
+WARNING: ObjectDB instances leaked at exit (run with --verbose for details).
+     at: cleanup (core/object/object.cpp:2641)
+ERROR: 7 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:810)

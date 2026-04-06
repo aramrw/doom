@@ -1,0 +1,6 @@
+Code: DeVloek
+GLDefs: DeVloek
+Sounds: id Software
+Sprites: Sonik.O.Fan, DeVloek, id Software
+Sprite Edit: DeVloek
+Idea Base: Space Marine Corps Blaster from Quake 2

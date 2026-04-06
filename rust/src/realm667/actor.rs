@@ -84,7 +84,12 @@ impl ActorDefinition {
         let lower_name = self.name.to_lowercase();
         let parent = self.parent.as_deref().unwrap_or("").to_lowercase();
 
-        if self.flags.contains(&"Monster".to_string()) || parent.contains("enemy") {
+        if self.flags.contains(&"Monster".to_string())
+            || parent.contains("enemy")
+            || self.states.contains_key("See")
+            || self.states.contains_key("Missile")
+            || self.states.contains_key("Melee")
+        {
             return ActorCategory::Enemy;
         }
 
@@ -98,6 +103,7 @@ impl ActorDefinition {
         if self.flags.contains(&"Projectile".to_string())
             || self.properties.contains_key("Projectile")
             || parent.contains("projectile")
+            || lower_name.contains("missile")
         {
             return ActorCategory::Projectile;
         }

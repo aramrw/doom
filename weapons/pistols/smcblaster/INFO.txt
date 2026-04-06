@@ -1,0 +1,15 @@
+Name: Space Marine Corps Blaster
+Class: 2
+Type: Projectile
+Summon: SMCBlaster
+Ammo Type: None
+Altfire: No
+Palette: Doom
+Brightmaps: Yes
+
+Description:
+This is the standard issue rechargeable energy side-arm. It does not require ammunition.
+Useful for taking down Imps as well as exploding barrels and setting off shootable buttons and secret doors.
+Keep one on you at all times.
+
+Note: to replace the standard Doom pistol with the SMC Blaster, uncomment the PlayerClasses line in the GameInfo block in MAPINFO.txt.

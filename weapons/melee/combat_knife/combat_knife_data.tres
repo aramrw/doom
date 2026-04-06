@@ -16,4 +16,4 @@ actions = {
 "primary": ExtResource("4_swing")
 }
 hud_hint = "MELEE"
-max_bullets = 0
+ammo_give = 0

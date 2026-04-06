@@ -1,0 +1,17 @@
+Name: Plague Rat
+Difficulty: Very Easy
+Connections: None
+Summon: plaguerat
+Melee: Yes
+Distance: No
+Type: Critter
+Brightmaps: Yes
+GLDEFS: No
+ACS: No
+Actor modification: No
+Added States: Yes
+Palette: Dark Forces Wait
+
+
+Dirty and smelly, this rat is the vector of the plague!
+Beware when a mischief of rats decides to bite your ankles.

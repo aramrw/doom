@@ -11,4 +11,4 @@ sprite_frames = ExtResource("2_m0enl")
 actions = {
 "primary": ExtResource("3_fire")
 }
-max_bullets = 25
+ammo_give = 25

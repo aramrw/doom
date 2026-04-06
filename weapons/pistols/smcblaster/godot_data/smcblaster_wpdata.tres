@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3 uid="uid://bso7weroymget"]
+
+[ext_resource type="Script" uid="uid://cqlple4um3rs" path="res://weapons/weapon_data.gd" id="1_script"]
+[ext_resource type="SpriteFrames" path="res://weapons/pistols/smcblaster/godot_data/smcblaster_spriteframes.tres" id="2_sprites"]
+[ext_resource type="Resource" path="res://weapons/pistols/smcblaster/godot_data/smcblaster_fire_action.tres" id="3_fire"]
+
+[resource]
+script = ExtResource("1_script")
+weapon_name = "smcblaster"
+sprite_frames = ExtResource("2_sprites")
+sprite_offset = Vector2(0, 15)
+actions = {
+"primary": ExtResource("3_fire")
+}
+ammo_give = 30

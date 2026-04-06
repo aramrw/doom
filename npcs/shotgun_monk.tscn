@@ -257,7 +257,7 @@ follows_player = true
 npc_display_name = "散弾銃僧"
 dialogue_lines = Array[String](["生きてるか。", "ジゴクだ。はやく外に出ればいい。"])
 speed = 0.5
-attack_range = 10.0
+meleerange = 10.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1445630673]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2227539, 0)

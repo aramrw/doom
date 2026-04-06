@@ -2,6 +2,8 @@ extends Resource
 class_name WeaponData
 
 @export var weapon_name: String = "Weapon"
+@export var slot_number: int = 1
+@export var ammo_type: String = "bullets"
 
 @export_subgroup("Sprite")
 @export var sprite_frames: SpriteFrames # The animations for this specific gun
@@ -18,4 +20,4 @@ class_name WeaponData
 @export var hud_hint: String = "BULLETS"
 
 @export_subgroup("Ammo")
-@export var max_bullets: int = 10
+@export var ammo_give: int = 10

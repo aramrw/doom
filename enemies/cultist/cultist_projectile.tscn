@@ -137,7 +137,13 @@ animations = [{
 "speed": 8.0
 }]
 
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_cndc6"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_b6c6c"]
+noise = SubResource("FastNoiseLite_cndc6")
+
 [node name="CultistProjectile" type="Area3D" unique_id=240745810]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
 collision_layer = 0
 collision_mask = 2
 script = ExtResource("1_1")
@@ -153,13 +159,18 @@ shape = SubResource("SphereShape3D_1")
 transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0)
 pixel_size = 0.02
 shaded = true
+fixed_size = true
 texture_filter = 0
 sprite_frames = SubResource("SpriteFrames_1")
 animation = &"fly_1"
 
 [node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=720458610]
-light_color = Color(0.8, 0.2, 1, 1)
-light_energy = 0.5
+light_color = Color(0.42182866, 0.5905894, 0.97774094, 1)
+light_volumetric_fog_energy = 5.023
+light_projector = SubResource("NoiseTexture2D_b6c6c")
+shadow_enabled = true
+omni_range = 8.0
+omni_attenuation = 3.0
 
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="." unique_id=795763281]
 volume_db = -20.0

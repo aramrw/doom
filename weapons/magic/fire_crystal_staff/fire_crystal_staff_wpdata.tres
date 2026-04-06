@@ -12,4 +12,4 @@ actions = {
 "primary": ExtResource("3_action")
 }
 hud_hint = "MANA"
-max_bullets = 50
+ammo_give = 50

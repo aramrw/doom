@@ -197,13 +197,35 @@ impl Realm667Importer {
             );
 
             if category == ActorCategory::Weapon {
+                godot_print!("Realm667Importer: Weapon states for {}: {:?}", actor.name, actor.states.keys());
+                if let Some(fire_states) = actor.states.get("Fire") {
+                    for (i, frame) in fire_states.iter().enumerate() {
+                        godot_print!("  Frame {}: prefix={}, action={:?}", i, frame.sprite_prefix, frame.action);
+                    }
+                }
                 ResourceGenerator::generate_weapon_resources(
                     &actor,
                     &godot_data_root,
                     &godot_data_res,
                     &label_sprites,
                 );
-                godot_print!("Realm667Importer: Created Godot data for {}", actor.name);
+                godot_print!("Realm667Importer: Created Godot data for weapon {}", actor.name);
+            } else if category == ActorCategory::Enemy {
+                ResourceGenerator::generate_enemy_resources(
+                    &actor,
+                    &godot_data_root,
+                    &godot_data_res,
+                    &label_sprites,
+                );
+                godot_print!("Realm667Importer: Created Godot data for enemy {}", actor.name);
+            } else if category == ActorCategory::Projectile {
+                ResourceGenerator::generate_projectile_resources(
+                    &actor,
+                    &godot_data_root,
+                    &godot_data_res,
+                    &label_sprites,
+                );
+                godot_print!("Realm667Importer: Created Godot data for projectile {}", actor.name);
             }
         }
 
@@ -308,13 +330,28 @@ impl Realm667Importer {
         sounds_map: &HashMap<String, String>,
     ) -> HashMap<String, Vec<String>> {
         let mut label_to_folder = HashMap::new();
-        label_to_folder.insert("Ready", "idle");
-        label_to_folder.insert("Spawn", "ground"); // Map Spawn to ground/item
-        label_to_folder.insert("Fire", "shoot");
-        label_to_folder.insert("Missile", "shoot");
-        label_to_folder.insert("Reload", "reload");
-        label_to_folder.insert("Pain", "pain");
-        label_to_folder.insert("Death", "death");
+        let category = actor.determine_category();
+
+        if category == ActorCategory::Weapon {
+            label_to_folder.insert("Ready", "idle");
+            label_to_folder.insert("Fire", "shoot");
+            label_to_folder.insert("Reload", "reload");
+            label_to_folder.insert("Pain", "pain");
+            label_to_folder.insert("Death", "death");
+        } else if category == ActorCategory::Enemy {
+            label_to_folder.insert("Spawn", "walk");
+            label_to_folder.insert("See", "walk");
+            label_to_folder.insert("Missile", "attack");
+            label_to_folder.insert("Melee", "attack");
+            label_to_folder.insert("Pain", "pain");
+            label_to_folder.insert("Death", "death");
+            label_to_folder.insert("XDeath", "xdeath");
+        } else if category == ActorCategory::Projectile {
+            label_to_folder.insert("Spawn", "spawn");
+            label_to_folder.insert("Death", "death");
+        } else if category == ActorCategory::Item || category == ActorCategory::Ammo {
+            label_to_folder.insert("Spawn", "idle");
+        }
 
         let mut result_map = HashMap::new();
         let actor_name = actor.name.to_lowercase();
@@ -355,18 +392,23 @@ impl Realm667Importer {
         }
 
         let sound_props = [
-            "SeeSound",
-            "AttackSound",
-            "PainSound",
-            "DeathSound",
-            "ActiveSound",
-            "SelectSound",
+            ("SeeSound", "taunt"),
+            ("AttackSound", "taunt"),
+            ("PainSound", "hurt"),
+            ("DeathSound", "death"),
+            ("ActiveSound", "taunt"),
+            ("SelectSound", "taunt"),
         ];
         let sounds_dir = godot_data_root.join("sounds").join(&actor_name);
-        for prop in sound_props {
+        for (prop, subfolder) in sound_props {
             if let Some(alias) = actor.properties.get(prop) {
                 if let Some(file_path) = sounds_map.get(&alias.to_string_lossy().to_uppercase()) {
-                    self.extract_sound_file(file_path, archive, &sounds_dir);
+                    let dest_dir = if category == ActorCategory::Enemy {
+                        sounds_dir.join(subfolder)
+                    } else {
+                        sounds_dir.clone()
+                    };
+                    self.extract_sound_file(file_path, archive, &dest_dir);
                 }
             }
         }
