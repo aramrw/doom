@@ -11,7 +11,7 @@ use crate::realm667::parser::Parser;
 use crate::realm667::resource_gen::ResourceGenerator;
 use godot::classes::ProjectSettings;
 use godot::prelude::*;
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 use std::fs;
 use std::fs::File;
 use std::io::{Read, Write};
@@ -88,7 +88,8 @@ impl Realm667Importer {
         let mut script_content = String::new();
         let main_scripts = ["zscript.txt", "zscript", "decorate.txt", "decorate"];
         for main_name in main_scripts {
-            if let Some(content) = self.read_zip_file_recursive(&mut archive, main_name) {
+            let mut visited = HashSet::new();
+            if let Some(content) = self.read_zip_file_recursive(&mut archive, main_name, &mut visited) {
                 script_content = content;
                 break;
             }
@@ -161,7 +162,8 @@ impl Realm667Importer {
         let mut sounds_map = HashMap::new();
         let sndinfo_names = ["sndinfo.txt", "sndinfo"];
         for snd_name in sndinfo_names {
-            if let Some(content) = self.read_zip_file_recursive(&mut archive, snd_name) {
+            let mut visited = HashSet::new();
+            if let Some(content) = self.read_zip_file_recursive(&mut archive, snd_name, &mut visited) {
                 let mut snd_parser = Parser::new(&content);
                 sounds_map = snd_parser.parse_sndinfo();
                 break;
@@ -212,11 +214,18 @@ impl Realm667Importer {
     fn read_zip_file_recursive(
         &self,
         archive: &mut ZipArchive<File>,
-        file_name: &str,
+        file_path: &str,
+        visited: &mut HashSet<String>,
     ) -> Option<String> {
-        let mut full_content = String::new();
+        let normalized_path = file_path.to_lowercase().replace('\\', "/");
+        if visited.contains(&normalized_path) {
+            godot_warn!("Realm667Importer: Circular #include detected: {}", file_path);
+            return None;
+        }
+        visited.insert(normalized_path.clone());
+
         let mut target_index = None;
-        let lower_name = file_name.to_lowercase().replace('\\', "/");
+        // Try exact match first
         for i in 0..archive.len() {
             let name = archive
                 .by_index(i)
@@ -224,25 +233,57 @@ impl Realm667Importer {
                 .name()
                 .to_lowercase()
                 .replace('\\', "/");
-            if name == lower_name || name.ends_with(&format!("/{}", lower_name)) {
+            if name == normalized_path {
                 target_index = Some(i);
                 break;
             }
         }
+
+        // If not found, try searching for it (original behavior as fallback)
+        if target_index.is_none() {
+            for i in 0..archive.len() {
+                let name = archive
+                    .by_index(i)
+                    .unwrap()
+                    .name()
+                    .to_lowercase()
+                    .replace('\\', "/");
+                if name.ends_with(&format!("/{}", normalized_path)) {
+                    target_index = Some(i);
+                    break;
+                }
+            }
+        }
+
         if let Some(idx) = target_index {
+            let actual_name = archive.by_index(idx).unwrap().name().replace('\\', "/");
+            let current_dir = Path::new(&actual_name).parent().unwrap_or(Path::new(""));
+
             let mut content = String::new();
             {
                 let mut zip_file = archive.by_index(idx).unwrap();
                 let _ = zip_file.read_to_string(&mut content);
             }
+
+            let mut full_content = String::new();
             for line in content.lines() {
                 let trimmed = line.trim();
                 if trimmed.to_lowercase().starts_with("#include") {
                     let parts: Vec<&str> = trimmed.split_whitespace().collect();
                     if parts.len() >= 2 {
                         let include_path = parts[1].replace('"', "").replace('\'', "");
+
+                        // Resolve relative path
+                        let resolved_path = if include_path.starts_with('/') {
+                            include_path.trim_start_matches('/').to_string()
+                        } else {
+                            let mut path = current_dir.to_path_buf();
+                            path.push(&include_path);
+                            path.to_string_lossy().replace('\\', "/")
+                        };
+
                         if let Some(sub_content) =
-                            self.read_zip_file_recursive(archive, &include_path)
+                            self.read_zip_file_recursive(archive, &resolved_path, visited)
                         {
                             full_content.push_str(&sub_content);
                             full_content.push('\n');
