@@ -90,8 +90,8 @@ impl Parser {
             }
         }
 
-        if let Token::Number(num) = self.cur_token {
-            actor.ed_number = Some(num);
+        if let Token::NumberStr(ref num) = self.cur_token {
+            actor.ed_number = num.parse().ok();
             self.next_token();
         }
 
@@ -152,7 +152,7 @@ impl Parser {
             let mut value = String::new();
             while self.cur_token != Token::SemiColon && !matches!(self.cur_token, Token::Identifier(_)) && self.cur_token != Token::BraceClose {
                 match &self.cur_token {
-                    Token::Number(n) => value.push_str(&n.to_string()),
+                    Token::NumberStr(s) => value.push_str(s),
                     Token::Identifier(s) => value.push_str(s),
                     Token::StringLiteral(s) => value.push_str(s),
                     Token::Comma => value.push(','),
@@ -164,7 +164,7 @@ impl Parser {
             if self.cur_token == Token::SemiColon {
                 self.next_token();
             }
-            actor.properties.insert(id, value.trim().to_string());
+            actor.properties.insert(id, crate::realm667::actor::GZValue::String(value.trim().to_string()));
         } else {
             self.next_token();
         }
@@ -221,8 +221,8 @@ impl Parser {
         self.next_token();
 
         // Duration (tics)
-        let duration = if let Token::Number(d) = self.cur_token {
-            d
+        let duration = if let Token::NumberStr(ref d) = self.cur_token {
+            d.parse().unwrap_or(0)
         } else {
             0
         };
@@ -232,15 +232,43 @@ impl Parser {
         let mut action = None;
         if let Token::Identifier(a) = self.cur_token.clone() {
             if a.starts_with("A_") {
-                action = Some(a);
+                let mut args = Vec::new();
                 self.next_token();
                 // Handle optional parameters in parentheses
                 if self.cur_token == Token::Operator("(".to_string()) {
+                    self.next_token(); // skip (
                     while self.cur_token != Token::Operator(")".to_string()) && self.cur_token != Token::Eof {
-                        self.next_token();
+                        match self.cur_token.clone() {
+                            Token::NumberStr(n) => {
+                                if let Ok(val) = n.parse::<i32>() {
+                                    args.push(crate::realm667::actor::GZValue::Integer(val));
+                                } else if let Ok(val) = n.parse::<f64>() {
+                                    args.push(crate::realm667::actor::GZValue::Float(val));
+                                }
+                                self.next_token();
+                            }
+                            Token::StringLiteral(s) => {
+                                args.push(crate::realm667::actor::GZValue::String(s));
+                                self.next_token();
+                            }
+                            Token::Identifier(id) => {
+                                args.push(crate::realm667::actor::GZValue::Identifier(id));
+                                self.next_token();
+                            }
+                            Token::Comma => {
+                                self.next_token();
+                            }
+                            _ => self.next_token(),
+                        }
                     }
-                    self.next_token(); // skip )
+                    if self.cur_token == Token::Operator(")".to_string()) {
+                        self.next_token(); // skip )
+                    }
                 }
+                action = Some(crate::realm667::actor::GZFunctionCall {
+                    name: a,
+                    args,
+                });
             }
         }
 

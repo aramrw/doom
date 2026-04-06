@@ -1,24 +1,46 @@
 use std::path::Path;
 use std::fs;
+use std::collections::HashMap;
 use crate::realm667::actor::ActorDefinition;
 
 pub struct ResourceGenerator;
 
 impl ResourceGenerator {
-    pub fn generate_weapon_resources(actor: &ActorDefinition, actor_root: &Path, rel_base: &str) {
+    pub fn generate_weapon_resources(
+        actor: &ActorDefinition, 
+        actor_root: &Path, 
+        rel_base: &str,
+        label_sprites: &HashMap<String, Vec<String>>
+    ) {
         let weapon_name = actor.name.to_lowercase();
         let rel_path = rel_base.trim_end_matches('/');
         
+        // Determine weapon type
+        let is_projectile = actor.states.iter().any(|(_, frames)| {
+            frames.iter().any(|f| f.action.as_ref().map(|a| a.name.as_str()) == Some("A_FireProjectile"))
+        });
+
         // 1. Generate Effects
         let effect_path = actor_root.join(format!("{}_fire_effect.tres", weapon_name));
-        let effect_content = 
+        let effect_content = if is_projectile {
+            format!(
+r#"[gd_resource type="Resource" script_class="ProjectileEffect" format=3]
+[ext_resource type="Script" path="res://weapons/effects/projectile_effect.gd" id="1_script"]
+[resource]
+script = ExtResource("1_script")
+speed = 50.0
+damage = 20
+"#)
+        } else {
+            format!(
 r#"[gd_resource type="Resource" script_class="HitscanEffect" format=3]
 [ext_resource type="Script" path="res://weapons/effects/hitscan_effect.gd" id="1_script"]
 [resource]
 script = ExtResource("1_script")
 damage = 15
 spread_angle = 2.0
-"#;
+"#)
+        };
         let _ = fs::write(&effect_path, effect_content);
 
         let sound_path = actor_root.join(format!("{}_fire_sound.tres", weapon_name));
@@ -55,36 +77,52 @@ r#"[gd_resource type="Resource" script_class="WeaponAction" format=3]
 script = ExtResource("1_script")
 animation_name = "shoot"
 steps = [ExtResource("2_step")]
-loop = true
+loop = false
 consumes_ammo = true
 "#, rel_path, weapon_name);
         let _ = fs::write(&action_path, action_content);
 
         // 4. Generate SpriteFrames
         let sprite_frames_path = actor_root.join(format!("{}_spriteframes.tres", weapon_name));
-        let sprite_frames_content = 
-r#"[gd_resource type="SpriteFrames" format=3]
-[resource]
-animations = [{
-"frames": [],
-"loop": true,
-"name": &"idle",
-"speed": 5.0
-}, {
-"frames": [],
-"loop": false,
-"name": &"reload",
-"speed": 5.0
-}, {
-"frames": [],
-"loop": false,
-"name": &"shoot",
-"speed": 10.0
-}]
-"#;
-        let _ = fs::write(&sprite_frames_path, sprite_frames_content);
+        let mut sf_content = String::from("[gd_resource type=\"SpriteFrames\" load_steps=2 format=3]\n\n");
+        
+        let mut ext_resources = Vec::new();
+        let mut animations = Vec::new();
+        let mut id_counter = 1;
 
-        // 5. Generate WeaponData (The Final Product)
+        // Sort keys for consistent generation
+        let mut keys: Vec<_> = label_sprites.keys().collect();
+        keys.sort();
+
+        for anim_name in keys {
+            let sprites = label_sprites.get(anim_name).unwrap();
+            if sprites.is_empty() { continue; }
+
+            let mut frames = Vec::new();
+            for sprite_rel_path in sprites {
+                let id = format!("{}_ext", id_counter);
+                ext_resources.push(format!("[ext_resource type=\"Texture2D\" path=\"{}\" id=\"{}\"]", sprite_rel_path, id));
+                frames.push(format!("{{\n\"duration\": 1.0,\n\"texture\": ExtResource(\"{}\")\n}}", id));
+                id_counter += 1;
+            }
+            
+            animations.push(format!(
+r#"{{
+"frames": [{}],
+"loop": {},
+"name": &"{}",
+"speed": 5.0
+}}"#, frames.join(", "), if anim_name == "idle" { "true" } else { "false" }, anim_name));
+        }
+
+        sf_content.push_str(&ext_resources.join("\n"));
+        sf_content.push_str("\n\n[resource]\nanimations = [");
+        sf_content.push_str(&animations.join(", "));
+        sf_content.push_str("]\n");
+        
+        let _ = fs::write(&sprite_frames_path, sf_content);
+
+        // 5. Generate WeaponData
         let wpdata_path = actor_root.join(format!("{}_wpdata.tres", weapon_name));
         let wpdata_content = format!(
 r#"[gd_resource type="Resource" script_class="WeaponData" format=3]
@@ -96,9 +134,11 @@ script = ExtResource("1_script")
 weapon_name = "{}"
 sprite_frames = ExtResource("2_sprites")
 actions = {{ "primary": ExtResource("3_fire") }}
-max_bullets = {}
+ammo_give = {}
 "#, rel_path, weapon_name, rel_path, weapon_name, weapon_name, 
-            actor.properties.get("Weapon.AmmoGive").unwrap_or(&"30".to_string()));
+            actor.properties.get("Weapon.AmmoGive")
+                .map(|v| v.to_string_lossy())
+                .unwrap_or_else(|| "30".to_string()));
         
         let _ = fs::write(&wpdata_path, wpdata_content);
     }

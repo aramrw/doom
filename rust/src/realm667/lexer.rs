@@ -1,7 +1,7 @@
 #[derive(Debug, PartialEq, Clone)]
 pub enum Token {
     Identifier(String),
-    Number(i32),
+    NumberStr(String),
     StringLiteral(String),
     BraceOpen,
     BraceClose,
@@ -54,8 +54,9 @@ impl Lexer {
             ',' => { self.pos += 1; Token::Comma }
             ';' => { self.pos += 1; Token::SemiColon }
             '"' => self.read_string(),
-            _ if ch.is_alphabetic() || ch == '_' || ch == '+' || ch == '-' || ch == '$' || ch == '.' => self.read_identifier(),
             _ if ch.is_digit(10) => self.read_number(),
+            _ if ch == '-' && self.pos + 1 < self.input.len() && self.input[self.pos + 1].is_digit(10) => self.read_number(),
+            _ if ch.is_alphabetic() || ch == '_' || ch == '+' || ch == '-' || ch == '$' || ch == '.' => self.read_identifier(),
             _ => {
                 self.pos += 1;
                 Token::Operator(ch.to_string())
@@ -105,10 +106,13 @@ impl Lexer {
 
     fn read_number(&mut self) -> Token {
         let start = self.pos;
-        while self.pos < self.input.len() && self.input[self.pos].is_digit(10) {
+        if self.pos < self.input.len() && self.input[self.pos] == '-' {
+            self.pos += 1;
+        }
+        while self.pos < self.input.len() && (self.input[self.pos].is_digit(10) || self.input[self.pos] == '.') {
             self.pos += 1;
         }
         let s: String = self.input[start..self.pos].iter().collect();
-        Token::Number(s.parse().unwrap_or(0))
+        Token::NumberStr(s)
     }
 }
