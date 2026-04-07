@@ -375,10 +375,21 @@ impl Parser {
                                     is_bright = true;
                                     self.next_token();
                                 }
-                                Token::Identifier(ref k) if k.to_lowercase().starts_with("a_") => {
+                                Token::Identifier(ref k) => {
                                     if let Some(call) = self.parse_function_call() {
                                         actions.push(call);
                                     } else {
+                                        // Check if it's one of the flow control keywords we already handled
+                                        let lower_k = k.to_lowercase();
+                                        if lower_k == "loop" || lower_k == "stop" || lower_k == "wait" || lower_k == "fail" || lower_k == "goto" || lower_k == "bright" {
+                                            if lower_k == "bright" {
+                                                is_bright = true;
+                                                self.next_token();
+                                                continue;
+                                            }
+                                            break;
+                                        }
+
                                         // It might be a simple action without parentheses
                                         actions.push(crate::realm667::actor::GZFunctionCall {
                                             name: k.clone(),
@@ -402,17 +413,13 @@ impl Parser {
                                                 self.next_token();
                                             }
                                             Token::Identifier(sub_id) => {
-                                                if sub_id.to_lowercase().starts_with("a_") {
-                                                    if let Some(call) = self.parse_function_call() {
-                                                        actions.push(call);
-                                                    } else {
-                                                        actions.push(crate::realm667::actor::GZFunctionCall {
-                                                            name: sub_id,
-                                                            args: Vec::new(),
-                                                        });
-                                                        self.next_token();
-                                                    }
+                                                if let Some(call) = self.parse_function_call() {
+                                                    actions.push(call);
                                                 } else {
+                                                    actions.push(crate::realm667::actor::GZFunctionCall {
+                                                        name: sub_id,
+                                                        args: Vec::new(),
+                                                    });
                                                     self.next_token();
                                                 }
                                             }

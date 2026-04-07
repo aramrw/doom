@@ -36,10 +36,16 @@ impl ResourceGenerator {
                     let effect_filename = format!("{}_f{}_a{}_effect.tres", weapon_name, frame_idx, action_idx);
                     let effect_path = actor_root.join(&effect_filename);
                     
-                    let (_script_path, effect_content) = if lower_name == "a_firebullets" || lower_name == "a_custompunch" {
+                    let (_script_path, effect_content) = if lower_name == "a_firebullets" || lower_name == "a_custompunch" || lower_name == "ca_quakeaxechop" {
                         let path = "res://weapons/effects/hitscan_effect.gd";
                         
-                        let damage = action.args.get(0).map(|v| v.to_string_lossy()).unwrap_or_else(|| "5".to_string());
+                        let (damage, range) = if lower_name == "ca_quakeaxechop" {
+                             ("25".to_string(), "3.5".to_string())
+                        } else if lower_name == "a_custompunch" {
+                             (action.args.get(0).map(|v| v.to_string_lossy()).unwrap_or_else(|| "5".to_string()), "3.5".to_string())
+                        } else {
+                            (action.args.get(0).map(|v| v.to_string_lossy()).unwrap_or_else(|| "5".to_string()), "100.0".to_string())
+                        };
                         let spread = action.args.get(2).map(|v| v.to_string_lossy()).unwrap_or_else(|| "2.0".to_string());
                         let pellets = action.args.get(1).map(|v| v.to_string_lossy()).unwrap_or_else(|| "1".to_string());
 
@@ -51,7 +57,8 @@ script = ExtResource("1_script")
 damage = {}
 spread_angle = {}
 pellets = {}
-"#, path, damage, spread, pellets))
+range_distance = {}
+"#, path, damage, spread, pellets, range))
 
                     } else if lower_name == "a_fireprojectile" || lower_name == "a_firecustommissile" || lower_name == "a_custommissile" {
                         let path = "res://weapons/effects/projectile_effect.gd";
@@ -169,6 +176,7 @@ effects = Array[ExtResource("2_base")]([{}])
         }
 
         // 3. Generate WeaponAction
+        let consumes_ammo = !actor.flags.contains(&"WEAPON.MELEEWEAPON".to_string());
         let action_path = actor_root.join(format!("{}_fire_action.tres", weapon_name));
         let action_content = format!(
 r#"[gd_resource type="Resource" script_class="WeaponAction" format=3]
@@ -179,8 +187,8 @@ script = ExtResource("1_script")
 animation_name = "shoot"
 steps = [{}]
 loop = false
-consumes_ammo = true
-"#, fire_ext_resources.join("\n"), fire_steps.join(", "));
+consumes_ammo = {}
+"#, fire_ext_resources.join("\n"), fire_steps.join(", "), consumes_ammo);
         let _ = fs::write(&action_path, action_content);
 
         // 4. Generate SpriteFrames

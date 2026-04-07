@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="HitscanEffect" format=3 uid="uid://drwi3mg32gnur"]
+
+[ext_resource type="Script" uid="uid://b504e5ofchd15" path="res://weapons/effects/hitscan_effect.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+damage = 25
+spread_angle = 2.0
+range_distance = 3.5

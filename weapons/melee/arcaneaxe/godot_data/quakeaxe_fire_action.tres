@@ -4,7 +4,10 @@
 [ext_resource type="Script" uid="uid://k0g2eck3n5cy" path="res://weapons/action_step.gd" id="2_octpo"]
 [ext_resource type="Resource" uid="uid://dtf1q7uvnepwh" path="res://weapons/melee/arcaneaxe/godot_data/quakeaxe_f0_step.tres" id="step_1"]
 [ext_resource type="Resource" uid="uid://dosfjwr36vvb6" path="res://weapons/melee/arcaneaxe/godot_data/quakeaxe_f1_step.tres" id="step_2"]
+[ext_resource type="Resource" uid="uid://dp6u86m0x1p4v" path="res://weapons/melee/arcaneaxe/godot_data/quakeaxe_f3_step.tres" id="step_3"]
 
 [resource]
 script = ExtResource("1_script")
-steps = Array[ExtResource("2_octpo")]([ExtResource("step_1"), ExtResource("step_2")])
+animation_name = "shoot"
+steps = Array[ExtResource("2_octpo")]([ExtResource("step_1"), ExtResource("step_2"), ExtResource("step_3")])
+consumes_ammo = false

@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ActionStep" format=3 uid="uid://dp6u86m0x1p4v"]
+
+[ext_resource type="Script" uid="uid://k0g2eck3n5cy" path="res://weapons/action_step.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://bkfyrjdpuxg0h" path="res://weapons/effects/weapon_effect.gd" id="2_base"]
+[ext_resource type="Resource" path="res://weapons/melee/arcaneaxe/godot_data/quakeaxe_f3_a0_effect.tres" id="eff_3_0"]
+
+[resource]
+script = ExtResource("1_script")
+frame_index = 4
+effects = Array[ExtResource("2_base")]([ExtResource("eff_3_0")])
