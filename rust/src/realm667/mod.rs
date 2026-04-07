@@ -18,12 +18,26 @@ use std::io::{Read, Write};
 use std::path::{Path, PathBuf};
 use zip::ZipArchive;
 
+#[derive(GodotConvert, Export, Default, Var, PartialEq, Eq, Clone, Copy, Debug)]
+#[godot(via = i32)]
+pub enum ImportMode {
+    #[default]
+    Automatic = 0,
+    Weapon = 1,
+    Enemy = 2,
+    Prop = 3,
+    Projectile = 4,
+}
+
 #[derive(GodotClass)]
 #[class(tool, base=Node)]
 pub struct Realm667Importer {
     #[export]
     #[var(hint = FILE_PATH, hint_string = "*.pk3,*.zip")]
     pk3_path: GString,
+
+    #[export]
+    import_mode: ImportMode,
 
     #[export]
     trigger_import: bool,
@@ -36,6 +50,7 @@ impl INode for Realm667Importer {
     fn init(base: Base<Node>) -> Self {
         Self {
             pk3_path: GString::from(""),
+            import_mode: ImportMode::Automatic,
             trigger_import: false,
             base,
         }
@@ -101,29 +116,83 @@ impl Realm667Importer {
         }
 
         let mut parser = Parser::new(&script_content);
-        let actors = parser.parse_actors();
+        let mut actors = parser.parse_actors();
 
         if actors.is_empty() {
             godot_warn!("Realm667Importer: No actors found in scripts.");
             return;
         }
 
-        // Primary actor for the top-level folder name
-        let primary_actor = actors
-            .iter()
-            .find(|a| {
-                matches!(
-                    a.determine_category(),
-                    ActorCategory::Weapon | ActorCategory::Enemy
-                )
-            })
-            .unwrap_or(&actors[0]);
+        // 1.5 Resolve Inheritance
+        let mut actor_map: HashMap<String, usize> = actors.iter().enumerate()
+            .map(|(i, a)| (a.name.to_lowercase(), i))
+            .collect();
 
-        let primary_name = primary_actor.name.to_lowercase();
+        let mut actors_to_update = Vec::new();
+        for i in 0..actors.len() {
+            if let Some(ref parent_name) = actors[i].parent {
+                if let Some(&parent_idx) = actor_map.get(&parent_name.to_lowercase()) {
+                    actors_to_update.push((i, parent_idx));
+                }
+            }
+        }
+
+        for (child_idx, parent_idx) in actors_to_update {
+            let (child, parent) = if child_idx < parent_idx {
+                let (left, right) = actors.split_at_mut(parent_idx);
+                (&mut left[child_idx], &right[0])
+            } else {
+                let (left, right) = actors.split_at_mut(child_idx);
+                (&mut right[0], &left[parent_idx])
+            };
+
+            // Copy properties if not present in child
+            for (k, v) in &parent.properties {
+                child.properties.entry(k.clone()).or_insert_with(|| v.clone());
+            }
+            // Copy flags if not present in child
+            for flag in &parent.flags {
+                if !child.flags.contains(flag) {
+                    child.flags.push(flag.clone());
+                }
+            }
+            // Copy states if not present in child
+            for (k, v) in &parent.states {
+                child.states.entry(k.clone()).or_insert_with(|| v.clone());
+            }
+        }
+
+        // Primary actor for the top-level folder name
+        let primary_actor = if self.import_mode == ImportMode::Automatic {
+            actors
+                .iter()
+                .find(|a: &&ActorDefinition| {
+                    matches!(
+                        a.determine_category(),
+                        ActorCategory::Weapon | ActorCategory::Enemy
+                    )
+                })
+                .unwrap_or(&actors[0])
+        } else {
+            // If mode is forced, use the first actor of that type if possible
+            let target_category = match self.import_mode {
+                ImportMode::Weapon => ActorCategory::Weapon,
+                ImportMode::Enemy => ActorCategory::Enemy,
+                ImportMode::Prop => ActorCategory::Prop,
+                ImportMode::Projectile => ActorCategory::Projectile,
+                _ => ActorCategory::Unknown,
+            };
+            
+            actors.iter()
+                .find(|a| a.determine_category() == target_category)
+                .unwrap_or(&actors[0])
+        };
+
+        let mod_folder_name = pk3_path_obj.file_stem().unwrap().to_string_lossy().to_lowercase();
         let parent_dir = pk3_path_obj.parent().unwrap_or(Path::new(""));
 
-        // Output directory is parent/primary_name
-        let abs_output_base = parent_dir.join(&primary_name);
+        // Output directory is parent/mod_folder_name
+        let abs_output_base = parent_dir.join(&mod_folder_name);
         let _ = fs::create_dir_all(&abs_output_base);
 
         let parent_res_path = if let Some(pos) = path.rfind('/') {
@@ -131,7 +200,7 @@ impl Realm667Importer {
         } else {
             "res://".to_string()
         };
-        let res_output_base = format!("{}/{}", parent_res_path.trim_end_matches('/'), primary_name);
+        let res_output_base = format!("{}/{}", parent_res_path.trim_end_matches('/'), mod_folder_name);
 
         godot_print!("--------------------------------------------------");
         godot_print!("Realm667Importer: STARTING CLEAN IMPORT");
@@ -172,8 +241,19 @@ impl Realm667Importer {
 
         // 4. Organize each actor into "godot_data"
         for actor in actors {
-            let category = actor.determine_category();
+            let actor: ActorDefinition = actor;
+
+            // Respect forced import mode if not Automatic
+            let category = match self.import_mode {
+                ImportMode::Weapon => ActorCategory::Weapon,
+                ImportMode::Enemy => ActorCategory::Enemy,
+                ImportMode::Prop => ActorCategory::Prop,
+                ImportMode::Projectile => ActorCategory::Projectile,
+                ImportMode::Automatic => actor.determine_category(),
+            };
+
             if category == ActorCategory::Unknown {
+                godot_print!("Realm667Importer: Skipping unknown actor: {}", actor.name);
                 continue;
             }
 
@@ -190,17 +270,19 @@ impl Realm667Importer {
             // Extract and categorize sprites for this actor
             let label_sprites = self.extract_actor_assets_clean(
                 &actor,
+                category,
                 &mut archive,
                 &godot_data_root,
                 &godot_data_res,
                 &sounds_map,
-                &primary_name,
+                &mod_folder_name,
             );
 
             if category == ActorCategory::Weapon {
                 godot_print!("Realm667Importer: Weapon states for {}: {:?}", actor.name, actor.states.keys());
                 if let Some(fire_states) = actor.states.get("Fire") {
                     for (i, frame) in fire_states.iter().enumerate() {
+                        let frame: &crate::realm667::actor::StateFrame = frame;
                         godot_print!("  Frame {}: prefix={}, action={:?}", i, frame.sprite_prefix, frame.action);
                     }
                 }
@@ -227,13 +309,21 @@ impl Realm667Importer {
                     &label_sprites,
                 );
                 godot_print!("Realm667Importer: Created Godot data for projectile {}", actor.name);
+            } else if category == ActorCategory::Prop {
+                ResourceGenerator::generate_prop_resources(
+                    &actor,
+                    &godot_data_root,
+                    &godot_data_res,
+                    &label_sprites,
+                );
+                godot_print!("Realm667Importer: Created Godot data for prop {}", actor.name);
             }
         }
 
         godot_print!("Realm667Importer: IMPORT FINISHED SUCCESSFULLY");
         godot_print!("--------------------------------------------------");
 
-        let mut editor = EditorInterface::singleton();
+        let editor = EditorInterface::singleton();
         if let Some(mut fs) = editor.get_resource_filesystem() {
             fs.scan();
         }
@@ -336,6 +426,7 @@ impl Realm667Importer {
     fn extract_actor_assets_clean(
         &self,
         actor: &ActorDefinition,
+        category: ActorCategory,
         archive: &mut ZipArchive<File>,
         godot_data_root: &Path,
         godot_data_res: &str,
@@ -343,32 +434,36 @@ impl Realm667Importer {
         mod_name: &str,
     ) -> HashMap<String, Vec<(String, i32)>> {
         let mut label_to_folder = HashMap::new();
-        let category = actor.determine_category();
 
         if category == ActorCategory::Weapon {
-            label_to_folder.insert("Ready", "idle");
-            label_to_folder.insert("Fire", "shoot");
-            label_to_folder.insert("Reload", "reload");
-            label_to_folder.insert("Pain", "pain");
-            label_to_folder.insert("Death", "death");
-            label_to_folder.insert("Spawn", "ground");
+            label_to_folder.insert("Ready", "idle".to_string());
+            label_to_folder.insert("Fire", "shoot".to_string());
+            label_to_folder.insert("Reload", "reload".to_string());
+            label_to_folder.insert("Pain", "pain".to_string());
+            label_to_folder.insert("Death", "death".to_string());
+            label_to_folder.insert("Spawn", "ground".to_string());
         } else if category == ActorCategory::Enemy {
-            label_to_folder.insert("Spawn", "walk");
-            label_to_folder.insert("See", "walk");
-            label_to_folder.insert("Missile", "attack");
-            label_to_folder.insert("Melee", "attack");
-            label_to_folder.insert("Pain", "pain");
-            label_to_folder.insert("Death", "death");
-            label_to_folder.insert("XDeath", "xdeath");
+            label_to_folder.insert("Spawn", "walk".to_string());
+            label_to_folder.insert("See", "walk".to_string());
+            label_to_folder.insert("Missile", "attack".to_string());
+            label_to_folder.insert("Melee", "attack".to_string());
+            label_to_folder.insert("Pain", "pain".to_string());
+            label_to_folder.insert("Death", "death".to_string());
+            label_to_folder.insert("XDeath", "xdeath".to_string());
         } else if category == ActorCategory::Projectile {
-            label_to_folder.insert("Spawn", "spawn");
-            label_to_folder.insert("Fly", "spawn");
-            label_to_folder.insert("Idle", "spawn");
-            label_to_folder.insert("Death", "death");
-            label_to_folder.insert("Crash", "death");
-            label_to_folder.insert("XDeath", "death");
+            label_to_folder.insert("Spawn", "spawn".to_string());
+            label_to_folder.insert("Fly", "spawn".to_string());
+            label_to_folder.insert("Idle", "spawn".to_string());
+            label_to_folder.insert("Death", "death".to_string());
+            label_to_folder.insert("Crash", "death".to_string());
+            label_to_folder.insert("XDeath", "death".to_string());
         } else if category == ActorCategory::Item || category == ActorCategory::Ammo {
-            label_to_folder.insert("Spawn", "idle");
+            label_to_folder.insert("Spawn", "idle".to_string());
+        } else if category == ActorCategory::Prop {
+            // For props, we use literal state names as folders
+            for label in actor.states.keys() {
+                label_to_folder.insert(label.as_str(), label.to_lowercase());
+            }
         }
 
         let mut result_map = HashMap::new();
