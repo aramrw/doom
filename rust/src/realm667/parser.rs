@@ -291,14 +291,36 @@ impl Parser {
         self.next_token();
 
         let mut current_labels = Vec::new();
+        let mut has_parsed_frames = false;
+
         while self.cur_token != Token::BraceClose && self.cur_token != Token::Eof {
             match self.cur_token.clone() {
                 Token::Identifier(id) => {
                     self.next_token();
                     if self.cur_token == Token::Colon {
                         self.next_token();
+                        if has_parsed_frames {
+                            current_labels.clear();
+                            has_parsed_frames = false;
+                        }
                         current_labels.push(id);
                     } else {
+                        // Check if it's a flow control keyword
+                        let lower_id = id.to_lowercase();
+                        if lower_id == "loop" || lower_id == "stop" || lower_id == "wait" || lower_id == "fail" || lower_id == "goto" {
+                            if lower_id == "goto" {
+                                if let Token::Identifier(_) = self.cur_token {
+                                    self.next_token();
+                                }
+                            }
+                            if self.cur_token == Token::SemiColon {
+                                self.next_token();
+                            }
+                            continue;
+                        }
+
+                        has_parsed_frames = true;
+
                         // Frame data
                         let frames_str = if self.peek_token != Token::Colon && self.peek_token != Token::BraceClose {
                             if let Token::Identifier(f) = self.cur_token.clone() {
@@ -342,8 +364,44 @@ impl Parser {
                                     action = self.parse_function_call();
                                 }
                                 Token::BraceOpen => {
-                                    // Skip anonymous blocks for now
-                                    self.skip_balanced_braces();
+                                    // ZScript anonymous function block - scan for actions inside!
+                                    let mut brace_count = 1;
+                                    self.next_token(); // skip {
+                                    while brace_count > 0 && self.cur_token != Token::Eof {
+                                        match self.cur_token.clone() {
+                                            Token::BraceOpen => {
+                                                brace_count += 1;
+                                                self.next_token();
+                                            }
+                                            Token::BraceClose => {
+                                                brace_count -= 1;
+                                                self.next_token();
+                                            }
+                                            Token::Identifier(sub_id) => {
+                                                if sub_id.starts_with("A_Fire") || sub_id.starts_with("A_Custom") || sub_id.starts_with("A_Explode") {
+                                                    let mut sub_args = Vec::new();
+                                                    self.next_token();
+                                                    if self.cur_token == Token::ParenthesisOpen {
+                                                        self.next_token();
+                                                        while self.cur_token != Token::ParenthesisClose && self.cur_token != Token::Eof {
+                                                            if let Some(val) = self.parse_gz_value() { sub_args.push(val); }
+                                                            if self.cur_token == Token::Comma { self.next_token(); } else if self.cur_token != Token::ParenthesisClose { self.next_token(); }
+                                                        }
+                                                        if self.cur_token == Token::ParenthesisClose { self.next_token(); }
+                                                    }
+                                                    action = Some(crate::realm667::actor::GZFunctionCall {
+                                                        name: sub_id,
+                                                        args: sub_args,
+                                                    });
+                                                } else {
+                                                    self.next_token();
+                                                }
+                                            }
+                                            _ => {
+                                                self.next_token();
+                                            }
+                                        }
+                                    }
                                 }
                                 _ => break, // Stop on unknown tokens (could be Loop, Stop, or a new label)
                             }
