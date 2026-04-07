@@ -555,4 +555,123 @@ bus = &"SfxBus"
 "#, rel_path, proj_name, r_val, speed, autoplay_anim);
         let _ = fs::write(&tscn_path, tscn_content);
     }
+
+    pub fn generate_prop_resources(
+        actor: &ActorDefinition,
+        actor_root: &Path,
+        rel_base: &str,
+        label_sprites: &HashMap<String, Vec<(String, i32)>>,
+    ) {
+        let _ = fs::create_dir_all(actor_root);
+        let prop_name = actor.name.to_lowercase();
+        let rel_path = rel_base.trim_end_matches('/');
+
+        let radius = actor.properties.get("Radius")
+            .map(|v| v.to_string_lossy())
+            .unwrap_or_else(|| "16.0".to_string());
+        let height = actor.properties.get("Height")
+            .map(|v| v.to_string_lossy())
+            .unwrap_or_else(|| "64.0".to_string());
+        let is_solid = actor.flags.contains(&"Solid".to_string());
+
+        let r_val: f32 = radius.parse().unwrap_or(16.0) / 40.0;
+        let h_val: f32 = height.parse().unwrap_or(64.0) / 40.0;
+
+        // 1. Generate SpriteFrames
+        let sprite_frames_path = actor_root.join(format!("{}_spriteframes.tres", prop_name));
+        let mut sf_content = String::from("[gd_resource type=\"SpriteFrames\" load_steps=2 format=3]\n\n");
+        let mut ext_resources = Vec::new();
+        let mut animations = Vec::new();
+        let mut id_counter = 1;
+
+        let mut keys: Vec<_> = label_sprites.keys().collect();
+        keys.sort();
+
+        for anim_name in keys {
+            let sprites = label_sprites.get(anim_name).unwrap();
+            if sprites.is_empty() { continue; }
+            
+            let mut frames = Vec::new();
+            for (sprite_rel_path, duration) in sprites {
+                let id = format!("{}_ext", id_counter);
+                ext_resources.push(format!("[ext_resource type=\"Texture2D\" path=\"{}\" id=\"{}\"]", sprite_rel_path, id));
+                let dur = if *duration < 0 { 1.0 } else { *duration as f32 };
+                frames.push(format!("{{\n\"duration\": {},\n\"texture\": ExtResource(\"{}\")\n}}", dur, id));
+                id_counter += 1;
+            }
+            
+            animations.push(format!(
+r#"{{
+"frames": [{}],
+"loop": true,
+"name": &"{}",
+"speed": 35.0
+}}"#, frames.join(", "), anim_name.to_lowercase()));
+        }
+
+        sf_content.push_str(&ext_resources.join("\n"));
+        sf_content.push_str("\n\n[resource]\nanimations = [");
+        sf_content.push_str(&animations.join(", "));
+        sf_content.push_str("]\n");
+        let _ = fs::write(&sprite_frames_path, sf_content);
+
+        let autoplay_anim = if label_sprites.contains_key("spawn") {
+            "spawn"
+        } else if label_sprites.contains_key("idle") {
+            "idle"
+        } else if !label_sprites.is_empty() {
+            label_sprites.keys().next().unwrap()
+        } else {
+            ""
+        };
+
+        // 2. Generate TSCN
+        let tscn_path = actor_root.join(format!("{}.tscn", prop_name));
+        
+        let mut tscn_content = format!(
+r#"[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://assets/base_prop.gd" id="1_script"]
+[ext_resource type="SpriteFrames" path="{}/{}_spriteframes.tres" id="2_sprites"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1"]
+radius = {:.4}
+height = {:.4}
+
+[node name="{}" type="StaticBody3D"]
+script = ExtResource("1_script")
+initial_state = "{}"
+"#, rel_path, prop_name, r_val, h_val, actor.name, autoplay_anim);
+
+        if is_solid {
+            tscn_content.push_str(&format!(
+r#"
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, {:.4}, 0)
+shape = SubResource("CapsuleShape3D_1")
+"#, h_val / 2.0));
+        }
+
+        // Add 4 sprites for volumetric effect
+        for i in 0..4 {
+            let rot = (i as f32) * 45.0;
+            tscn_content.push_str(&format!(
+r#"
+[node name="Sprite3D_{}" type="AnimatedSprite3D" parent="."]
+transform = Transform3D({:.4}, 0, {:.4}, 0, 1, 0, {:.4}, 0, {:.4}, 0, {:.4}, 0)
+shaded = true
+texture_filter = 0
+sprite_frames = ExtResource("2_sprites")
+autoplay = "{}"
+"#, 
+                i, 
+                (rot.to_radians()).cos(), (rot.to_radians()).sin(),
+                -(rot.to_radians()).sin(), (rot.to_radians()).cos(),
+                h_val / 2.0,
+                autoplay_anim
+            ));
+        }
+
+        let _ = fs::write(&tscn_path, tscn_content);
+    }
 }

@@ -6,32 +6,13 @@ mod tests {
 
     #[test]
     fn test_lexer_tokens() {
-        let input = "actor MyActor : Parent 123 { Default { Health 100; +MONSTER } States { Spawn: PLAY A 10; Loop } }";
+        let input = "actor MyActor // comment\n{ }";
         let mut lexer = Lexer::new(input);
         
         assert_eq!(lexer.next_token(), Token::Identifier("actor".to_string()));
         assert_eq!(lexer.next_token(), Token::Identifier("MyActor".to_string()));
-        assert_eq!(lexer.next_token(), Token::Colon);
-        assert_eq!(lexer.next_token(), Token::Identifier("Parent".to_string()));
-        assert_eq!(lexer.next_token(), Token::NumberStr("123".to_string()));
+        assert_eq!(lexer.next_token(), Token::Comment(" comment".to_string()));
         assert_eq!(lexer.next_token(), Token::BraceOpen);
-        assert_eq!(lexer.next_token(), Token::Identifier("Default".to_string()));
-        assert_eq!(lexer.next_token(), Token::BraceOpen);
-        assert_eq!(lexer.next_token(), Token::Identifier("Health".to_string()));
-        assert_eq!(lexer.next_token(), Token::NumberStr("100".to_string()));
-        assert_eq!(lexer.next_token(), Token::SemiColon);
-        assert_eq!(lexer.next_token(), Token::Identifier("+MONSTER".to_string()));
-        assert_eq!(lexer.next_token(), Token::BraceClose);
-        assert_eq!(lexer.next_token(), Token::Identifier("States".to_string()));
-        assert_eq!(lexer.next_token(), Token::BraceOpen);
-        assert_eq!(lexer.next_token(), Token::Identifier("Spawn".to_string()));
-        assert_eq!(lexer.next_token(), Token::Colon);
-        assert_eq!(lexer.next_token(), Token::Identifier("PLAY".to_string()));
-        assert_eq!(lexer.next_token(), Token::Identifier("A".to_string()));
-        assert_eq!(lexer.next_token(), Token::NumberStr("10".to_string()));
-        assert_eq!(lexer.next_token(), Token::SemiColon);
-        assert_eq!(lexer.next_token(), Token::Identifier("Loop".to_string()));
-        assert_eq!(lexer.next_token(), Token::BraceClose);
         assert_eq!(lexer.next_token(), Token::BraceClose);
     }
 

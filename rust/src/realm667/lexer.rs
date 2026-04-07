@@ -30,6 +30,7 @@ pub enum Token {
     Hash,
     Quote,
     Operator(String),
+    Comment(String),
     Eof,
 }
 
@@ -58,12 +59,10 @@ impl Lexer {
         // Handle comments
         if ch == '/' {
             if self.pos + 1 < self.input.len() && self.input[self.pos+1] == '/' {
-                self.skip_line_comment();
-                return self.next_token();
+                return self.read_line_comment();
             }
             if self.pos + 1 < self.input.len() && self.input[self.pos+1] == '*' {
-                self.skip_block_comment();
-                return self.next_token();
+                return self.read_block_comment();
             }
         }
 
@@ -228,18 +227,25 @@ impl Lexer {
         }
     }
 
-    fn skip_line_comment(&mut self) {
+    fn read_line_comment(&mut self) -> Token {
+        self.pos += 2; // skip //
+        let start = self.pos;
         while self.pos < self.input.len() && self.input[self.pos] != '\n' {
             self.pos += 1;
         }
+        let s = self.input[start..self.pos].iter().collect();
+        Token::Comment(s)
     }
 
-    fn skip_block_comment(&mut self) {
+    fn read_block_comment(&mut self) -> Token {
         self.pos += 2; // skip /*
+        let start = self.pos;
         while self.pos + 1 < self.input.len() && !(self.input[self.pos] == '*' && self.input[self.pos+1] == '/') {
             self.pos += 1;
         }
+        let s = self.input[start..self.pos].iter().collect();
         self.pos += 2; // skip */
+        Token::Comment(s)
     }
 
     fn read_string(&mut self) -> Token {

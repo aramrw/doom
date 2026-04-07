@@ -8,6 +8,7 @@ pub struct ActorDefinition {
     pub properties: HashMap<String, GZValue>,
     pub flags: Vec<String>,
     pub states: HashMap<String, Vec<StateFrame>>,
+    pub metadata: HashMap<String, String>,
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -68,7 +69,7 @@ pub struct StateFrame {
     pub is_bright: bool,
 }
 
-#[derive(Debug, PartialEq, Eq)]
+#[derive(Debug, PartialEq, Eq, Clone, Copy)]
 pub enum ActorCategory {
     Weapon,
     Enemy,
@@ -76,6 +77,7 @@ pub enum ActorCategory {
     Item,
     Projectile,
     Ammo,
+    Prop,
     Unknown,
 }
 
@@ -84,6 +86,21 @@ impl ActorDefinition {
         let lower_name = self.name.to_lowercase();
         let parent = self.parent.as_deref().unwrap_or("").to_lowercase();
 
+        // 1. Check metadata hints first
+        if let Some(cat) = self.metadata.get("category") {
+            let cat_lower = cat.to_lowercase();
+            if cat_lower.contains("decoration") || cat_lower.contains("obstacle") || cat_lower.contains("light source") {
+                return ActorCategory::Prop;
+            }
+            if cat_lower.contains("weapon") {
+                return ActorCategory::Weapon;
+            }
+            if cat_lower.contains("enemy") || cat_lower.contains("monster") {
+                return ActorCategory::Enemy;
+            }
+        }
+
+        // 2. Heuristics as fallback
         if self.flags.contains(&"Monster".to_string())
             || parent.contains("enemy")
             || self.states.contains_key("See")
@@ -114,6 +131,18 @@ impl ActorDefinition {
 
         if parent == "inventory" || parent == "custominventory" || parent.contains("item") {
             return ActorCategory::Item;
+        }
+
+        // Detect Props
+        if self.flags.contains(&"Solid".to_string()) 
+            || self.properties.contains_key("Radius") 
+            || self.properties.contains_key("Height")
+            || lower_name.contains("statue")
+            || lower_name.contains("pillar")
+            || lower_name.contains("column")
+            || lower_name.contains("brazier")
+        {
+            return ActorCategory::Prop;
         }
 
         ActorCategory::Unknown

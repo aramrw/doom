@@ -1,5 +1,5 @@
 use crate::realm667::lexer::{Lexer, Token};
-use crate::realm667::actor::{ActorDefinition, StateFrame};
+use crate::realm667::actor::{ActorDefinition, StateFrame, GZValue, GZFunctionCall};
 use std::collections::HashMap;
 
 pub struct Parser {
@@ -27,26 +27,42 @@ impl Parser {
 
     pub fn parse_actors(&mut self) -> Vec<ActorDefinition> {
         let mut actors = Vec::new();
+        let mut last_metadata = HashMap::new();
+
         while self.cur_token != Token::Eof {
-            if let Token::Identifier(ref id) = self.cur_token {
-                let lower = id.to_lowercase();
-                if lower == "actor" || lower == "class" {
-                    if let Some(actor) = self.parse_actor() {
-                        actors.push(actor);
+            match self.cur_token.clone() {
+                Token::Comment(ref content) => {
+                    let trimmed = content.trim();
+                    if trimmed.starts_with("$category") {
+                        let parts: Vec<&str> = trimmed.splitn(2, '"').collect();
+                        if parts.len() >= 2 {
+                            let category = parts[1].trim_end_matches('"');
+                            last_metadata.insert("category".to_string(), category.to_string());
+                        } else {
+                            // Try without quotes
+                            let parts: Vec<&str> = trimmed.split_whitespace().collect();
+                            if parts.len() >= 2 {
+                                last_metadata.insert("category".to_string(), parts[1].to_string());
+                            }
+                        }
                     }
-                } else {
                     self.next_token();
                 }
-            } else if let Token::Operator(op) = self.cur_token.clone() {
-                if op == "#" {
-                    // Skip #include lines for now in the general parser,
-                    // as they should be pre-processed or handled differently.
-                    self.next_token();
-                } else {
-                    self.next_token();
+                Token::Identifier(ref id) => {
+                    let lower = id.to_lowercase();
+                    if lower == "actor" || lower == "class" {
+                        if let Some(mut actor) = self.parse_actor() {
+                            // Merge metadata collected before and during actor block
+                            for (k, v) in last_metadata.drain() {
+                                actor.metadata.insert(k, v);
+                            }
+                            actors.push(actor);
+                        }
+                    } else {
+                        self.next_token();
+                    }
                 }
-            } else {
-                self.next_token();
+                _ => self.next_token(),
             }
         }
         actors
@@ -123,7 +139,7 @@ impl Parser {
                 Token::Identifier(id) => {
                     let lower = id.to_lowercase();
                     if lower == "states" {
-                        actor.states = self.parse_states();
+                        self.parse_states_into(&mut actor);
                     } else if lower == "default" {
                         self.next_token(); // skip "default"
                         if self.cur_token == Token::BraceOpen {
@@ -145,6 +161,23 @@ impl Parser {
                         // In DECORATE, properties/flags are directly in the actor block
                         self.parse_actor_property(&mut actor);
                     }
+                }
+                Token::Comment(content) => {
+                    let trimmed = content.trim();
+                    if trimmed.starts_with("$category") {
+                        let parts: Vec<&str> = trimmed.splitn(2, '"').collect();
+                        if parts.len() >= 2 {
+                            let category = parts[1].trim_end_matches('"');
+                            actor.metadata.insert("category".to_string(), category.to_string());
+                        } else {
+                            // Try without quotes
+                            let parts: Vec<&str> = trimmed.split_whitespace().collect();
+                            if parts.len() >= 2 {
+                                actor.metadata.insert("category".to_string(), parts[1].to_string());
+                            }
+                        }
+                    }
+                    self.next_token();
                 }
                 _ => self.next_token(),
             }
@@ -194,14 +227,14 @@ impl Parser {
                     actor.properties.insert(id, values[0].clone());
                 } else {
                     let joined = values.iter()
-                        .map(|v| v.to_string_lossy())
+                        .map(|v: &GZValue| v.to_string_lossy())
                         .collect::<Vec<_>>()
                         .join(", ");
-                    actor.properties.insert(id, crate::realm667::actor::GZValue::String(joined));
+                    actor.properties.insert(id, GZValue::String(joined));
                 }
             } else {
                 // No values - standalone flag like "Projectile;"
-                actor.properties.insert(id, crate::realm667::actor::GZValue::Identifier("true".to_string()));
+                actor.properties.insert(id, GZValue::Identifier("true".to_string()));
             }
 
             if self.cur_token == Token::SemiColon {
@@ -212,332 +245,192 @@ impl Parser {
         }
     }
 
-    fn parse_gz_value(&mut self) -> Option<crate::realm667::actor::GZValue> {
+    fn parse_gz_value(&mut self) -> Option<GZValue> {
         match self.cur_token.clone() {
             Token::NumberStr(n) => {
                 let val = if n.contains('.') {
-                    crate::realm667::actor::GZValue::Float(n.parse().unwrap_or(0.0))
+                    GZValue::Float(n.parse().unwrap_or(0.0))
                 } else {
-                    crate::realm667::actor::GZValue::Integer(n.parse().unwrap_or(0))
+                    GZValue::Integer(n.parse().unwrap_or(0))
                 };
                 self.next_token();
                 Some(val)
             }
             Token::StringLiteral(s) => {
                 self.next_token();
-                Some(crate::realm667::actor::GZValue::String(s))
+                Some(GZValue::String(s))
             }
             Token::Identifier(id) => {
                 self.next_token();
-                Some(crate::realm667::actor::GZValue::Identifier(id))
+                Some(GZValue::Identifier(id))
             }
             Token::Minus => {
                 self.next_token();
                 if let Token::NumberStr(n) = self.cur_token.clone() {
                     let neg_n = format!("-{}", n);
                     let val = if neg_n.contains('.') {
-                        crate::realm667::actor::GZValue::Float(neg_n.parse().unwrap_or(0.0))
+                        GZValue::Float(neg_n.parse().unwrap_or(0.0))
                     } else {
-                        crate::realm667::actor::GZValue::Integer(neg_n.parse().unwrap_or(0))
+                        GZValue::Integer(neg_n.parse().unwrap_or(0))
                     };
                     self.next_token();
                     Some(val)
                 } else {
-                    Some(crate::realm667::actor::GZValue::Identifier("-".to_string()))
+                    Some(GZValue::Identifier("-".to_string()))
                 }
             }
             _ => None,
         }
     }
 
-    fn parse_states(&mut self) -> HashMap<String, Vec<StateFrame>> {
-        let mut states = HashMap::new();
+    fn parse_states_into(&mut self, actor: &mut ActorDefinition) {
         self.next_token(); // skip "states"
         if self.cur_token != Token::BraceOpen {
-            return states;
+            return;
         }
         self.next_token();
 
         let mut current_labels = Vec::new();
-
         while self.cur_token != Token::BraceClose && self.cur_token != Token::Eof {
             match self.cur_token.clone() {
                 Token::Identifier(id) => {
-                    if self.peek_token == Token::Colon {
+                    self.next_token();
+                    if self.cur_token == Token::Colon {
+                        self.next_token();
                         current_labels.push(id);
-                        self.next_token(); // skip id
-                        self.next_token(); // skip colon
-
-                        // Collect multiple labels if they are consecutive
-                        while let Token::Identifier(next_id) = self.cur_token.clone() {
-                            if self.peek_token == Token::Colon {
-                                current_labels.push(next_id);
+                    } else {
+                        // Frame data
+                        let frames_str = if self.peek_token != Token::Colon && self.peek_token != Token::BraceClose {
+                            if let Token::Identifier(f) = self.cur_token.clone() {
                                 self.next_token();
-                                self.next_token();
+                                f
                             } else {
-                                break;
+                                "".to_string()
+                            }
+                        } else {
+                            "".to_string()
+                        };
+
+                        let duration = if let Token::NumberStr(n) = self.cur_token.clone() {
+                            self.next_token();
+                            n.parse().unwrap_or(1)
+                        } else if self.cur_token == Token::Minus {
+                             self.next_token();
+                             if let Token::NumberStr(n) = self.cur_token.clone() {
+                                 self.next_token();
+                                 -n.parse::<i32>().unwrap_or(1)
+                             } else {
+                                 1
+                             }
+                        } else {
+                            1
+                        };
+
+                        let duration = if duration == 0 { 1 } else { duration };
+
+                        let mut action = None;
+                        let mut is_bright = false;
+
+                        // Check for keywords or block
+                        while self.cur_token != Token::SemiColon && self.cur_token != Token::BraceClose && self.cur_token != Token::Eof {
+                            match self.cur_token.clone() {
+                                Token::Identifier(ref k) if k.to_lowercase() == "bright" => {
+                                    is_bright = true;
+                                    self.next_token();
+                                }
+                                Token::Identifier(ref k) if k.to_lowercase().starts_with("a_") => {
+                                    action = self.parse_function_call();
+                                }
+                                Token::BraceOpen => {
+                                    // Skip anonymous blocks for now
+                                    self.skip_balanced_braces();
+                                }
+                                _ => break, // Stop on unknown tokens (could be Loop, Stop, or a new label)
                             }
                         }
-                    } else {
-                        let lower = id.to_lowercase();
-                        if lower == "loop" || lower == "wait" || lower == "stop" || lower == "fail" {
-                            // These are state flow control keywords.
-                            // We could store them as special frames or just skip.
-                            // For now, let's just clear labels as they mark the end of a block.
+
+                        if self.cur_token == Token::SemiColon {
                             self.next_token();
-                            current_labels.clear();
-                        } else if lower == "goto" {
-                            self.next_token();
-                            // Skip goto target (usually Identifier or Identifier + Colon + Identifier)
-                            while self.cur_token != Token::SemiColon && self.cur_token != Token::BraceClose && !matches!(self.cur_token, Token::Identifier(_)) {
-                                self.next_token();
-                            }
-                            if let Token::Identifier(_) = self.cur_token {
-                                self.next_token();
-                            }
-                            current_labels.clear();
-                        } else {
-                            // This looks like a state line: Sprite Frames Duration [Bright] [Action]
-                            let frames = self.parse_state_line();
-                            for label in &current_labels {
-                                states.entry(label.clone()).or_insert_with(Vec::new).extend(frames.clone());
-                            }
-                            
-                            // If the next token is a label, we should NOT clear current_labels yet?
-                            // Actually, in DECORATE, a label applies to all following lines until another label or flow control.
-                            // But usually, we only want to associate the label with the START of the sequence.
-                            // For our purposes (importer), associating it with the first line is usually enough.
-                            // If we want to be thorough, we'd keep current_labels until a flow control keyword.
-                            
-                            // Check if next is a label
-                            if let Token::Identifier(_) = self.cur_token {
-                                if self.peek_token == Token::Colon {
-                                    current_labels.clear();
-                                }
-                            }
+                        }
+
+                        let frame = StateFrame {
+                            sprite_prefix: id,
+                            frames: frames_str,
+                            duration,
+                            action,
+                            is_bright,
+                        };
+
+                        for label in &current_labels {
+                            actor.states.entry(label.clone()).or_insert_with(Vec::new).push(frame.clone());
                         }
                     }
                 }
                 Token::SemiColon => self.next_token(),
+                Token::Comment(content) => {
+                    let trimmed = content.trim();
+                    if trimmed.starts_with("$category") {
+                        let parts: Vec<&str> = trimmed.splitn(2, '"').collect();
+                        if parts.len() >= 2 {
+                            let category = parts[1].trim_end_matches('"');
+                            actor.metadata.insert("category".to_string(), category.to_string());
+                        } else {
+                            // Try without quotes
+                            let parts: Vec<&str> = trimmed.split_whitespace().collect();
+                            if parts.len() >= 2 {
+                                actor.metadata.insert("category".to_string(), parts[1].to_string());
+                            }
+                        }
+                    }
+                    self.next_token();
+                }
                 _ => self.next_token(),
             }
         }
         if self.cur_token == Token::BraceClose {
             self.next_token();
         }
-        states
     }
 
-    fn parse_state_line(&mut self) -> Vec<StateFrame> {
-        let mut frames_out = Vec::new();
-        
-        // Sprite Prefix (e.g., "CULT")
-        let prefix = if let Token::Identifier(p) = self.cur_token.clone() {
-            p
-        } else {
-            // Not a valid state line
-            return frames_out;
-        };
-        self.next_token();
-
-        // Frames (e.g., "ABCD")
-        let frame_chars = if let Token::Identifier(f) = self.cur_token.clone() {
-            f
-        } else {
-            // Might be a sprite with only 1 frame that looks like a keyword? 
-            // Or just invalid.
-            return frames_out;
-        };
-        self.next_token();
-
-        // Duration (tics)
-        let duration = match self.cur_token.clone() {
-            Token::NumberStr(d) => {
-                let val = d.parse().unwrap_or(0);
+    fn parse_function_call(&mut self) -> Option<GZFunctionCall> {
+        if let Token::Identifier(name) = self.cur_token.clone() {
+            self.next_token();
+            if self.cur_token == Token::ParenthesisOpen {
                 self.next_token();
-                val
-            }
-            Token::Identifier(id) if id == "-1" => {
-                self.next_token();
-                -1
-            }
-            Token::Minus => {
-                self.next_token();
-                if let Token::NumberStr(d) = self.cur_token.clone() {
+                let mut args = Vec::new();
+                while self.cur_token != Token::ParenthesisClose && self.cur_token != Token::Eof {
+                    if let Some(val) = self.parse_gz_value() {
+                        args.push(val);
+                    }
+                    if self.cur_token == Token::Comma {
+                        self.next_token();
+                    }
+                }
+                if self.cur_token == Token::ParenthesisClose {
                     self.next_token();
-                    -(d.parse::<i32>().unwrap_or(0))
-                } else {
-                    0
                 }
-            }
-            _ => 0,
-        };
-
-        // Optional keywords/Action
-        let mut is_bright = false;
-        let mut action = None;
-
-        while self.cur_token != Token::SemiColon && self.cur_token != Token::BraceClose && self.cur_token != Token::Eof {
-            match self.cur_token.clone() {
-                Token::Identifier(id) => {
-                    let lower = id.to_lowercase();
-                    if lower == "bright" {
-                        is_bright = true;
-                        self.next_token();
-                    } else if lower == "offset" {
-                        // Skip offset(x, y)
-                        self.next_token();
-                        if self.cur_token == Token::ParenthesisOpen {
-                            self.next_token();
-                            while self.cur_token != Token::ParenthesisClose && self.cur_token != Token::Eof {
-                                self.next_token();
-                            }
-                            self.next_token();
-                        }
-                    } else if lower == "canraise" || lower == "light" {
-                        // Skip other keywords
-                        self.next_token();
-                        if self.cur_token == Token::ParenthesisOpen {
-                            self.next_token();
-                            while self.cur_token != Token::ParenthesisClose && self.cur_token != Token::Eof {
-                                self.next_token();
-                            }
-                            self.next_token();
-                        }
-                    } else {
-                        // Likely an action function
-                        let mut is_action = id.starts_with("A_");
-                        if self.peek_token == Token::ParenthesisOpen || self.peek_token == Token::BraceOpen {
-                            is_action = true;
-                        }
-
-                        if is_action {
-                            let action_name = id;
-                            self.next_token();
-                            let mut args = Vec::new();
-
-                            if self.cur_token == Token::ParenthesisOpen {
-                                self.next_token();
-                                while self.cur_token != Token::ParenthesisClose && self.cur_token != Token::Eof {
-                                    if let Some(val) = self.parse_gz_value() {
-                                        args.push(val);
-                                    }
-                                    if self.cur_token == Token::Comma {
-                                        self.next_token();
-                                    } else if self.cur_token != Token::ParenthesisClose {
-                                        self.next_token();
-                                    }
-                                }
-                                if self.cur_token == Token::ParenthesisClose {
-                                    self.next_token();
-                                }
-                            } else if self.cur_token == Token::BraceOpen {
-                                // ZScript anonymous function block - scan for actions inside!
-                                let mut brace_count = 1;
-                                self.next_token(); // skip {
-                                while brace_count > 0 && self.cur_token != Token::Eof {
-                                    match self.cur_token.clone() {
-                                        Token::BraceOpen => {
-                                            brace_count += 1;
-                                            self.next_token();
-                                        }
-                                        Token::BraceClose => {
-                                            brace_count -= 1;
-                                            self.next_token();
-                                        }
-                                        Token::Identifier(sub_id) => {
-                                            if sub_id.starts_with("A_Fire") || sub_id.starts_with("A_Custom") || sub_id.starts_with("A_Explode") {
-                                                let mut sub_args = Vec::new();
-                                                self.next_token();
-                                                if self.cur_token == Token::ParenthesisOpen {
-                                                    self.next_token();
-                                                    while self.cur_token != Token::ParenthesisClose && self.cur_token != Token::Eof {
-                                                        if let Some(val) = self.parse_gz_value() { sub_args.push(val); }
-                                                        if self.cur_token == Token::Comma { self.next_token(); } else if self.cur_token != Token::ParenthesisClose { self.next_token(); }
-                                                    }
-                                                    if self.cur_token == Token::ParenthesisClose { self.next_token(); }
-                                                }
-                                                action = Some(crate::realm667::actor::GZFunctionCall {
-                                                    name: sub_id,
-                                                    args: sub_args,
-                                                });
-                                            } else {
-                                                self.next_token();
-                                            }
-                                        }
-                                        _ => {
-                                            self.next_token();
-                                        }
-                                    }
-                                }
-                            }
-
-                            if action.is_none() {
-                                action = Some(crate::realm667::actor::GZFunctionCall {
-                                    name: action_name,
-                                    args,
-                                });
-                            }
-                        } else {
-                            // Unknown identifier, break to avoid infinite loop
-                            break;
-                        }
-                    }
-                }
-                Token::BraceOpen => {
-                    // Anonymous function block (not after an identifier)
-                    let mut brace_count = 1;
-                    self.next_token(); // skip {
-                    while brace_count > 0 && self.cur_token != Token::Eof {
-                        match self.cur_token.clone() {
-                            Token::BraceOpen => {
-                                brace_count += 1;
-                                self.next_token();
-                            }
-                            Token::BraceClose => {
-                                brace_count -= 1;
-                                self.next_token();
-                            }
-                            Token::Identifier(sub_id) => {
-                                if sub_id.starts_with("A_Fire") || sub_id.starts_with("A_Custom") || sub_id.starts_with("A_Explode") {
-                                    let mut sub_args = Vec::new();
-                                    self.next_token();
-                                    if self.cur_token == Token::ParenthesisOpen {
-                                        self.next_token();
-                                        while self.cur_token != Token::ParenthesisClose && self.cur_token != Token::Eof {
-                                            if let Some(val) = self.parse_gz_value() { sub_args.push(val); }
-                                            if self.cur_token == Token::Comma { self.next_token(); } else if self.cur_token != Token::ParenthesisClose { self.next_token(); }
-                                        }
-                                        if self.cur_token == Token::ParenthesisClose { self.next_token(); }
-                                    }
-                                    action = Some(crate::realm667::actor::GZFunctionCall {
-                                        name: sub_id,
-                                        args: sub_args,
-                                    });
-                                } else {
-                                    self.next_token();
-                                }
-                            }
-                            _ => {
-                                self.next_token();
-                            }
-                        }
-                    }
-                }
-                _ => break,
+                return Some(GZFunctionCall { name, args });
             }
         }
+        None
+    }
 
-        // For now, we'll store all frames in one StateFrame if they share everything else.
-        // This matches the current StateFrame struct.
-        frames_out.push(StateFrame {
-            sprite_prefix: prefix,
-            frames: frame_chars,
-            duration,
-            action,
-            is_bright,
-        });
-
-        frames_out
+    fn skip_balanced_braces(&mut self) {
+        let mut depth = 0;
+        loop {
+            match self.cur_token {
+                Token::BraceOpen => {
+                    depth += 1;
+                    self.next_token();
+                }
+                Token::BraceClose => {
+                    depth -= 1;
+                    self.next_token();
+                    if depth <= 0 { break; }
+                }
+                Token::Eof => break,
+                _ => self.next_token(),
+            }
+        }
     }
 }

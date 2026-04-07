@@ -438,7 +438,9 @@ impl Realm667Importer {
         if category == ActorCategory::Weapon {
             label_to_folder.insert("Ready", "idle".to_string());
             label_to_folder.insert("Fire", "shoot".to_string());
-            label_to_folder.insert("Reload", "reload".to_string());
+            label_to_folder.insert("Fire2", "shoot".to_string());
+            label_to_folder.insert("Hold", "shoot".to_string());
+            label_to_folder.insert("AltFire", "shoot".to_string());
             label_to_folder.insert("Pain", "pain".to_string());
             label_to_folder.insert("Death", "death".to_string());
             label_to_folder.insert("Spawn", "ground".to_string());
