@@ -1,0 +1,22 @@
+[gd_resource type="SpriteFrames" format=3]
+
+[ext_resource type="Texture2D" path="res://weapons/magic/holysnow/godot_data/sprites/holysnow/particle/SNOWA0.png" id="1_snowa"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_snowa")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_snowa")
+}],
+"loop": true,
+"name": &"spawn",
+"speed": 5.0
+}]

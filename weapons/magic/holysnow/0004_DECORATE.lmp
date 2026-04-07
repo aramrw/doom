@@ -1,0 +1,187 @@
+////Note////
+//This weapon has a lot of spawned things going on, and thus may cause some lag.
+//Removing the GLDEFS should help eliviate a good portion of any potential slow-
+//down.
+
+Actor HolySnow : Weapon
+{
+  Obituary "%o could not survive %k Holy Snow."
+  Inventory.pickupmessage "You can now conjure Holy Snow."
+  Weapon.SelectionOrder 400
+  Weapon.SlotNumber 2
+  Weapon.kickback 100
+  Weapon.AmmoType "Mana1"
+  Weapon.AmmoType2 "Mana1"
+  Weapon.AmmoUse 1
+  Weapon.AmmoUse2 20
+  Weapon.AmmoGive 40
+  +NoGravity
+  +FloatBob
+  States
+  {
+  Spawn:
+	TNT1 A 0 A_SpawnItemEx("SnowParticle3",random(-20,20),random(-20,20),random(5,30),0,0,frandom(-0.5,-0.1),0,SXF_SETMASTER)
+	SSCR A 5
+    Loop
+  Ready:
+    SH1I A 1 A_WeaponReady
+    Loop
+  Deselect:
+    SH1I A 1 A_Lower
+    Loop
+  Select:
+    SH1I A 1 A_Raise
+    Loop
+  Fire:
+	TNT1 A 0 A_PlaySound("Weapon/SnowWindS")
+	SH1P ABCDEF 2
+	SH1P G 5
+	SH1P HIJKLMNOPP 1
+	Goto Hold
+  Hold:
+	TNT1 A 0 A_PlaySound("Weapon/SnowWindL")
+	SH2P A 1 A_FireCustomMissile("SnowParticle2",random(-15,15),1,2,5,FPF_NOAUTOAIM,random(-15,15))
+	SH2P BCDEFGHIJ 1 A_FireCustomMissile("SnowParticle2",random(-15,15),0,2,5,FPF_NOAUTOAIM,random(-15,15))
+	TNT1 A 0 A_Refire
+	SH1P QQRRSTUVWXYZ 2
+    Goto Ready
+  AltFire:
+	TNT1 A 0 A_JumpIfInventory("PowerSnowWaitGiver", 1, "CoolFail")
+	SH3P ABCDEFG 2
+	SH3P G 5
+	TNT1 A 0 A_PlaySound("Weapon/NixFull")
+	TNT1 A 0 A_GiveInventory("SnowWait", 1)
+	TNT1 A 0 A_SetSpeed(0) //This makes the player stop while casting the spell. Remove if desired
+	SH3P HIJ 3
+	SH3P KLMNOP 3
+	SH3P KLMNOPKLMNOPKLMNOP 2
+	TNT1 A 0 A_FireCustomMissile("SnowStart",0,1,0,5)
+    SH3P KLMNOPKLMNOPKLMNOP 2
+	SH3P KLMNOP 3
+	SH3P JIH 3
+	TNT1 A 0 A_SetSpeed(1) //This makes the player resume moving at normal speed. Remove if desired
+	SH3P GFEDCBA 2
+	Goto Ready
+  CoolFail:
+	SH1I A 0 A_Print("I must wait to purify the snow again...")
+	Goto Ready
+  }
+} 
+
+////Snow Cooldown////
+actor PowerSnowWaitGiver : PowerUp {}
+
+actor SnowWait : PowerupGiver
+{
+	powerup.type "SnowWaitGiver"
+	powerup.duration -30
+	inventory.maxamount 0
+	+INVENTORY.AUTOACTIVATE
+}
+
+
+////The Projectiles////
+Actor SnowParticle
+{
+	Radius 2
+	Height 2
+	Damage 2
+	DamageType Ice
+	RenderStyle Translucent
+	Alpha 0
+	Scale 0.6
+	Projectile
+	States
+	{
+	Spawn:
+		TNT1 A 0
+		TNT1 A 0 A_SetScale(frandom(0.3, 0.6))
+		SNOW AAAAAAA 2 A_FadeIn(0.1)
+		SNOW A 3
+		loop
+		Death:
+		SNOW A 20 A_FadeOut(0.05)
+		Stop
+	}
+}
+
+Actor SnowParticle2 : SnowParticle
+{
+	Speed 5
+	Damage 1
+}
+
+Actor SnowParticle3 : SnowParticle
+{
+	Damage 0
+}
+
+////The Cloud Stuff////
+Actor SnowStart
+{
+	Radius 2
+	Height 2
+	Speed 1
+	RenderStyle Translucent
+	Alpha 0.0
+	Scale 0.6
+	Projectile
+	+SKYEXPLODE
+	States
+	{
+	Spawn:
+		SNOW A 0 NoDelay A_ChangeVelocity(0, 0, 10, CVF_REPLACE)
+		SNOW A 1 A_CheckCeiling("Death")
+		Wait
+		Death:
+		SNOW A 1
+		TNT1 AAAAAAAAAA 0 A_SpawnItemEx("SnowSpawner",0,0,0,0,0,0,0,SXF_SETTARGET)
+		Stop
+	}
+}
+
+Actor SnowSpawner
+{
+	Radius 1
+	Height 1
+	+NOBLOCKMAP
+	+NOGRAVITY
+	+NOSECTOR
+	+NOINTERACTION
+	+NOCLIP
+	-SOLID
+	+SPAWNCEILING
+	States
+	{
+	Spawn:
+		TNT1 AAAAAAAAAA 1 A_SpawnItemEx ("Snowcloud", Random(-400, 400), Random(-400, 400), -30, random(-1,1), random(-1,1), 0, 0, 0, 0)
+		TNT1 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 5 A_SpawnItemEx ("SnowParticle", Random(-400, 400), Random(-400, 400), -60, frandom(-1.0, 1.0), frandom(-1.0, 1.0), frandom(-1.0, -3.0), 0, SXF_TRANSFERPOINTERS, 0)
+		TNT1 AAAAAAAAAA 1 A_SpawnItemEx ("Snowcloud", Random(-400, 400), Random(-400, 400), -30, random(-1,1), random(-1,1), 0, 0, 0, 0)
+		TNT1 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 5 A_SpawnItemEx ("SnowParticle", Random(-400, 400), Random(-400, 400), -60, frandom(-1.0, 1.0), frandom(-1.0, 1.0), frandom(-1.0, -3.0), 0, SXF_TRANSFERPOINTERS, 0)
+		TNT1 AAAAAAAAAA 1 A_SpawnItemEx ("Snowcloud", Random(-400, 400), Random(-400, 400), -30, random(-1,1), random(-1,1), 0, 0, 0, 0)
+		TNT1 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 5 A_SpawnItemEx ("SnowParticle", Random(-400, 400), Random(-400, 400), -60, frandom(-1.0, 1.0), frandom(-1.0, 1.0), frandom(-1.0, -3.0), 0, SXF_TRANSFERPOINTERS, 0)
+		Stop
+		}
+}
+
+Actor Snowcloud
+{
+ Radius 0
+ Height 0
+ RenderStyle Translucent
+ Alpha 0.0 
+ Scale 2.5
+ Speed 1
+ +NoGravity
+ +NoBlockmap
+ +NoInteraction
+ -Solid
+ States
+   {
+   Spawn:
+      SNCL ABCDEABCDE 7 A_FadeIn(0.01)  //fades from 0% to 100%
+      SNCL ABCDEABCDEABCDEABCDEABCDEABCDEABCDEABCDEABCDEABCDEABCDEABCDE 7
+      SNCL ABCDEABCDE 7 A_FadeOut(0.01)  //fades from 100% to 0%
+      Stop
+   }
+}

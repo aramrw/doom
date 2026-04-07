@@ -1,4 +1,4 @@
 [gd_scene format=3 uid="uid://b8x6l0pho2vbp"]
 
 [node name="GZDOOM_IMPORTER" type="Realm667Importer" unique_id=1185607918]
-pk3_path = "res://enemies/PlagueRat.zip"
+pk3_path = "res://weapons/magic/holy_snow.zip"

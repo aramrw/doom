@@ -1,12 +1,10 @@
-extends Resource
+extends PickupResource
 class_name WeaponData
 
-@export var weapon_name: String = "Weapon"
 @export var slot_number: int = 1
 @export var ammo_type: String = "bullets"
 
-@export_subgroup("Sprite")
-@export var sprite_frames: SpriteFrames # The animations for this specific gun
+@export_subgroup("Sprite Settings")
 @export var sprite_offset: Vector2 = Vector2.ZERO # Lets you nudge each gun!
 @export var flip_h: bool = false
 
@@ -21,3 +19,6 @@ class_name WeaponData
 
 @export_subgroup("Ammo")
 @export var ammo_give: int = 10
+
+@export_subgroup("Pickup")
+@export var pickup_scene: PackedScene # The scene to spawn when dropped

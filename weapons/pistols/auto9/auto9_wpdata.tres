@@ -6,9 +6,9 @@
 
 [resource]
 script = ExtResource("1_osl3q")
-weapon_name = "auto9"
-sprite_frames = ExtResource("2_m0enl")
 actions = {
 "primary": ExtResource("3_fire")
 }
 ammo_give = 25
+item_name = "auto9"
+sprite_frames = ExtResource("2_m0enl")

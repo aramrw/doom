@@ -14,8 +14,10 @@ func _ready():
 
 func _on_body_entered(body):
 	var player = body.get_parent()
-	
+	if not (player and player.is_in_group("Player")):
+		player = body
+		
 	# Only trigger if the thing we hit actually has the pickup function
-	if player.has_method("handle_item_pickup"):
-		player.handle_item_pickup(data)
-		queue_free()
+	if player.has_method("handle_pickup"):
+		if player.handle_pickup(data):
+			queue_free()

@@ -10,30 +10,60 @@ pub struct AssetHandler;
 impl AssetHandler {
     /// Detects the correct extension based on the first few bytes of the file content.
     pub fn get_correct_extension(content: &[u8], current_name: &str) -> String {
-        let name = current_name.to_lowercase();
+        let name_lower = current_name.to_lowercase();
         
+        // Remove index prefix (e.g., 0001_) if present
+        let mut clean_name = if let Some(pos) = current_name.find('_') {
+            if current_name[..pos].chars().all(|c| c.is_ascii_digit()) {
+                current_name[pos+1..].to_string()
+            } else {
+                current_name.to_string()
+            }
+        } else {
+            current_name.to_string()
+        };
+
         // PNG Magic: 89 50 4E 47 0D 0A 1A 0A
         if content.starts_with(&[0x89, 0x50, 0x4E, 0x47]) {
-            if !name.ends_with(".png") {
-                return format!("{}.png", current_name);
+            if !name_lower.ends_with(".png") {
+                if let Some(pos) = clean_name.rfind('.') {
+                    clean_name.truncate(pos);
+                }
+                return format!("{}.png", clean_name);
             }
         }
         
         // OGG Magic: 4F 67 67 53 (OggS)
         if content.starts_with(&[0x4F, 0x67, 0x67, 0x53]) {
-            if !name.ends_with(".ogg") {
-                return format!("{}.ogg", current_name);
+            if !name_lower.ends_with(".ogg") {
+                if let Some(pos) = clean_name.rfind('.') {
+                    clean_name.truncate(pos);
+                }
+                return format!("{}.ogg", clean_name);
+            }
+        }
+
+        // WAV Magic: 52 49 46 46 (RIFF)
+        if content.starts_with(&[0x52, 0x49, 0x46, 0x46]) {
+            if !name_lower.ends_with(".wav") {
+                if let Some(pos) = clean_name.rfind('.') {
+                    clean_name.truncate(pos);
+                }
+                return format!("{}.wav", clean_name);
             }
         }
 
         // JPEG Magic: FF D8 FF
         if content.starts_with(&[0xFF, 0xD8, 0xFF]) {
-            if !name.ends_with(".jpg") && !name.ends_with(".jpeg") {
-                return format!("{}.jpg", current_name);
+            if !name_lower.ends_with(".jpg") && !name_lower.ends_with(".jpeg") {
+                if let Some(pos) = clean_name.rfind('.') {
+                    clean_name.truncate(pos);
+                }
+                return format!("{}.jpg", clean_name);
             }
         }
 
-        current_name.to_string()
+        clean_name
     }
 
     /// Extracts a file from the archive and ensures it has the correct extension.

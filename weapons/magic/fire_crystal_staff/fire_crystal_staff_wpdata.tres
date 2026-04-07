@@ -6,7 +6,7 @@
 
 [resource]
 script = ExtResource("1_osl3q")
-weapon_name = "Fire Crystal Staff"
+item_name = "Fire Crystal Staff"
 sprite_frames = ExtResource("2_anims")
 actions = {
 "primary": ExtResource("3_action")

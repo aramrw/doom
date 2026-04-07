@@ -7,6 +7,7 @@ extends CanvasLayer
 @onready var magazines = $Mag
 @onready var crosshair = $CenterContainer/TextureRect
 @onready var damage_flash = $DamageFlash
+@onready var pickup_label = $CenterContainer/PickupLabel
 
 func _ready():
 	# Force the heart to start pulsing the moment the HUD loads
@@ -14,6 +15,9 @@ func _ready():
 	
 	if damage_flash:
 		damage_flash.modulate.a = 0
+		
+	if pickup_label:
+		pickup_label.text = ""
 	
 	# Connect to weapon manager for hit feedback
 	var wm = get_tree().get_first_node_in_group("WeaponManager")
@@ -52,6 +56,10 @@ func update_weapon_ui(weapon: WeaponData):
 	else:
 		bullets.hide()
 		magazines.hide()
+
+func set_pickup_hint(text: String):
+	if pickup_label:
+		pickup_label.text = text
 
 func update_bullets(count: int):
 	# This finds the child node that actually handles the ammo display

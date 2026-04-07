@@ -1,0 +1,25 @@
+////SnowParticles////
+
+PulseLight SnowPart
+{
+Color 0.5 0.5 1
+Size 4
+Secondarysize 8
+Interval 2
+Offset 0 1 0
+}
+
+Object SnowParticle
+{
+	Frame SNOWA { Light SnowPart }
+}
+
+Object SnowParticle2
+{
+	Frame SNOWA { Light SnowPart }
+}
+
+Object SnowParticle3
+{
+	Frame SNOWA { Light SnowPart }
+}

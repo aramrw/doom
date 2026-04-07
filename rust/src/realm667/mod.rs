@@ -9,7 +9,7 @@ use crate::realm667::actor::{ActorCategory, ActorDefinition};
 use crate::realm667::asset_handler::AssetHandler;
 use crate::realm667::parser::Parser;
 use crate::realm667::resource_gen::ResourceGenerator;
-use godot::classes::ProjectSettings;
+use godot::classes::{ProjectSettings, EditorInterface};
 use godot::prelude::*;
 use std::collections::{HashMap, HashSet};
 use std::fs;
@@ -194,6 +194,7 @@ impl Realm667Importer {
                 &godot_data_root,
                 &godot_data_res,
                 &sounds_map,
+                &primary_name,
             );
 
             if category == ActorCategory::Weapon {
@@ -231,6 +232,11 @@ impl Realm667Importer {
 
         godot_print!("Realm667Importer: IMPORT FINISHED SUCCESSFULLY");
         godot_print!("--------------------------------------------------");
+
+        let mut editor = EditorInterface::singleton();
+        if let Some(mut fs) = editor.get_resource_filesystem() {
+            fs.scan();
+        }
     }
 
     fn read_zip_file_recursive(
@@ -270,7 +276,13 @@ impl Realm667Importer {
                     .name()
                     .to_lowercase()
                     .replace('\\', "/");
-                if name.ends_with(&format!("/{}", normalized_path)) {
+                
+                // Check if it ends with the name (normal fallback) 
+                // OR if it matches a pattern like 0000_NAME.LMP
+                if name.ends_with(&format!("/{}", normalized_path)) || 
+                   name == normalized_path ||
+                   name.ends_with(&format!("_{}", normalized_path)) ||
+                   name.ends_with(&format!("_{}.lmp", normalized_path)) {
                     target_index = Some(i);
                     break;
                 }
@@ -328,7 +340,8 @@ impl Realm667Importer {
         godot_data_root: &Path,
         godot_data_res: &str,
         sounds_map: &HashMap<String, String>,
-    ) -> HashMap<String, Vec<String>> {
+        mod_name: &str,
+    ) -> HashMap<String, Vec<(String, i32)>> {
         let mut label_to_folder = HashMap::new();
         let category = actor.determine_category();
 
@@ -338,6 +351,7 @@ impl Realm667Importer {
             label_to_folder.insert("Reload", "reload");
             label_to_folder.insert("Pain", "pain");
             label_to_folder.insert("Death", "death");
+            label_to_folder.insert("Spawn", "ground");
         } else if category == ActorCategory::Enemy {
             label_to_folder.insert("Spawn", "walk");
             label_to_folder.insert("See", "walk");
@@ -348,13 +362,16 @@ impl Realm667Importer {
             label_to_folder.insert("XDeath", "xdeath");
         } else if category == ActorCategory::Projectile {
             label_to_folder.insert("Spawn", "spawn");
+            label_to_folder.insert("Fly", "spawn");
+            label_to_folder.insert("Idle", "spawn");
             label_to_folder.insert("Death", "death");
+            label_to_folder.insert("Crash", "death");
+            label_to_folder.insert("XDeath", "death");
         } else if category == ActorCategory::Item || category == ActorCategory::Ammo {
             label_to_folder.insert("Spawn", "idle");
         }
 
         let mut result_map = HashMap::new();
-        let actor_name = actor.name.to_lowercase();
 
         // Process states in order to preserve frame sequence
         let mut sorted_labels: Vec<_> = actor.states.keys().collect();
@@ -365,7 +382,7 @@ impl Realm667Importer {
                 let frames = &actor.states[label];
                 let state_dir = godot_data_root
                     .join("sprites")
-                    .join(&actor_name)
+                    .join(mod_name)
                     .join(folder_name);
                 let mut sprite_paths = Vec::new();
 
@@ -375,11 +392,11 @@ impl Realm667Importer {
                         let rel_res = format!(
                             "{}/sprites/{}/{}/{}",
                             godot_data_res,
-                            actor_name,
+                            mod_name,
                             folder_name,
                             p.file_name().unwrap().to_str().unwrap()
                         );
-                        sprite_paths.push(rel_res);
+                        sprite_paths.push((rel_res, frame.duration));
                     }
                 }
 
@@ -399,7 +416,7 @@ impl Realm667Importer {
             ("ActiveSound", "taunt"),
             ("SelectSound", "taunt"),
         ];
-        let sounds_dir = godot_data_root.join("sounds").join(&actor_name);
+        let sounds_dir = godot_data_root.join("sounds").join(mod_name);
         for (prop, subfolder) in sound_props {
             if let Some(alias) = actor.properties.get(prop) {
                 if let Some(file_path) = sounds_map.get(&alias.to_string_lossy().to_uppercase()) {
@@ -436,23 +453,36 @@ impl Realm667Importer {
                     .replace('\\', "/");
                 let file_name = entry_name.split('/').last().unwrap_or("").to_uppercase();
 
-                // Skip non-image files and brightmaps
-                if !file_name.ends_with(".PNG")
-                    && !file_name.ends_with(".JPG")
-                    && !file_name.ends_with(".TGA")
-                {
-                    continue;
-                }
+                // Skip brightmaps
                 if file_name.starts_with("BM") || file_name.starts_with("BR") {
                     continue;
                 }
 
                 // Match sprite prefix and frame char
-                if file_name.starts_with(&sprite_search_prefix) {
+                // Handle both normal (XXXXA1.PNG) and prefixed (0007_XXXXA1.LMP)
+                let is_match = if file_name.starts_with(&sprite_search_prefix) {
+                    true
+                } else if let Some(pos) = file_name.find('_') {
+                    file_name[pos+1..].starts_with(&sprite_search_prefix)
+                } else {
+                    false
+                };
+
+                if is_match {
                     // Check if it's a valid Doom sprite name (e.g. Q2BLA0.PNG)
-                    // Length must be at least prefix+frame+rotation (e.g. 5 + 1 + 1 = 7)
-                    let base_name = file_name.split('.').next().unwrap_or("");
-                    if base_name.len() >= sprite_search_prefix.len() {
+                    let base_name = if let Some(pos) = file_name.find('.') {
+                        &file_name[..pos]
+                    } else {
+                        &file_name
+                    };
+                    
+                    let actual_base = if let Some(pos) = base_name.find('_') {
+                        &base_name[pos+1..]
+                    } else {
+                        base_name
+                    };
+
+                    if actual_base.len() >= sprite_search_prefix.len() {
                         if let Some(path) =
                             AssetHandler::extract_with_extension_fix(archive, i, dest_dir)
                         {

@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="WeaponAction" format=3 uid="uid://cfl4n13mjw40h"]
+
+[ext_resource type="Script" uid="uid://7og58pc8mae4" path="res://weapons/weapon_action.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://k0g2eck3n5cy" path="res://weapons/action_step.gd" id="2_mx327"]
+[ext_resource type="Resource" uid="uid://cto8u13mfrwxp" path="res://weapons/magic/holysnow/godot_data/holysnow_fire_step.tres" id="2_step"]
+
+[resource]
+script = ExtResource("1_script")
+steps = Array[ExtResource("2_mx327")]([ExtResource("2_step")])

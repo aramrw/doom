@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3 uid="uid://ct01sh06qkctg"]
+
+[ext_resource type="Script" uid="uid://cqlple4um3rs" path="res://weapons/weapon_data.gd" id="1_script"]
+[ext_resource type="SpriteFrames" uid="uid://uajcyiecf47s" path="res://weapons/magic/holysnow/godot_data/holysnow_spriteframes.tres" id="2_sprites"]
+[ext_resource type="Resource" uid="uid://cfl4n13mjw40h" path="res://weapons/magic/holysnow/godot_data/holysnow_fire_action.tres" id="3_fire"]
+
+[resource]
+script = ExtResource("1_script")
+sprite_offset = Vector2(-20, 0)
+actions = {
+"primary": ExtResource("3_fire")
+}
+ammo_give = 40
+item_name = "holysnow"
+sprite_frames = ExtResource("2_sprites")

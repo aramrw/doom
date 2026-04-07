@@ -149,6 +149,7 @@ func update_target_outline():
 		last_targeted_node = target_node
 
 func handle_interaction():
+	print("Player: handle_interaction called")
 	# 1. If dialogue is already open, advance it and return
 	var dialogue_ui = get_tree().get_first_node_in_group("DialogueUI")
 	if dialogue_ui and dialogue_ui.visible:
@@ -157,15 +158,45 @@ func handle_interaction():
 		
 	# 2. Otherwise, look for something to interact with
 	var interact_ray = $CharacterBody3D/ShakeGimbal/Camera/InteractRay
+	interact_ray.collision_mask = 5 # Layer 1 (Environment) + Layer 3 (Interaction)
 	interact_ray.force_raycast_update()
 	
 	if interact_ray.is_colliding():
 		var collider = interact_ray.get_collider()
-		# Check body and parent for interact method
+		print("Player: interaction ray hit: ", collider.name, " on layer: ", collider.collision_layer)
+		
+		# Robust check: search up the hierarchy for an 'interact' method
+		var current = collider
+		while current:
+			if current.has_method("interact"):
+				print("Player: Calling interact() on ", current.name)
+				current.interact()
+				return
+			current = current.get_parent()
+		
+		print("Player: No interact() method found in hierarchy of ", collider.name)
+		return
+
+	# 3. Proximity fallback
+	print("Player: raycast missed, checking proximity")
+	var space_state = body.get_world_3d().direct_space_state
+	var query = PhysicsShapeQueryParameters3D.new()
+	query.collision_mask = 5 # Layer 1 + Layer 3
+	var shape = SphereShape3D.new()
+	shape.radius = 2.0
+	query.shape = shape
+	query.transform = body.global_transform
+	
+	var results = space_state.intersect_shape(query)
+	for result in results:
+		var collider = result.collider
+		print("Player: proximity found: ", collider.name, " on layer: ", collider.collision_layer)
 		if collider.has_method("interact"):
 			collider.interact()
+			return
 		elif collider.get_parent() and collider.get_parent().has_method("interact"):
 			collider.get_parent().interact()
+			return
 
 func _physics_process(delta: float) -> void:
 	if not body.is_on_floor():
@@ -225,21 +256,36 @@ func _physics_process(delta: float) -> void:
 	# 6. Actually move the body
 	body.move_and_slide()
 	
-func handle_item_pickup(item: ItemData):
-	match item.type:
-		ItemData.ItemType.HLTH_MEDKIT:
-			health = clamp(health + item.amount, 0, max_health)
-			hud.update_health(health)
-			
-		ItemData.ItemType.AMMO_MAGAZINE:
-			weapon_manager.handle_item_pickup(item);
-			
-		ItemData.ItemType.AMMO_SHELL:
-			# You can add logic for other guns here later!
-			print("Picked up ", item.amount, " shells.")
-			
-		ItemData.ItemType.AMMO_ROCKET:
-			print("Picked up ", item.amount, " rockets.")
+func handle_pickup(resource: PickupResource) -> bool:
+	if resource == null:
+		return false
+		
+	if resource is ItemData:
+		var item = resource as ItemData
+		match item.type:
+			ItemData.ItemType.HLTH_MEDKIT:
+				if health >= max_health: return false
+				health = clamp(health + item.amount, 0, max_health)
+				hud.update_health(health)
+				return true
+				
+			ItemData.ItemType.AMMO_MAGAZINE:
+				weapon_manager.handle_item_pickup(item)
+				return true
+				
+			ItemData.ItemType.AMMO_SHELL:
+				print("Picked up ", item.amount, " shells.")
+				return true
+				
+			ItemData.ItemType.AMMO_ROCKET:
+				print("Picked up ", item.amount, " rockets.")
+				return true
+		return false
+		
+	elif resource is WeaponData:
+		return weapon_manager.handle_weapon_pickup(resource as WeaponData)
+		
+	return false
 
 func _headbob(time) -> Vector3:
 	var pos = Vector3.ZERO

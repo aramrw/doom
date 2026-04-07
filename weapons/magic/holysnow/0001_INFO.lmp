@@ -1,0 +1,17 @@
+Name: Holy Snow
+Class: 3
+Type: Projectile
+Palette: Hexen
+Summon: Holysnow
+Ammo Type: Mana1
+Altfire: Yes
+Powered Mode: No
+Added States: No
+
+Description: Evil spreads far and wide, from the scorching sands in the east to
+the frozen lands of the north. Though the frozen lands are harsh enough to stop
+most creatures, some are resilient enough to endure the frozen wastes. To combat
+these evils the frost mages developed a new magic that infuses holy energies
+into the snow that naturally falls from the sky. Though not terribly strong this
+Holy Snow slowly drains the health of evil creatures. Calling upon the holy
+energies requires reciting the spell, 'Sanctus Nix, conjectus auferetur malum!'

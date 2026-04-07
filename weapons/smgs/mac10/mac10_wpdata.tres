@@ -6,7 +6,7 @@
 
 [resource]
 script = ExtResource("1_script")
-weapon_name = "mac10"
+item_name = "mac10"
 sprite_frames = ExtResource("2_spriteframes")
 sprite_offset = Vector2(0, 5)
 actions = {

@@ -1,4 +1,4 @@
-extends Resource
+extends PickupResource
 class_name ItemData
 
 enum ItemType { 
@@ -8,7 +8,5 @@ enum ItemType {
 	AMMO_ROCKET 
 }
 
-@export var item_name: String = "Item"
-@export var sprite_frames: SpriteFrames  
 @export var type: ItemType = ItemType.AMMO_MAGAZINE
 @export var amount: int = 1

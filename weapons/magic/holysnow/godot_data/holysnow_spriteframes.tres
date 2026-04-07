@@ -1,0 +1,140 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://uajcyiecf47s"]
+
+[ext_resource type="Texture2D" uid="uid://28jx4fixa627" path="res://weapons/magic/holysnow/godot_data/sprites/holysnow/ground/SSCRA0.png" id="1_ext"]
+[ext_resource type="Texture2D" uid="uid://cty0bepuot3xc" path="res://weapons/magic/holysnow/godot_data/sprites/holysnow/idle/SH1IA0.png" id="2_ext"]
+[ext_resource type="Texture2D" uid="uid://cpauytpsi8us0" path="res://weapons/magic/holysnow/godot_data/sprites/holysnow/shoot/SH1PA0.png" id="3_ext"]
+[ext_resource type="Texture2D" uid="uid://bvxcg5jqs5uhw" path="res://weapons/magic/holysnow/godot_data/sprites/holysnow/shoot/SH1PB0.png" id="4_ext"]
+[ext_resource type="Texture2D" uid="uid://c6nwcok5db5kp" path="res://weapons/magic/holysnow/godot_data/sprites/holysnow/shoot/SH1PC0.png" id="5_ext"]
+[ext_resource type="Texture2D" uid="uid://dy5hx1xupjhr0" path="res://weapons/magic/holysnow/godot_data/sprites/holysnow/shoot/SH1PD0.png" id="6_ext"]
+[ext_resource type="Texture2D" uid="uid://duxjd1nq4yihp" path="res://weapons/magic/holysnow/godot_data/sprites/holysnow/shoot/SH1PE0.png" id="7_ext"]
+[ext_resource type="Texture2D" uid="uid://dxaabrao72635" path="res://weapons/magic/holysnow/godot_data/sprites/holysnow/shoot/SH1PF0.png" id="8_ext"]
+[ext_resource type="Texture2D" uid="uid://bo73d73d2mxfn" path="res://weapons/magic/holysnow/godot_data/sprites/holysnow/shoot/SH1PG0.png" id="9_ext"]
+[ext_resource type="Texture2D" uid="uid://dqbpvlm0t1fjo" path="res://weapons/magic/holysnow/godot_data/sprites/holysnow/shoot/SH1PH0.png" id="10_ext"]
+[ext_resource type="Texture2D" uid="uid://jtspiuux25m2" path="res://weapons/magic/holysnow/godot_data/sprites/holysnow/shoot/SH1PI0.png" id="11_ext"]
+[ext_resource type="Texture2D" uid="uid://dqtka08v6lsex" path="res://weapons/magic/holysnow/godot_data/sprites/holysnow/shoot/SH1PJ0.png" id="12_ext"]
+[ext_resource type="Texture2D" uid="uid://byl512o1q6u77" path="res://weapons/magic/holysnow/godot_data/sprites/holysnow/shoot/SH1PK0.png" id="13_ext"]
+[ext_resource type="Texture2D" uid="uid://bs375fme2ffuy" path="res://weapons/magic/holysnow/godot_data/sprites/holysnow/shoot/SH1PL0.png" id="14_ext"]
+[ext_resource type="Texture2D" uid="uid://bgmtq6vnipy62" path="res://weapons/magic/holysnow/godot_data/sprites/holysnow/shoot/SH1PM0.png" id="15_ext"]
+[ext_resource type="Texture2D" uid="uid://qc561p6iv1vf" path="res://weapons/magic/holysnow/godot_data/sprites/holysnow/shoot/SH1PN0.png" id="16_ext"]
+[ext_resource type="Texture2D" uid="uid://b3iyo6e3e7q7w" path="res://weapons/magic/holysnow/godot_data/sprites/holysnow/shoot/SH1PO0.png" id="17_ext"]
+[ext_resource type="Texture2D" uid="uid://dq3s6vmv37wy2" path="res://weapons/magic/holysnow/godot_data/sprites/holysnow/shoot/SH1PP0.png" id="19_ext"]
+[ext_resource type="Texture2D" path="res://weapons/magic/holysnow/godot_data/sprites/holysnow/hold/SH2PA0.png" id="20_h1"]
+[ext_resource type="Texture2D" path="res://weapons/magic/holysnow/godot_data/sprites/holysnow/hold/SH2PB0.png" id="21_h2"]
+[ext_resource type="Texture2D" path="res://weapons/magic/holysnow/godot_data/sprites/holysnow/hold/SH2PC0.png" id="22_h3"]
+[ext_resource type="Texture2D" path="res://weapons/magic/holysnow/godot_data/sprites/holysnow/hold/SH2PD0.png" id="23_h4"]
+[ext_resource type="Texture2D" path="res://weapons/magic/holysnow/godot_data/sprites/holysnow/hold/SH2PE0.png" id="24_h5"]
+[ext_resource type="Texture2D" path="res://weapons/magic/holysnow/godot_data/sprites/holysnow/hold/SH2PF0.png" id="25_h6"]
+[ext_resource type="Texture2D" path="res://weapons/magic/holysnow/godot_data/sprites/holysnow/hold/SH2PG0.png" id="26_h7"]
+[ext_resource type="Texture2D" path="res://weapons/magic/holysnow/godot_data/sprites/holysnow/hold/SH2PH0.png" id="27_h8"]
+[ext_resource type="Texture2D" path="res://weapons/magic/holysnow/godot_data/sprites/holysnow/hold/SH2PI0.png" id="28_h9"]
+[ext_resource type="Texture2D" path="res://weapons/magic/holysnow/godot_data/sprites/holysnow/hold/SH2PJ0.png" id="29_h10"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 5.0,
+"texture": ExtResource("1_ext")
+}],
+"loop": false,
+"name": &"ground",
+"speed": 35.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_ext")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 35.0
+}, {
+"frames": [{
+"duration": 2.0,
+"texture": ExtResource("3_ext")
+}, {
+"duration": 2.0,
+"texture": ExtResource("4_ext")
+}, {
+"duration": 2.0,
+"texture": ExtResource("5_ext")
+}, {
+"duration": 2.0,
+"texture": ExtResource("6_ext")
+}, {
+"duration": 2.0,
+"texture": ExtResource("7_ext")
+}, {
+"duration": 2.0,
+"texture": ExtResource("8_ext")
+}, {
+"duration": 5.0,
+"texture": ExtResource("9_ext")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_ext")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_ext")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_ext")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_ext")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_ext")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_ext")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_ext")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_ext")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19_ext")
+}, {
+"duration": 15.0,
+"texture": ExtResource("19_ext")
+}],
+"loop": false,
+"name": &"shoot",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("20_h1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_h2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22_h3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23_h4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("24_h5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("25_h6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("26_h7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("27_h8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("28_h9")
+}, {
+"duration": 1.0,
+"texture": ExtResource("29_h10")
+}],
+"loop": true,
+"name": &"hold",
+"speed": 15.0
+}]

@@ -6,7 +6,7 @@
 
 [resource]
 script = ExtResource("1_script")
-weapon_name = "smcblaster"
+item_name = "smcblaster"
 sprite_frames = ExtResource("2_sprites")
 sprite_offset = Vector2(0, 15)
 actions = {

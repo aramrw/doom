@@ -7,9 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://bjydiwnnwago8" path="res://assets/scifitextures/wall_ship_0.png" id="4_r3fl7"]
 [ext_resource type="PackedScene" uid="uid://bw0uup8kykjce" path="res://assets/scifitextures/ship/ship_ceiling.tscn" id="6_i5arm"]
 [ext_resource type="PackedScene" uid="uid://bmx87k8st5vy0" path="res://enemies/grin/grin.tscn" id="7_wc5p8"]
-[ext_resource type="PackedScene" uid="uid://cqxvv45yrneec" path="res://items/item_pickup_radius.tscn" id="8_4arys"]
 [ext_resource type="PackedScene" uid="uid://d1jpcw1ontism" path="res://assets/camping/sleeping_bag.tscn" id="8_jsk3o"]
-[ext_resource type="Resource" uid="uid://cr3jy8ioouucp" path="res://items/weapons/pistols/pistol_mag.tres" id="9_6iypd"]
 [ext_resource type="PackedScene" uid="uid://b7hwuaxqyod5w" path="res://enemies/cultist/cultist.tscn" id="11_tereu"]
 [ext_resource type="PackedScene" uid="uid://db1lhq4oxjxt7" path="res://assets/camping/sleeping_bag/sleeping_bag.glb" id="12_cdqbm"]
 [ext_resource type="PackedScene" uid="uid://c4qn7bhw133js" path="res://assets/lights/torches/wall_torch_black/wall_torch_black.tscn" id="13_imku0"]
@@ -20,7 +18,8 @@
 [ext_resource type="PackedScene" uid="uid://0lefihnkg1ip" path="res://ui/dialogue_ui.tscn" id="17_dialogue"]
 [ext_resource type="PackedScene" uid="uid://b45e5hjqdka1g" path="res://npcs/shotgun_monk.tscn" id="18_monk"]
 [ext_resource type="PackedScene" uid="uid://by41h2dwu1l1k" path="res://assets/lights/torches/fire/fire.tscn" id="20_jsnrv"]
-[ext_resource type="PackedScene" path="res://enemies/plaguerat/godot_data/plaguerat.tscn" id="21_lggff"]
+[ext_resource type="PackedScene" path="res://weapons/magic/holysnow/godot_data/holysnow_pickup.tscn" id="20_lggff"]
+[ext_resource type="PackedScene" uid="uid://dtq7atqe1rcdd" path="res://enemies/plaguerat/godot_data/plaguerat.tscn" id="21_lggff"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_i5arm"]
 shader = ExtResource("1_jka67")
@@ -78,10 +77,6 @@ stream_0/stream = ExtResource("16_tuemg")
 
 [node name="Node3D" type="Node3D" unique_id=1074528092]
 
-[node name="ItemPickupRadius" parent="." unique_id=366953278 instance=ExtResource("8_4arys")]
-transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 2.216501, 1.0366548, -7.569035)
-data = ExtResource("9_6iypd")
-
 [node name="RetroFilter" type="CanvasLayer" parent="." unique_id=781796435]
 layer = 10
 
@@ -97,7 +92,7 @@ grow_vertical = 2
 environment = SubResource("Environment_4xowi")
 
 [node name="Player" parent="." unique_id=432180329 instance=ExtResource("2_noarx")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -42.233692, 6.051029, 11.934803)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.7289243, 6.051029, -2.3173451)
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="." unique_id=236648503]
 navigation_mesh = SubResource("NavigationMesh_wc5p8")
@@ -165,7 +160,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2597854, 0.5225768, -3.6403
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.638075, 5.7639313, 11.138747)
 
 [node name="Cultist3" parent="." unique_id=1006558139 instance=ExtResource("11_tereu")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.149233, 5.7639313, -2.2949705)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -122.089615, 5.7639313, -2.2949705)
 
 [node name="Cultist2" parent="." unique_id=1111420264 instance=ExtResource("11_tereu")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -61.904438, 0.50049996, 17.022404)
@@ -226,10 +221,13 @@ meleerange = 4.0
 health = 500
 
 [node name="Fire" parent="." unique_id=494991560 instance=ExtResource("20_jsnrv")]
-transform = Transform3D(60, 0, 0, 0, 60, 0, 0, 0, 60, -12.998892, 16.566061, 8.25909)
+transform = Transform3D(40, 0, 0, 0, 40, 0, 0, 0, 40, -12.998892, 16.37592, 8.25909)
 
 [node name="Fire2" parent="." unique_id=1944567405 instance=ExtResource("20_jsnrv")]
 transform = Transform3D(24.290804, 0, -17.605587, 0, 29.999998, 0, 17.605587, 0, 24.290804, -8.910022, 10.895618, -11.1331415)
 
 [node name="DoomEnemy" parent="." unique_id=715377368 instance=ExtResource("21_lggff")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -42.780758, 5.165, 4.4505496)
+
+[node name="Pickup" parent="." unique_id=392349365 instance=ExtResource("20_lggff")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.053176165, 5.05, -8.93398)
