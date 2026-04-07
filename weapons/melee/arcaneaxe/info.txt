@@ -1,0 +1,14 @@
+Name: Arcane Axe
+Class: 1
+Type: Melee
+Palette: Doom
+Summon: QuakeAxe
+Ammo Type: None
+Altfire: No
+Powered Mode: No
+Brightmaps: Yes
+Actor modification: No
+ACS: No
+
+Can be enhanced with any PowerStrength powerup. While powered up, it will always gib the target.
+Includes an alternate set of sprites without gloves.

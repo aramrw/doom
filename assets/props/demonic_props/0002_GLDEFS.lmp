@@ -1,0 +1,68 @@
+pointlight CANDLE1
+{
+    color 1.0 1.0 0.3
+    size 24
+    offset 0 22 0
+	attenuate 1
+}
+
+object BlackCandle1
+{
+    frame CAND {light CANDLE1}
+}
+
+pointlight CANDLE2
+{
+    color 1.0 1.0 0.3
+    size 24
+    offset 0 18 0
+	attenuate 1
+}
+
+object BlackCandle2
+{
+    frame CAND {light CANDLE2}
+}
+
+pointlight FIRESTAT
+{
+    color 1.0 1.0 0.3
+    size 90
+    offset 0 50 0
+	attenuate 1
+}
+
+object FireStatue
+{
+    frame FSTAA {light FIRESTAT}
+	frame FSTAB {light FIRESTAT}
+	frame FSTAC {light FIRESTAT}
+}
+
+pointlight DEMONBRAZ
+{
+    color 1.0 1.0 0.3
+    size 80
+    offset 0 68 0
+	attenuate 1
+}
+
+object DemonBrazier1
+{
+    frame BRZ1A {light DEMONBRAZ}
+	frame BRZ1B {light DEMONBRAZ}
+	frame BRZ1C {light DEMONBRAZ}
+	frame BRZ1D {light DEMONBRAZ}
+	frame BRZ1E {light DEMONBRAZ}
+	frame BRZ1F {light DEMONBRAZ}
+}
+
+object DemonBrazier2
+{
+    frame BRZ2A {light DEMONBRAZ}
+	frame BRZ2B {light DEMONBRAZ}
+	frame BRZ2C {light DEMONBRAZ}
+	frame BRZ2D {light DEMONBRAZ}
+	frame BRZ2E {light DEMONBRAZ}
+	frame BRZ2F {light DEMONBRAZ}
+}

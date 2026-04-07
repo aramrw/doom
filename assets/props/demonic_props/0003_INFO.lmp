@@ -1,0 +1,10 @@
+Name: Demonic Props
+Connection: None
+Palette: Doom
+Summon: DemonBrazier[1/2], FireStatue, DemonPedestal, BlackCandle[1/2], ImpStatue, ImpStatueBroke[1/2/3], ImpStatueBase, MarbleColumn, MarbleBase
+Ambient Sound: No
+De-/Activatable: Yes (some)
+Destroyable: No
+Special Effects: No
+Brightmaps: No
+ACS: No

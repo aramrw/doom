@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="ActionStep" format=3 uid="uid://dupbovc3t6lhc"]
 
-[ext_resource type="Script" uid="uid://dbrkdla20teuq" path="res://weapons/effects/weapon_effect.gd" id="1_effect_script"]
+[ext_resource type="Script" uid="uid://bkfyrjdpuxg0h" path="res://weapons/effects/weapon_effect.gd" id="1_effect_script"]
 [ext_resource type="Script" uid="uid://k0g2eck3n5cy" path="res://weapons/action_step.gd" id="2_step_script"]
 [ext_resource type="Resource" uid="uid://bdljegsv8anq1" path="res://weapons/pistols/auto9/auto9_fire_effect.tres" id="3_effect"]
 [ext_resource type="Resource" uid="uid://c36k3yquij7ke" path="res://weapons/pistols/auto9/auto9_fire_sound.tres" id="4_sound"]
@@ -8,5 +8,4 @@
 [resource]
 script = ExtResource("2_step_script")
 frame_index = 1
-duration_seconds = 0.05
 effects = Array[ExtResource("1_effect_script")]([ExtResource("3_effect"), ExtResource("4_sound")])

@@ -6,10 +6,10 @@
 
 [resource]
 script = ExtResource("1_script")
-item_name = "mac10"
-sprite_frames = ExtResource("2_spriteframes")
 sprite_offset = Vector2(0, 5)
 actions = {
 "primary": ExtResource("3_fire")
 }
 ammo_give = 64
+item_name = "mac10"
+sprite_frames = ExtResource("2_spriteframes")

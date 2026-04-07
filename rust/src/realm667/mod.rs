@@ -124,7 +124,7 @@ impl Realm667Importer {
         }
 
         // 1.5 Resolve Inheritance
-        let mut actor_map: HashMap<String, usize> = actors.iter().enumerate()
+        let actor_map: HashMap<String, usize> = actors.iter().enumerate()
             .map(|(i, a)| (a.name.to_lowercase(), i))
             .collect();
 
@@ -163,8 +163,7 @@ impl Realm667Importer {
         }
 
         // Primary actor for the top-level folder name
-        let primary_actor = if self.import_mode == ImportMode::Automatic {
-            actors
+        let _primary_actor = if self.import_mode == ImportMode::Automatic {            actors
                 .iter()
                 .find(|a: &&ActorDefinition| {
                     matches!(
@@ -283,7 +282,7 @@ impl Realm667Importer {
                 if let Some(fire_states) = actor.states.get("Fire") {
                     for (i, frame) in fire_states.iter().enumerate() {
                         let frame: &crate::realm667::actor::StateFrame = frame;
-                        godot_print!("  Frame {}: prefix={}, action={:?}", i, frame.sprite_prefix, frame.action);
+                        godot_print!("  Frame {}: prefix={}, actions={:?}", i, frame.sprite_prefix, frame.actions);
                     }
                 }
                 ResourceGenerator::generate_weapon_resources(
@@ -291,6 +290,8 @@ impl Realm667Importer {
                     &godot_data_root,
                     &godot_data_res,
                     &label_sprites,
+                    &sounds_map,
+                    &mod_folder_name,
                 );
                 godot_print!("Realm667Importer: Created Godot data for weapon {}", actor.name);
             } else if category == ActorCategory::Enemy {
@@ -526,6 +527,23 @@ impl Realm667Importer {
                         sounds_dir.clone()
                     };
                     self.extract_sound_file(file_path, archive, &dest_dir);
+                }
+            }
+        }
+
+        // Extract sounds referenced in actions
+        for frames in actor.states.values() {
+            for frame in frames {
+                for action in &frame.actions {
+                    let lower_name = action.name.to_lowercase();
+                    if lower_name == "a_playsound" || lower_name == "a_startsound" || lower_name == "a_playweaponsound" {
+                        if let Some(alias) = action.args.get(0) {
+                            let alias_str = alias.to_string_lossy().to_uppercase();
+                            if let Some(file_path) = sounds_map.get(&alias_str) {
+                                self.extract_sound_file(file_path, archive, &sounds_dir);
+                            }
+                        }
+                    }
                 }
             }
         }

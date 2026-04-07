@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="RawZScriptEffect" format=3 uid="uid://bfeqm6xol7es3"]
+
+[ext_resource type="Script" uid="uid://dusb71mvl08ox" path="res://weapons/effects/raw_zscript_effect.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+function_name = "A_Jump"
+arguments = ["128", "Fire2"]

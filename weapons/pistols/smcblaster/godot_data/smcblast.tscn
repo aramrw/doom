@@ -9,8 +9,8 @@ radius = 0.075
 
 [node name="Projectile" type="Area3D" unique_id=825473360]
 script = ExtResource("1_script")
-speed = 48
-damage = 20
+speed = 100.0
+damage = 8
 impact_sound = ExtResource("3_6odih")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=882726831]
@@ -18,16 +18,20 @@ shape = SubResource("SphereShape3D_1")
 
 [node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="." unique_id=1253181410]
 transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 0, 0)
+pixel_size = 0.001
 billboard = 2
 shaded = true
 texture_filter = 0
 sprite_frames = ExtResource("2_sprites")
 animation = &"spawn"
 autoplay = "spawn"
-frame = 5
-frame_progress = 0.62529165
+frame_progress = 0.046640128
+speed_scale = 15.0
 
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="." unique_id=1040987040]
+attenuation_model = 2
+unit_size = 3.0
+pitch_scale = 2.5
 bus = &"SfxBus"
 
 [node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=426261086]

@@ -1,0 +1,9 @@
+BrightMap Sprite QAXEJ0 { Map BMQAXE01 DisableFullBright }
+BrightMap Sprite QAXEK0 { Map BMQAXE02 DisableFullBright }
+BrightMap Sprite QAXEL0 { Map BMQAXE03 DisableFullBright }
+BrightMap Sprite QAXEM0 { Map BMQAXE04 DisableFullBright }
+BrightMap Sprite QAXEN0 { Map BMQAXE05 DisableFullBright }
+BrightMap Sprite QAXEO0 { Map BMQAXE06 DisableFullBright }
+BrightMap Sprite QAXEP0 { Map BMQAXE07 DisableFullBright }
+BrightMap Sprite QAXEQ0 { Map BMQAXE08 DisableFullBright }
+BrightMap Sprite QAXER0 { Map BMQAXE09 DisableFullBright }

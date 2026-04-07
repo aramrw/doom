@@ -26,7 +26,11 @@ func _ready():
 		elif data.sprite_frames.has_animation("idle"):
 			anim_sprite.play("idle")
 		else:
-			anim_sprite.play("default")
+			var anims = data.sprite_frames.get_animation_names()
+			if anims.size() > 0:
+				anim_sprite.play(anims[0])
+			else:
+				push_warning("Pickup " + name + " has SpriteFrames but no animations!")
 			
 	body_entered.connect(_on_body_entered)
 	body_exited.connect(_on_body_exited)

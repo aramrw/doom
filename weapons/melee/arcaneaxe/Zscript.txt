@@ -1,0 +1,113 @@
+/*
+Weapon: Arcane Axe
+Original by Wills (from WRW), remade by Gothic.
+DoEffect & HandlePickup code by DeVloek
+Sprites ripped from Arcane Dimensions using Quake Model Viewer.
+Shadow Axe model by MatthewB & Stas "dwere" Kuznetsov.
+Hands edited by Gothic, taking bits from Doom hands.
+Sounds from Quake & Chasm: The Rift.
+*/
+
+
+class QuakeAxe : Weapon 
+{
+Default
+	{
+	+WEAPON.MELEEWEAPON
+	Inventory.PickupMessage "You got the Arcane Axe!";
+	Obituary "%k chopped %o like a psycho.";
+	Scale 0.5;
+	Weapon.SlotNumber 1;
+	Weapon.SlotPriority 0;
+	Weapon.SelectionOrder 2100;
+	}
+States
+	{
+	Spawn:
+		QAXP A -1;
+		Stop;
+	Deselect:
+		QAXE A 1 A_Lower();
+		Wait;
+	Select:
+		QAXE A 1 A_Raise();
+		Wait;
+	Ready:
+		QAXE A 1 A_WeaponReady();
+		Loop;
+	Fire:
+		QAXE B 0 A_Jump(128,"Fire2");
+		QAXE B 2 A_StartSound("weapons/quakeaxe",7);
+		QAXE CD 2;
+		QAXE E 2 CA_QuakeAxeChop();
+		TNT1 A 7;
+		QAXE I 2;
+		Goto Ready;
+	Fire2:
+		QAXE F 2 A_StartSound("weapons/quakeaxe",7);
+		QAXE GH 2;
+		TNT1 A 9 CA_QuakeAxeChop();
+		QAXE I 2;
+		Goto Ready;
+	}
+action void CA_QuakeAxeChop()
+	{
+		string pufftype = "QAxePuff"; int damage = 4;
+		if (FindInventory("PowerStrength"))
+		{
+			pufftype = "QAxePuffPowered";
+			damage *= 7;
+		}
+		A_CustomPunch(damage,0,CPF_NOTURN,pufftype);
+	}
+bool doonce;
+override void DoEffect()
+	{	
+		if (owner.player && owner.FindInventory("PowerStrength"))	// while the player has the berserk power
+		{
+			let rwep = owner.player.readyweapon;	// get the weapon that the player is currently using
+			let pwep = owner.player.pendingweapon;	// get the weapon that the player is switching to
+			let psp = owner.player.FindPSprite(PSP_Weapon);
+			if (rwep is 'QuakeAxe' && psp && psp.frame < 9) psp.frame += 9;// display the berserk axe frames instead of the normal ones		
+			if (pwep is 'Fist' && doonce == true)
+			{
+				if (rwep is 'QuakeAxe')	// when the player auto-switches from the axe to the fist after having picked up a berserk
+				{	
+					owner.player.pendingweapon = WP_NOCHANGE;				// do not switch to the fist
+					owner.player.SetPSprite(PSP_Weapon,GetReadyState());	// keep the axe ready instead
+				}
+				doonce = false;	// but do this only once, so the player can switch to the fist manually
+			}
+		}
+		Super.doEffect();
+	}
+override bool HandlePickup(Inventory item)
+	{
+		if (item is 'PowerStrength') doonce = true;	// when the player has picked up a berserk (this is required to make it work in each map)
+		return super.HandlePickup(item);
+	}
+}
+
+class QAxePuff : BulletPuff
+{
+Default
+	{
+	+PUFFONACTORS
+	//+NOEXTREMEDEATH
+	+FORCEPAIN
+	}
+States
+	{
+	Melee:
+	Crash:
+		PUFF A 4 Bright light("BPUFF1") A_StartSound("weapons/quakeaxe/hitsolid");
+		PUFF B 4 light("BPUFF2");
+		PUFF CD 4;
+		Stop;
+	XDeath:
+		TNT1 A 1 A_StartSound("weapons/quakeaxe/hitflesh");
+		Stop;
+	}
+}
+
+class QAxePuffPowered : QAxePuff { Default { +EXTREMEDEATH } }

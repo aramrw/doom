@@ -1,0 +1,72 @@
+[gd_resource type="SpriteFrames" load_steps=2 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/props/demonic_props/godot_data/sprites/demonic_props/demonbrazier1/active/BRZ1A0.png" id="1_ext"]
+[ext_resource type="Texture2D" path="res://assets/props/demonic_props/godot_data/sprites/demonic_props/demonbrazier1/active/BRZ1B0.png" id="2_ext"]
+[ext_resource type="Texture2D" path="res://assets/props/demonic_props/godot_data/sprites/demonic_props/demonbrazier1/active/BRZ1C0.png" id="3_ext"]
+[ext_resource type="Texture2D" path="res://assets/props/demonic_props/godot_data/sprites/demonic_props/demonbrazier1/active/BRZ1D0.png" id="4_ext"]
+[ext_resource type="Texture2D" path="res://assets/props/demonic_props/godot_data/sprites/demonic_props/demonbrazier1/active/BRZ1E0.png" id="5_ext"]
+[ext_resource type="Texture2D" path="res://assets/props/demonic_props/godot_data/sprites/demonic_props/demonbrazier1/active/BRZ1F0.png" id="6_ext"]
+[ext_resource type="Texture2D" path="res://assets/props/demonic_props/godot_data/sprites/demonic_props/demonbrazier1/inactive/BRZ1G0.png" id="7_ext"]
+[ext_resource type="Texture2D" path="res://assets/props/demonic_props/godot_data/sprites/demonic_props/demonbrazier1/spawn/BRZ1A0.png" id="8_ext"]
+[ext_resource type="Texture2D" path="res://assets/props/demonic_props/godot_data/sprites/demonic_props/demonbrazier1/spawn/BRZ1B0.png" id="9_ext"]
+[ext_resource type="Texture2D" path="res://assets/props/demonic_props/godot_data/sprites/demonic_props/demonbrazier1/spawn/BRZ1C0.png" id="10_ext"]
+[ext_resource type="Texture2D" path="res://assets/props/demonic_props/godot_data/sprites/demonic_props/demonbrazier1/spawn/BRZ1D0.png" id="11_ext"]
+[ext_resource type="Texture2D" path="res://assets/props/demonic_props/godot_data/sprites/demonic_props/demonbrazier1/spawn/BRZ1E0.png" id="12_ext"]
+[ext_resource type="Texture2D" path="res://assets/props/demonic_props/godot_data/sprites/demonic_props/demonbrazier1/spawn/BRZ1F0.png" id="13_ext"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 4,
+"texture": ExtResource("1_ext")
+}, {
+"duration": 4,
+"texture": ExtResource("2_ext")
+}, {
+"duration": 4,
+"texture": ExtResource("3_ext")
+}, {
+"duration": 4,
+"texture": ExtResource("4_ext")
+}, {
+"duration": 4,
+"texture": ExtResource("5_ext")
+}, {
+"duration": 4,
+"texture": ExtResource("6_ext")
+}],
+"loop": true,
+"name": &"active",
+"speed": 35.0
+}, {
+"frames": [{
+"duration": 1,
+"texture": ExtResource("7_ext")
+}],
+"loop": true,
+"name": &"inactive",
+"speed": 35.0
+}, {
+"frames": [{
+"duration": 4,
+"texture": ExtResource("8_ext")
+}, {
+"duration": 4,
+"texture": ExtResource("9_ext")
+}, {
+"duration": 4,
+"texture": ExtResource("10_ext")
+}, {
+"duration": 4,
+"texture": ExtResource("11_ext")
+}, {
+"duration": 4,
+"texture": ExtResource("12_ext")
+}, {
+"duration": 4,
+"texture": ExtResource("13_ext")
+}],
+"loop": true,
+"name": &"spawn",
+"speed": 35.0
+}]

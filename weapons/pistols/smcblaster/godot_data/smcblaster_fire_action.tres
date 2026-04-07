@@ -1,9 +1,15 @@
-[gd_resource type="Resource" script_class="WeaponAction" format=3]
-[ext_resource type="Script" path="res://weapons/weapon_action.gd" id="1_script"]
-[ext_resource type="Resource" path="res://weapons/pistols/smcblaster/godot_data/smcblaster_fire_step.tres" id="2_step"]
+[gd_resource type="Resource" script_class="WeaponAction" format=3 uid="uid://cyxch6jljxgxt"]
+
+[ext_resource type="Script" uid="uid://7og58pc8mae4" path="res://weapons/weapon_action.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://k0g2eck3n5cy" path="res://weapons/action_step.gd" id="2_kulk5"]
+[ext_resource type="Script" uid="uid://bkfyrjdpuxg0h" path="res://weapons/effects/weapon_effect.gd" id="3_sjlyv"]
+[ext_resource type="Resource" uid="uid://txa53gccp7b3" path="res://weapons/pistols/smcblaster/godot_data/smcblaster_fire_effect.tres" id="4_3m2w8"]
+[ext_resource type="Resource" path="res://weapons/pistols/smcblaster/godot_data/smcblaster_fire_sound.tres" id="5_kqvip"]
+
+[sub_resource type="Resource" id="Resource_xj8va"]
+script = ExtResource("2_kulk5")
+effects = Array[ExtResource("3_sjlyv")]([ExtResource("4_3m2w8"), ExtResource("5_kqvip")])
+
 [resource]
 script = ExtResource("1_script")
-animation_name = "shoot"
-steps = [ExtResource("2_step")]
-loop = false
-consumes_ammo = true
+steps = Array[ExtResource("2_kulk5")]([SubResource("Resource_xj8va")])

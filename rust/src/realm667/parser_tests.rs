@@ -1,7 +1,7 @@
 #[cfg(test)]
 mod tests {
     use crate::realm667::lexer::{Lexer, Token};
-    use crate::realm667::actor::{GZValue, ActorDefinition};
+    use crate::realm667::actor::GZValue;
     use crate::realm667::parser::Parser;
 
     #[test]
@@ -90,7 +90,8 @@ mod tests {
         assert_eq!(spawn_states.len(), 1);
         let state = &spawn_states[0];
         
-        let action = state.action.as_ref().unwrap();
+        assert_eq!(state.actions.len(), 1);
+        let action = &state.actions[0];
         assert_eq!(action.name, "A_JumpIfHealthLower");
         assert_eq!(action.args.len(), 2);
         assert_eq!(action.args[0], GZValue::Integer(10));
@@ -142,14 +143,25 @@ mod tests {
         assert_eq!(first_frame.frames, "F");
         assert_eq!(first_frame.duration, 4);
         
-        // Even if we don't parse everything in the block, we should at least 
-        // find ONE relevant action if it's there, or at least not crash.
-        // Ideally we want A_FireProjectile.
-        assert!(first_frame.action.is_some());
-        let action = first_frame.action.as_ref().unwrap();
-        // Since the block has two, it might pick one or we might need to handle multiple.
-        // Currently GZFunctionCall is Option, not Vec. We might need to change it to Vec
-        // if we want to support multiple actions per frame (ZScript allows this).
-        assert_eq!(action.name, "A_FireProjectile"); 
+        assert_eq!(first_frame.actions.len(), 2);
+        assert_eq!(first_frame.actions[0].name, "A_Gunflash");
+        assert_eq!(first_frame.actions[1].name, "A_FireProjectile"); 
+    }
+
+    #[test]
+    fn test_parser_states_no_braces() {
+        let input = "
+            actor MyActor {
+                States
+                    Spawn:
+                        PLAY A 10
+                        Loop
+            }
+        ";
+        let mut parser = Parser::new(input);
+        let actors = parser.parse_actors();
+        assert_eq!(actors.len(), 1);
+        let actor = &actors[0];
+        assert!(actor.states.contains_key("Spawn"));
     }
 }

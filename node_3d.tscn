@@ -18,8 +18,11 @@
 [ext_resource type="PackedScene" uid="uid://0lefihnkg1ip" path="res://ui/dialogue_ui.tscn" id="17_dialogue"]
 [ext_resource type="PackedScene" uid="uid://b45e5hjqdka1g" path="res://npcs/shotgun_monk.tscn" id="18_monk"]
 [ext_resource type="PackedScene" uid="uid://by41h2dwu1l1k" path="res://assets/lights/torches/fire/fire.tscn" id="20_jsnrv"]
-[ext_resource type="PackedScene" path="res://weapons/magic/holysnow/godot_data/holysnow_pickup.tscn" id="20_lggff"]
+[ext_resource type="PackedScene" uid="uid://bdyggv7inv1k1" path="res://weapons/magic/holysnow/godot_data/holysnow_pickup.tscn" id="20_lggff"]
 [ext_resource type="PackedScene" uid="uid://dtq7atqe1rcdd" path="res://enemies/plaguerat/godot_data/plaguerat.tscn" id="21_lggff"]
+[ext_resource type="PackedScene" uid="uid://dfu8ux3qx10qv" path="res://assets/props/demonic_props/godot_data/demonpedestal.tscn" id="21_s0gvp"]
+[ext_resource type="PackedScene" uid="uid://wq7jq8taaawf" path="res://assets/props/demonic_props/godot_data/demonbrazier2.tscn" id="22_s0gvp"]
+[ext_resource type="PackedScene" path="res://weapons/melee/arcaneaxe/godot_data/quakeaxe_pickup.tscn" id="23_vxd74"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_i5arm"]
 shader = ExtResource("1_jka67")
@@ -231,3 +234,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -42.780758, 5.165, 4.4505496)
 
 [node name="Pickup" parent="." unique_id=392349365 instance=ExtResource("20_lggff")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.053176165, 5.05, -8.93398)
+
+[node name="DemonPedestal" parent="." unique_id=1923286135 instance=ExtResource("21_s0gvp")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 5.104932, 4.0200067, 0.02118361)
+
+[node name="DemonBrazier2" parent="." unique_id=923365151 instance=ExtResource("22_s0gvp")]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 4.5666003, 3.85074, 0.9394176)
+
+[node name="Pickup2" parent="." unique_id=83717827 instance=ExtResource("23_vxd74")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5879593, 5.05, -1.4095681)

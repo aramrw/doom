@@ -1,0 +1,60 @@
+[gd_scene format=3 uid="uid://wq7jq8taaawf"]
+
+[ext_resource type="SpriteFrames" path="res://assets/props/demonic_props/godot_data/demonbrazier2_spriteframes.tres" id="1_sprites"]
+[ext_resource type="AudioStream" uid="uid://dp1uiw8d2nbr4" path="res://assets/lights/torches/Sounds/LILFIRE.ogg" id="2_qkrx0"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1"]
+radius = 0.15
+height = 1.6
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_pptxa"]
+random_pitch = 1.1268145
+streams_count = 1
+stream_0/stream = ExtResource("2_qkrx0")
+
+[node name="DemonBrazier2" type="StaticBody3D" unique_id=1662092071]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1193496647]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+shape = SubResource("CapsuleShape3D_1")
+
+[node name="Sprite3D_0" type="AnimatedSprite3D" parent="." unique_id=1161367836]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+texture_filter = 0
+sprite_frames = ExtResource("1_sprites")
+animation = &"active"
+autoplay = "active"
+
+[node name="Sprite3D_1" type="AnimatedSprite3D" parent="." unique_id=964425469]
+transform = Transform3D(0.7071, 0, 0.7071, 0, 1, 0, -0.7071, 0, 0.7071, 0, 0.8, 0)
+texture_filter = 0
+sprite_frames = ExtResource("1_sprites")
+animation = &"active"
+autoplay = "active"
+
+[node name="Sprite3D_2" type="AnimatedSprite3D" parent="." unique_id=981449776]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 0, 0.8, 0)
+texture_filter = 0
+sprite_frames = ExtResource("1_sprites")
+animation = &"active"
+autoplay = "active"
+
+[node name="Sprite3D_3" type="AnimatedSprite3D" parent="." unique_id=1204549803]
+transform = Transform3D(-0.7071, 0, 0.7071, 0, 1, 0, -0.7071, 0, -0.7071, 0, 0.8, 0)
+texture_filter = 0
+sprite_frames = ExtResource("1_sprites")
+animation = &"active"
+autoplay = "active"
+frame_progress = 0.37672862
+
+[node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=796574807]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0788815, 0)
+light_color = Color(0.70352674, 0.32883352, 0.13965437, 1)
+light_energy = 4.0
+shadow_enabled = true
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="." unique_id=2104288636]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0698026, 0)
+stream = SubResource("AudioStreamRandomizer_pptxa")
+unit_size = 1.0
+pitch_scale = 1.05

@@ -27,6 +27,7 @@ else
     echo "Build failed."
     exit 1
 fi
+cd "../"
 
 # Ensure destination directory exists
 mkdir -p "../$BIN_DIR"
@@ -41,4 +42,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
     codesign -s - "../$BIN_DIR/$BINARY_NAME"
 fi
 
-echo "Done."
+echo "+Rust build successfull--"
+echo "--Running Godot Game Window+:"
+
+/Applications/Godot.app/Contents/MacOS/Godot --path . -d

@@ -65,7 +65,7 @@ pub struct StateFrame {
     pub sprite_prefix: String,
     pub frames: String,
     pub duration: i32,
-    pub action: Option<GZFunctionCall>,
+    pub actions: Vec<GZFunctionCall>,
     pub is_bright: bool,
 }
 

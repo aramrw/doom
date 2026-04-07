@@ -4,5 +4,7 @@
 [resource]
 script = ExtResource("1_script")
 projectile_scene = ExtResource("2_proj")
-speed = 50.0
+speed = 5.0
 damage = 20
+lifetime = 15.0
+projectile_scale = 3.0

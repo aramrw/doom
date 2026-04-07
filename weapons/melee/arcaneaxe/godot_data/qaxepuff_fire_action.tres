@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="WeaponAction" format=3]
+[ext_resource type="Script" path="res://weapons/weapon_action.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+animation_name = "shoot"
+steps = []
+loop = false
+consumes_ammo = true

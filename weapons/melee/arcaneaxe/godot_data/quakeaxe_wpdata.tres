@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3 uid="uid://b317jn4m8puoh"]
+
+[ext_resource type="Script" uid="uid://cqlple4um3rs" path="res://weapons/weapon_data.gd" id="1_script"]
+[ext_resource type="SpriteFrames" uid="uid://dis13u2a2onu1" path="res://weapons/melee/arcaneaxe/godot_data/quakeaxe_spriteframes.tres" id="2_sprites"]
+[ext_resource type="Resource" uid="uid://bistu846pau4" path="res://weapons/melee/arcaneaxe/godot_data/quakeaxe_fire_action.tres" id="3_fire"]
+
+[resource]
+script = ExtResource("1_script")
+actions = {
+"primary": ExtResource("3_fire")
+}
+ammo_give = 30
+item_name = "quakeaxe"
+sprite_frames = ExtResource("2_sprites")

@@ -22,12 +22,13 @@ func _ready():
 		audio_player.stream = whoosh_sound
 		audio_player.play()
 
-func setup(p_firer: Node3D, p_direction: Vector3, p_damage: int = -1, p_speed: float = -1.0):
+func setup(p_firer: Node3D, p_direction: Vector3, p_damage: int = -1, p_speed: float = -1.0, p_lifetime: float = -1.0):
 	firer = p_firer
 	direction = p_direction.normalized()
 
 	if p_damage > 0: damage = p_damage
 	if p_speed > 0: speed = p_speed
+	if p_lifetime > 0: lifetime = p_lifetime
 
 	# Team detection logic
 	if firer.is_in_group("Player"):

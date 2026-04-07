@@ -285,15 +285,30 @@ impl Parser {
 
     fn parse_states_into(&mut self, actor: &mut ActorDefinition) {
         self.next_token(); // skip "states"
-        if self.cur_token != Token::BraceOpen {
-            return;
-        }
-        self.next_token();
+        let has_braces = if self.cur_token == Token::BraceOpen {
+            self.next_token();
+            true
+        } else {
+            false
+        };
 
         let mut current_labels = Vec::new();
         let mut has_parsed_frames = false;
 
-        while self.cur_token != Token::BraceClose && self.cur_token != Token::Eof {
+        while self.cur_token != Token::Eof {
+            if has_braces && self.cur_token == Token::BraceClose {
+                break;
+            }
+            // If no braces, we stop at the next actor-level keyword or closing brace of actor
+            if !has_braces && (self.cur_token == Token::BraceClose || 
+                matches!(self.cur_token, Token::Identifier(ref id) if 
+                    id.to_lowercase() == "default" || 
+                    id.to_lowercase() == "states" ||
+                    id.starts_with('+') || 
+                    id.starts_with('-'))) {
+                break;
+            }
+
             match self.cur_token.clone() {
                 Token::Identifier(id) => {
                     self.next_token();
@@ -350,7 +365,7 @@ impl Parser {
 
                         let duration = if duration == 0 { 1 } else { duration };
 
-                        let mut action = None;
+                        let mut actions = Vec::new();
                         let mut is_bright = false;
 
                         // Check for keywords or block
@@ -361,7 +376,16 @@ impl Parser {
                                     self.next_token();
                                 }
                                 Token::Identifier(ref k) if k.to_lowercase().starts_with("a_") => {
-                                    action = self.parse_function_call();
+                                    if let Some(call) = self.parse_function_call() {
+                                        actions.push(call);
+                                    } else {
+                                        // It might be a simple action without parentheses
+                                        actions.push(crate::realm667::actor::GZFunctionCall {
+                                            name: k.clone(),
+                                            args: Vec::new(),
+                                        });
+                                        self.next_token();
+                                    }
                                 }
                                 Token::BraceOpen => {
                                     // ZScript anonymous function block - scan for actions inside!
@@ -378,21 +402,16 @@ impl Parser {
                                                 self.next_token();
                                             }
                                             Token::Identifier(sub_id) => {
-                                                if sub_id.starts_with("A_Fire") || sub_id.starts_with("A_Custom") || sub_id.starts_with("A_Explode") {
-                                                    let mut sub_args = Vec::new();
-                                                    self.next_token();
-                                                    if self.cur_token == Token::ParenthesisOpen {
+                                                if sub_id.to_lowercase().starts_with("a_") {
+                                                    if let Some(call) = self.parse_function_call() {
+                                                        actions.push(call);
+                                                    } else {
+                                                        actions.push(crate::realm667::actor::GZFunctionCall {
+                                                            name: sub_id,
+                                                            args: Vec::new(),
+                                                        });
                                                         self.next_token();
-                                                        while self.cur_token != Token::ParenthesisClose && self.cur_token != Token::Eof {
-                                                            if let Some(val) = self.parse_gz_value() { sub_args.push(val); }
-                                                            if self.cur_token == Token::Comma { self.next_token(); } else if self.cur_token != Token::ParenthesisClose { self.next_token(); }
-                                                        }
-                                                        if self.cur_token == Token::ParenthesisClose { self.next_token(); }
                                                     }
-                                                    action = Some(crate::realm667::actor::GZFunctionCall {
-                                                        name: sub_id,
-                                                        args: sub_args,
-                                                    });
                                                 } else {
                                                     self.next_token();
                                                 }
@@ -415,7 +434,7 @@ impl Parser {
                             sprite_prefix: id,
                             frames: frames_str,
                             duration,
-                            action,
+                            actions,
                             is_bright,
                         };
 
@@ -473,22 +492,4 @@ impl Parser {
         None
     }
 
-    fn skip_balanced_braces(&mut self) {
-        let mut depth = 0;
-        loop {
-            match self.cur_token {
-                Token::BraceOpen => {
-                    depth += 1;
-                    self.next_token();
-                }
-                Token::BraceClose => {
-                    depth -= 1;
-                    self.next_token();
-                    if depth <= 0 { break; }
-                }
-                Token::Eof => break,
-                _ => self.next_token(),
-            }
-        }
-    }
 }

@@ -1,0 +1,3 @@
+weapons/quakeaxe ax1
+weapons/quakeaxe/hitsolid axhit2
+weapons/quakeaxe/hitflesh axhit

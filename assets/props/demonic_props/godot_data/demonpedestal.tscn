@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://dfu8ux3qx10qv"]
+
+[ext_resource type="SpriteFrames" path="res://assets/props/demonic_props/godot_data/demonpedestal_spriteframes.tres" id="1_sprites"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1"]
+radius = 0.45
+height = 1.6
+
+[node name="DemonPedestal" type="StaticBody3D" unique_id=1384483749]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=310275115]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+shape = SubResource("CapsuleShape3D_1")
+
+[node name="Sprite3D_0" type="AnimatedSprite3D" parent="." unique_id=936441109]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+billboard = 2
+shaded = true
+texture_filter = 0
+sprite_frames = ExtResource("1_sprites")
+animation = &"spawn"
+autoplay = "spawn"

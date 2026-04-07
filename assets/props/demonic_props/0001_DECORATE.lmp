@@ -1,0 +1,171 @@
+Actor ImpStatue
+{
+//$category "Decoration"
+	Radius 17
+	Height 64
+	+Solid
+	States
+	{
+		Spawn:
+		 ISTA A -1
+		 Stop
+	}
+}
+
+Actor ImpStatueBroke1 : ImpStatue
+{
+//$category "Decoration"
+	States
+	{
+		Spawn:
+		 ISTA B -1
+		 Stop
+	}
+}
+
+Actor ImpStatueBroke2 : ImpStatue
+{
+//$category "Decoration"
+	Height 40
+	States
+	{
+		Spawn:
+		 ISTA C -1
+		 Stop
+	}
+}
+
+Actor ImpStatueBroke3 : ImpStatue
+{
+//$category "Decoration"
+	Height 25
+	States
+	{
+		Spawn:
+		 ISTA D -1
+		 Stop
+	}
+}
+
+Actor ImpStatueBase
+{
+//$category "Decoration"
+	States
+	{
+		Spawn:
+		 ISTA E -1
+		 Stop
+	}
+}
+
+Actor MarbleBase
+{
+//$category "Obstacles"
+	States
+	{
+		Spawn:
+		 HCOL A -1
+		 Stop
+	}
+}
+
+Actor MarbleColumn
+{
+//$category "Obstacles"
+	Radius 14
+	Height 54
+	+Solid
+	States
+	{
+		Spawn:
+		 HCOL C -1
+		 Stop
+	}
+}
+
+Actor BlackCandle1
+{
+//$category "Light Sources"
+	States
+	{
+		Spawn:
+		 CAND B -1 Bright
+		 Stop
+	}
+}
+
+Actor BlackCandle2
+{
+//$category "Light Sources"
+	States
+	{
+		Spawn:
+		 CAND C -1 Bright
+		 Stop
+	}
+}
+
+Actor FireStatue : SwitchableDecoration
+{
+//$category "Light Sources"
+	Radius 20
+	Height 45
+	+Solid
+	States
+	{
+		Active:
+		Spawn:
+		 FSTA ABCB 4 Bright
+		 Loop
+		Inactive:
+		 FSTA D -1
+		 Stop
+	}
+}
+		 
+
+Actor DemonBrazier1 : SwitchableDecoration
+{
+//$category "Light Sources"
+	Radius 6
+	Height 64
+	+Solid
+	States
+	{
+		Active:
+		Spawn:
+		 BRZ1 ABCDEF 4 Bright
+		 Loop
+		Inactive:
+		 BRZ1 G -1
+		 Stop
+	}
+}
+
+Actor DemonBrazier2 : DemonBrazier1
+{
+//$category "Light Sources"
+	States
+	{
+		Spawn:
+		 BRZ2 ABCDEF 4 Bright
+		 Loop
+		Inactive:
+		 BRZ2 G -1
+		 Stop
+	}
+}
+
+Actor DemonPedestal
+{
+//$category "Decoration"
+	Radius 18
+	Height 64
+	+Solid
+	States
+	{
+		Spawn:
+		 PDSL A -1
+		 Stop
+	}
+}

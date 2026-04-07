@@ -1,0 +1,6 @@
+Code: Wills, Gothic, DeVloek
+GLDEFS: Gothic
+Sprites: MatthewB & Stas "dwere" Kuznetsov (model), id Software
+Sprite Edit: Gothic
+Sounds: id Software, Action Forms
+Idea Base: Shadow Axe from Arcane Dimensions

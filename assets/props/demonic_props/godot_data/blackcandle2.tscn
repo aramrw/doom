@@ -1,0 +1,37 @@
+[gd_scene format=3 uid="uid://cjw115ieqstv0"]
+
+[ext_resource type="SpriteFrames" path="res://assets/props/demonic_props/godot_data/blackcandle2_spriteframes.tres" id="1_sprites"]
+
+[node name="BlackCandle2" type="StaticBody3D" unique_id=1248953423]
+
+[node name="Sprite3D_0" type="AnimatedSprite3D" parent="." unique_id=745147774]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+shaded = true
+texture_filter = 0
+sprite_frames = ExtResource("1_sprites")
+animation = &"spawn"
+autoplay = "spawn"
+
+[node name="Sprite3D_1" type="AnimatedSprite3D" parent="." unique_id=570246420]
+transform = Transform3D(0.7071, 0, 0.7071, 0, 1, 0, -0.7071, 0, 0.7071, 0, 0.8, 0)
+shaded = true
+texture_filter = 0
+sprite_frames = ExtResource("1_sprites")
+animation = &"spawn"
+autoplay = "spawn"
+
+[node name="Sprite3D_2" type="AnimatedSprite3D" parent="." unique_id=1807485063]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 0, 0.8, 0)
+shaded = true
+texture_filter = 0
+sprite_frames = ExtResource("1_sprites")
+animation = &"spawn"
+autoplay = "spawn"
+
+[node name="Sprite3D_3" type="AnimatedSprite3D" parent="." unique_id=1945899003]
+transform = Transform3D(-0.7071, 0, 0.7071, 0, 1, 0, -0.7071, 0, -0.7071, 0, 0.8, 0)
+shaded = true
+texture_filter = 0
+sprite_frames = ExtResource("1_sprites")
+animation = &"spawn"
+autoplay = "spawn"
