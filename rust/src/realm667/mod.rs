@@ -475,9 +475,11 @@ impl Realm667Importer {
         for label in sorted_labels {
             if let Some(folder_name) = label_to_folder.get(label.as_str()) {
                 let frames = &actor.states[label];
+                let actor_name = actor.name.to_lowercase();
                 let state_dir = godot_data_root
                     .join("sprites")
                     .join(mod_name)
+                    .join(&actor_name)
                     .join(folder_name);
                 let mut sprite_paths = Vec::new();
 
@@ -485,9 +487,10 @@ impl Realm667Importer {
                     let extracted = self.extract_sprites_for_frame(frame, archive, &state_dir);
                     for p in extracted {
                         let rel_res = format!(
-                            "{}/sprites/{}/{}/{}",
+                            "{}/sprites/{}/{}/{}/{}",
                             godot_data_res,
                             mod_name,
+                            actor_name,
                             folder_name,
                             p.file_name().unwrap().to_str().unwrap()
                         );
