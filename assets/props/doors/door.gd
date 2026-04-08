@@ -8,6 +8,7 @@ extends Node3D
 
 @export var dissolve_noise: Texture2D
 @export var required_item: InventoryItemData
+@export var consume_on_use: bool = true
 @export var is_open: bool = false
 
 func _ready():
@@ -34,29 +35,26 @@ func interact(player: Node):
 	if is_open:
 		return
 		
+	# Check if player is holding the required item
+	var inv = player.get_inventory_manager()
+	if not inv: 
+		print("Door: No inventory manager found on player")
+		return
+	
+	var active_item = inv.get_active_item()
+	
 	if required_item == null:
 		open_door()
 		return
 		
-	# Check if player is holding the required item
-	if player.has_method("get_inventory_manager"):
-		var inv = player.get_inventory_manager()
-		var active_item = inv.get_active_item()
-		
-		if active_item == required_item:
-			print("Door: Player used ", active_item.item_name)
-			open_door()
-			# If it's a key, maybe we don't consume it? 
-			# Or if is_consumable is true in item data, it gets consumed in use_active_item.
-			# But here we are using it via interaction.
-		else:
-			print("Door: You need ", required_item.item_name, " to open this.")
+	# Use name comparison for more robustness if references are weird
+	if active_item and active_item.item_name == required_item.item_name:
+		print("Door: Player used ", active_item.item_name)
+		if consume_on_use:
+			inv.consume_item(active_item.item_name, 1)
+		open_door()
 	else:
-		# Fallback if player structure is different
-		if player.get("inventory_manager"):
-			var active_item = player.inventory_manager.get_active_item()
-			if active_item == required_item:
-				open_door()
+		print("Door: You need ", required_item.item_name, " to open this.")
 
 func open_door():
 	if is_open: return

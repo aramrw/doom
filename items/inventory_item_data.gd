@@ -7,7 +7,8 @@ class_name InventoryItemData
 
 @export_group("Behavior")
 @export var is_consumable: bool = false
-@export var max_stack: int = 1
+@export var default_uses: int = 1
+@export var max_stack: int = 99
 @export var use_sound: AudioStream
 
 func use(player: Node):

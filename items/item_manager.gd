@@ -21,19 +21,24 @@ func activate(item: InventoryItemData):
 	item_layer.show()
 	is_active = true
 	
-	# Tell player to hide weapons
+	# Hide weapons layer (CanvasLayer doesn't inherit visibility)
 	var player = get_parent()
 	if player and player.has_node("WeaponManager"):
-		player.get_node("WeaponManager").hide()
+		var wm = player.get_node("WeaponManager")
+		if wm.has_node("WeaponLayer"):
+			wm.get_node("WeaponLayer").hide()
 
 func deactivate():
 	is_active = false
+	current_item = null
 	item_layer.hide()
 	
-	# Tell player to show weapons if needed
+	# Show weapons layer
 	var player = get_parent()
 	if player and player.has_node("WeaponManager"):
-		player.get_node("WeaponManager").show()
+		var wm = player.get_node("WeaponManager")
+		if wm.has_node("WeaponLayer"):
+			wm.get_node("WeaponLayer").show()
 
 func update_item(item: InventoryItemData):
 	if is_active:

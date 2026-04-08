@@ -78,7 +78,7 @@ func _on_inventory_changed():
 		var active = inventory_manager.get_active_item()
 		var count = 0
 		if active:
-			count = inventory_manager.counts.get(active.item_name, 0)
+			count = inventory_manager.uses.get(active.item_name, 0)
 		
 		item_manager.update_item(active)
 		hud.update_inventory_ui(active, count)
@@ -102,10 +102,16 @@ func _process(delta):
 		if Input.is_action_just_pressed("inv_use"):
 			inventory_manager.use_active_item(self)
 			
-		if Input.is_key_pressed(KEY_5):
-			var active = inventory_manager.get_active_item()
-			if active:
-				item_manager.activate(active)
+		if Input.is_action_just_pressed("item_cycle_five"):
+			if inventory_manager.items.size() > 0:
+				if not item_manager.is_active:
+					item_manager.activate(inventory_manager.get_active_item())
+				else:
+					inventory_manager.cycle_next()
+					if inventory_manager.active_index == 0:
+						item_manager.deactivate()
+					else:
+						item_manager.activate(inventory_manager.get_active_item())
 		
 	if Input.is_action_just_pressed("interact"):
 		handle_interaction()
