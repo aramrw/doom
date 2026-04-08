@@ -1,0 +1,14 @@
+[gd_resource type="SpriteFrames" format=3]
+
+[ext_resource type="Texture2D" path="res://items/crosses/cross_1/godot_data/sprites/cross_1/whitecrosskey/idle/CROSG0.png" id="1_ext"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 10,
+"texture": ExtResource("1_ext")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}]

@@ -26,6 +26,7 @@ pub enum ImportMode {
     Enemy = 2,
     Prop = 3,
     Projectile = 4,
+    Item = 5,
 }
 
 #[derive(GodotClass)]
@@ -183,6 +184,7 @@ impl Realm667Importer {
                 ImportMode::Enemy => ActorCategory::Enemy,
                 ImportMode::Prop => ActorCategory::Prop,
                 ImportMode::Projectile => ActorCategory::Projectile,
+                ImportMode::Item => ActorCategory::Item,
                 _ => ActorCategory::Unknown,
             };
             
@@ -251,6 +253,7 @@ impl Realm667Importer {
                 ImportMode::Enemy => ActorCategory::Enemy,
                 ImportMode::Prop => ActorCategory::Prop,
                 ImportMode::Projectile => ActorCategory::Projectile,
+                ImportMode::Item => ActorCategory::Item,
                 ImportMode::Automatic => actor.determine_category(),
             };
 
@@ -321,6 +324,14 @@ impl Realm667Importer {
                     &label_sprites,
                 );
                 godot_print!("Realm667Importer: Created Godot data for prop {}", actor.name);
+            } else if category == ActorCategory::Item || category == ActorCategory::Ammo {
+                ResourceGenerator::generate_item_resources(
+                    &actor,
+                    &godot_data_root,
+                    &godot_data_res,
+                    &label_sprites,
+                );
+                godot_print!("Realm667Importer: Created Godot data for item {}", actor.name);
             }
         }
 

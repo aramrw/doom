@@ -2,9 +2,10 @@
 
 [ext_resource type="Script" uid="uid://dph1xsp2evfca" path="res://player/player.gd" id="1_oul6g"]
 [ext_resource type="Script" uid="uid://cm63mb3u7m2c1" path="res://weapons/weapon_manager.gd" id="2_rkbax"]
+[ext_resource type="Script" uid="uid://d08j1vl8tnk6f" path="res://items/inventory_manager.gd" id="3_invmgr"]
 [ext_resource type="Resource" uid="uid://d1ifsjtpvoctm" path="res://weapons/pistols/auto9/auto9_wpdata.tres" id="4_boad6"]
 [ext_resource type="Resource" uid="uid://dmac10wpdata" path="res://weapons/smgs/mac10/mac10_wpdata.tres" id="5_boad6"]
-[ext_resource type="Resource" path="res://weapons/melee/arcaneaxe/godot_data/quakeaxe_wpdata.tres" id="5_rgyib"]
+[ext_resource type="Resource" uid="uid://bso7weroymget" path="res://weapons/pistols/smcblaster/godot_data/smcblaster_wpdata.tres" id="5_rgyib"]
 [ext_resource type="Script" uid="uid://cb3fhq0jm1ik7" path="res://weapons/import_weapon.gd" id="6_boad6"]
 [ext_resource type="AudioStream" uid="uid://of6lbjkpy10h" path="res://weapons/shotguns/TOZ-34/SOUNDS/TOZSFIR.ogg" id="7_rgyib"]
 [ext_resource type="PackedScene" uid="uid://dee08knnxgt4m" path="res://ui/Pulsing Heart/hud.tscn" id="8_rgyib"]
@@ -16,6 +17,9 @@ script = ExtResource("1_oul6g")
 runspeed = 15.0
 SPEED = 3.0
 LOOK_SPEED = 1.8
+
+[node name="InventoryManager" type="Node" parent="." unique_id=987654321]
+script = ExtResource("3_invmgr")
 
 [node name="CharacterBody3D" type="CharacterBody3D" parent="." unique_id=995130082]
 collision_layer = 2
@@ -49,7 +53,7 @@ aim_raycast = NodePath("../CharacterBody3D/ShakeGimbal/Camera/AimRayCast")
 primary_weapon = ExtResource("5_boad6")
 secondary_weapon = ExtResource("4_boad6")
 third_weapon = ExtResource("5_rgyib")
-magazine_count = 2
+magazine_count = 3
 
 [node name="WeaponLayer" type="CanvasLayer" parent="WeaponManager" unique_id=2131710237]
 
@@ -61,6 +65,12 @@ speed_scale = 4.0
 [node name="ShootSound" type="AudioStreamPlayer" parent="WeaponManager" unique_id=1230038840]
 volume_db = -4.0
 bus = &"SfxBus"
+
+[node name="ItemLayer" type="CanvasLayer" parent="." unique_id=2131710238]
+
+[node name="ItemSprite" type="Sprite2D" parent="ItemLayer" unique_id=69001508]
+position = Vector2(100, 100)
+scale = Vector2(1.5, 1.5)
 
 [node name="Hud" parent="." unique_id=1142552128 instance=ExtResource("8_rgyib")]
 

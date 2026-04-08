@@ -1,0 +1,115 @@
+[gd_scene format=3 uid="uid://uskdi4242ngs"]
+
+[ext_resource type="PackedScene" uid="uid://np7iyav4dmn7" path="res://assets/rift/source/rift_small.fbx" id="1_p3iwk"]
+[ext_resource type="Material" uid="uid://ced7s5rd6i2tq" path="res://assets/rift/source/rift_shader_material.tres" id="2_1nwqx"]
+[ext_resource type="Script" uid="uid://dvc1fod423lcg" path="res://assets/rift/rift.gd" id="3_1nwqx"]
+
+[sub_resource type="Animation" id="Animation_p3iwk"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Rift:surface_material_override/1:shader_parameter/progress")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Rift:surface_material_override/0:shader_parameter/progress")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="Animation" id="Animation_eoxxn"]
+resource_name = "close"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Rift:surface_material_override/1:shader_parameter/progress")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [1.0, 0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Rift:surface_material_override/0:shader_parameter/progress")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [1.0, 0.0]
+}
+
+[sub_resource type="Animation" id="Animation_1nwqx"]
+resource_name = "open"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Rift:surface_material_override/1:shader_parameter/progress")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 1.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Rift:surface_material_override/0:shader_parameter/progress")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 1.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_4a1qv"]
+_data = {
+&"RESET": SubResource("Animation_p3iwk"),
+&"close": SubResource("Animation_eoxxn"),
+&"open": SubResource("Animation_1nwqx")
+}
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_eoxxn"]
+radius = 4.266045
+
+[node name="rift_small" unique_id=1646518957 instance=ExtResource("1_p3iwk")]
+
+[node name="Rift" parent="." index="0" unique_id=460857796]
+surface_material_override/0 = ExtResource("2_1nwqx")
+surface_material_override/1 = ExtResource("2_1nwqx")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="1" unique_id=1957991233]
+libraries/ = SubResource("AnimationLibrary_4a1qv")
+
+[node name="Area3D" type="Area3D" parent="." index="2" unique_id=836943702]
+collision_mask = 2
+script = ExtResource("3_1nwqx")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D" index="0" unique_id=1952102148]
+shape = SubResource("SphereShape3D_eoxxn")
+
+[connection signal="body_entered" from="Area3D" to="Area3D" method="_on_body_entered"]
+[connection signal="body_exited" from="Area3D" to="Area3D" method="_on_body_exited"]

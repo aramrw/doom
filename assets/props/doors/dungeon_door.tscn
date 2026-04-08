@@ -1,0 +1,61 @@
+[gd_scene format=3 uid="uid://ncxbsny2rh0x"]
+
+[ext_resource type="PackedScene" uid="uid://dk7dqyagft6tb" path="res://assets/props/doors/dungeon_door/dungeon_door.fbx" id="1_k11i3"]
+[ext_resource type="Script" uid="uid://1617clkcec1f" path="res://assets/props/doors/door.gd" id="2_yrfg3"]
+[ext_resource type="Resource" path="res://items/crosses/cross_1/godot_data/blackcrosskey_item.tres" id="3_ojfyf"]
+[ext_resource type="Shader" uid="uid://cbkf7u154gtqj" path="res://assets/props/doors/dissolve_door.gdshader" id="4_rrnu1"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_yrfg3"]
+seed = 3
+frequency = 0.05
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_r4nrd"]
+noise = SubResource("FastNoiseLite_yrfg3")
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_yrfg3"]
+points = PackedVector3Array(9.49473e-05, 0.010613345, 0.019991456, 0.00021748777, 0.009966306, 0.019989498, 0.00021748777, 0.010564115, 0.019989498, 0.00019289141, 0.016933694, 0.019989498, 4.7696398e-05, 0.016933694, 0.019989498, -7.313538e-07, 0.016335886, 0.019989498, -7.313538e-07, -0.0070161154, 0.019989498, 0.00019289141, -0.0070161154, 0.019989498, 0.00027091717, 0.009966306, 0.009214934, 0.00027091717, 0.010997817, 0.009214934, 0.00019289141, 0.01693135, -1.2781249e-09, 9.777176e-05, 0.016933694, 0.008618087, 0.00027091717, 0.010997817, 0.006463564, -7.313538e-07, 0.016933694, 0.01939265, -2.9387875e-05, 0.015616173, 0.013525934, -2.9652669e-05, -0.0034152044, 0.0070604114, -7.313538e-07, -0.0070161154, 0.015680455, 0.00019289141, -0.0070161154, -1.2781249e-09, 0.00027091717, 0.009966306, 0.006463564, 9.600648e-05, 0.01693135, -1.2781249e-09, 0.00021748777, 0.010564115, -1.2781249e-09, -7.313538e-07, 0.016933694, 0.008618087, -2.9387875e-05, 0.015620861, 0.012929087, -2.9652669e-05, -0.0033823836, 0.006463564, -7.313538e-07, -0.0070114266, 0.0005948894, 9.600648e-05, -0.0070161154, -1.2781249e-09, 0.00021748777, 0.009966306, -1.2781249e-09, 4.8520204e-05, 0.016929006, -1.2781249e-09, -7.313538e-07, 0.016929006, 0.0005948894, -7.313538e-07, 0.016335886, -1.2781249e-09, -7.313538e-07, -0.004291989, -1.2781249e-09, 3.1014424e-05, -0.0063807983, -1.2781249e-09, 4.8520204e-05, -0.0070114266, -1.2781249e-09)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1qkmr"]
+render_priority = 0
+shader = ExtResource("4_rrnu1")
+shader_parameter/noise_texture = SubResource("NoiseTexture2D_r4nrd")
+shader_parameter/dissolve_amount = 0.0
+shader_parameter/edge_width = 0.05
+shader_parameter/edge_color = Color(1, 0.5, 0, 1)
+
+[sub_resource type="Animation" id="Animation_yrfg3"]
+resource_name = "dissolve"
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_r4nrd"]
+_data = {
+&"dissolve": SubResource("Animation_yrfg3")
+}
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_yrfg3"]
+size = Vector3(0.7641754, 2.841919, 2.074707)
+
+[node name="Door" unique_id=1795032391 node_paths=PackedStringArray("door_mesh") instance=ExtResource("1_k11i3")]
+script = ExtResource("2_yrfg3")
+door_mesh = NodePath("G_dungeon_bars_door")
+dissolve_noise = SubResource("NoiseTexture2D_r4nrd")
+required_item = ExtResource("3_ojfyf")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="." index="0" unique_id=651951274]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" index="0" unique_id=349308834]
+transform = Transform3D(100, 0, 0, 0, -1.1920929e-05, 99.99999, 0, -99.99999, -1.1920929e-05, 0, 0, 0)
+shape = SubResource("ConvexPolygonShape3D_yrfg3")
+
+[node name="G_dungeon_bars_door" parent="." index="2" unique_id=1036544602]
+surface_material_override/0 = SubResource("ShaderMaterial_1qkmr")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="3" unique_id=959411124]
+libraries/ = SubResource("AnimationLibrary_r4nrd")
+
+[node name="Area3D" type="Area3D" parent="." index="4" unique_id=1791956838]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D" index="0" unique_id=273071893]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.07204437, 0.9209595, -0.5373535)
+shape = SubResource("BoxShape3D_yrfg3")
+
+[connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]

@@ -289,11 +289,32 @@ pub fn parse_actor(input: &str) -> IResult<&str, ActorDefinition> {
                 input = next_input;
             }
             Err(_e) => {
-                // Skip unknown things in actor block for robustness, or fail?
-                // For now, if it's not a closing brace, we might be stuck.
-                // Let's try to skip one token if we can't parse anything.
-                let (next_input, _) = ws(recognize(many1(none_of(" \t\n\r{}"))))(input)?;
-                input = next_input;
+                // Skip unknown things in actor block for robustness
+                if let Ok((next_input, _)) = ws(char('{'))(input) {
+                    // Skip balanced block
+                    let mut depth = 1;
+                    let mut temp_input = next_input;
+                    while depth > 0 && !temp_input.is_empty() {
+                        if let Ok((next, _)) = char::<&str, nom::error::Error<&str>>('{')(temp_input) {
+                            depth += 1;
+                            temp_input = next;
+                        } else if let Ok((next, _)) = char::<&str, nom::error::Error<&str>>('}')(temp_input) {
+                            depth -= 1;
+                            temp_input = next;
+                        } else if let Ok((next, _)) = multispace1::<&str, nom::error::Error<&str>>(temp_input) {
+                            temp_input = next;
+                        } else if !temp_input.is_empty() {
+                            temp_input = &temp_input[1..];
+                        }
+                    }
+                    input = temp_input;
+                } else if let Ok((next_input, _)) = ws(recognize(many1(none_of(" \t\n\r{}"))))(input) {
+                    input = next_input;
+                } else if !input.is_empty() {
+                    input = &input[1..];
+                } else {
+                    break;
+                }
             }
         }
     }

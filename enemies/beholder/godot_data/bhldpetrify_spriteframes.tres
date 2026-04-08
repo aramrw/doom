@@ -1,0 +1,62 @@
+[gd_resource type="SpriteFrames" format=3]
+
+[ext_resource type="Texture2D" path="res://enemies/beholder/godot_data/sprites/beholder/bhldpetrify/walk/PRAYA0.png" id="1_ext"]
+[ext_resource type="Texture2D" path="res://enemies/beholder/godot_data/sprites/beholder/bhldpetrify/walk/PRAYB0.png" id="2_ext"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1,
+"texture": ExtResource("1_ext")
+}, {
+"duration": 1,
+"texture": ExtResource("2_ext")
+}],
+"loop": true,
+"name": &"walk_1",
+"speed": 35.0
+}, {
+"frames": [{
+"duration": 1,
+"texture": ExtResource("1_ext")
+}, {
+"duration": 1,
+"texture": ExtResource("2_ext")
+}],
+"loop": true,
+"name": &"walk_2",
+"speed": 35.0
+}, {
+"frames": [{
+"duration": 1,
+"texture": ExtResource("1_ext")
+}, {
+"duration": 1,
+"texture": ExtResource("2_ext")
+}],
+"loop": true,
+"name": &"walk_3",
+"speed": 35.0
+}, {
+"frames": [{
+"duration": 1,
+"texture": ExtResource("1_ext")
+}, {
+"duration": 1,
+"texture": ExtResource("2_ext")
+}],
+"loop": true,
+"name": &"walk_4",
+"speed": 35.0
+}, {
+"frames": [{
+"duration": 1,
+"texture": ExtResource("1_ext")
+}, {
+"duration": 1,
+"texture": ExtResource("2_ext")
+}],
+"loop": true,
+"name": &"walk_5",
+"speed": 35.0
+}]

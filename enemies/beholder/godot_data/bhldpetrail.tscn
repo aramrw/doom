@@ -1,0 +1,43 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://enemies/grin/doom_enemy.gd" id="1_script"]
+[ext_resource type="Script" path="res://enemies/enemy_sounds.gd" id="2_sounds"]
+[ext_resource type="SpriteFrames" path="res://enemies/beholder/godot_data/bhldpetrail_spriteframes.tres" id="3_sprites"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1"]
+radius = 0.5000
+height = 1.4000
+
+[node name="DoomEnemy" type="CharacterBody3D"]
+floor_stop_on_slope = false
+safe_margin = 0.5
+script = ExtResource("1_script")
+speed = 0.0000
+meleerange = 1.6000
+damage = 5
+reactiontime = 0.2286
+pain_chance = 50
+health = 100
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7000, 0)
+shape = SubResource("CapsuleShape3D_1")
+
+[node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="."]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0.7000, 0)
+billboard = 2
+shaded = true
+texture_filter = 0
+sprite_frames = ExtResource("3_sprites")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+simplify_path = true
+
+[node name="RayCast3D" type="RayCast3D" parent="."]
+
+[node name="EnemySounds" type="AudioStreamPlayer3D" parent="."]
+bus = &"SfxBus"
+script = ExtResource("2_sounds")
+death_folder = "res://enemies/beholder/godot_data/sounds/bhldpetrail/death"
+hurt_folder = "res://enemies/beholder/godot_data/sounds/bhldpetrail/hurt"
+taunt_folder = "res://enemies/beholder/godot_data/sounds/bhldpetrail/taunt"

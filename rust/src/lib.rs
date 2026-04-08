@@ -2,6 +2,7 @@ use godot::prelude::*;
 
 pub mod realm667;
 pub use realm667::Realm667Importer;
+pub mod inventory;
 
 struct MyExtension;
 

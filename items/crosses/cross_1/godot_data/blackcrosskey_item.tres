@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="InventoryItemData" format=3 uid="uid://b4tivwmucef5q"]
+
+[ext_resource type="Script" uid="uid://qrr2ag1jia5c" path="res://items/inventory_item_data.gd" id="1_script"]
+[ext_resource type="SpriteFrames" uid="uid://vxjdwa5hkh3j" path="res://items/crosses/cross_1/godot_data/blackcrosskey_spriteframes.tres" id="2_sprites"]
+[ext_resource type="Texture2D" uid="uid://dkdfgfa6d7who" path="res://items/crosses/cross_1/godot_data/sprites/cross_1/blackcrosskey/idle/CROSJ0.png" id="3_icon"]
+
+[resource]
+script = ExtResource("1_script")
+icon = ExtResource("3_icon")
+item_name = "BlackCrossKey"
+sprite_frames = ExtResource("2_sprites")

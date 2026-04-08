@@ -702,14 +702,14 @@ r#"{{
         sf_content.push_str("]\n");
         let _ = fs::write(&sprite_frames_path, sf_content);
 
-        let autoplay_anim = if label_sprites.contains_key("spawn") {
-            "spawn"
-        } else if label_sprites.contains_key("idle") {
-            "idle"
+        let autoplay_anim = if label_sprites.contains_key("idle") {
+            "idle".to_string()
+        } else if label_sprites.contains_key("spawn") {
+            "spawn".to_string()
         } else if !label_sprites.is_empty() {
-            label_sprites.keys().next().unwrap()
+            label_sprites.keys().next().unwrap().to_lowercase()
         } else {
-            ""
+            "default".to_string()
         };
 
         // 2. Generate TSCN
@@ -760,5 +760,129 @@ autoplay = "{}"
         }
 
         let _ = fs::write(&tscn_path, tscn_content);
+    }
+
+    pub fn generate_item_resources(
+        actor: &ActorDefinition,
+        actor_root: &Path,
+        rel_base: &str,
+        label_sprites: &HashMap<String, Vec<(String, i32)>>,
+    ) {
+        let _ = fs::create_dir_all(actor_root);
+        let item_name = actor.name.to_lowercase();
+        let rel_path = rel_base.trim_end_matches('/');
+
+        // 1. Generate SpriteFrames
+        let sprite_frames_path = actor_root.join(format!("{}_spriteframes.tres", item_name));
+        let mut sf_content = String::from("[gd_resource type=\"SpriteFrames\" format=3]\n\n");
+        let mut ext_resources = Vec::new();
+        let mut animations = Vec::new();
+        let mut id_counter = 1;
+
+        let mut keys: Vec<_> = label_sprites.keys().collect();
+        keys.sort();
+
+        let mut first_sprite_path = String::new();
+
+        for anim_name in keys {
+            let sprites = label_sprites.get(anim_name).unwrap();
+            if sprites.is_empty() { continue; }
+            
+            let mut frames = Vec::new();
+            for (sprite_rel_path, duration) in sprites {
+                if first_sprite_path.is_empty() {
+                    first_sprite_path = sprite_rel_path.clone();
+                }
+                let id = format!("{}_ext", id_counter);
+                ext_resources.push(format!("[ext_resource type=\"Texture2D\" path=\"{}\" id=\"{}\"]", sprite_rel_path, id));
+                let dur = if *duration <= 0 { 1.0 } else { *duration as f32 };
+                frames.push(format!("{{\n\"duration\": {},\n\"texture\": ExtResource(\"{}\")\n}}", dur, id));
+                id_counter += 1;
+            }
+            
+            animations.push(format!(
+r#"{{
+"frames": [{}],
+"loop": true,
+"name": &"{}",
+"speed": 5.0
+}}"#, frames.join(", "), anim_name.to_lowercase()));
+        }
+
+        sf_content.push_str(&ext_resources.join("\n"));
+        sf_content.push_str("\n\n[resource]\nanimations = [");
+        sf_content.push_str(&animations.join(", "));
+        sf_content.push_str("]\n");
+        let _ = fs::write(&sprite_frames_path, sf_content);
+
+        let autoplay_anim = if label_sprites.contains_key("idle") {
+            "idle".to_string()
+        } else if label_sprites.contains_key("ground") {
+            "ground".to_string()
+        } else if !label_sprites.is_empty() {
+            label_sprites.keys().next().unwrap().to_lowercase()
+        } else {
+            "default".to_string()
+        };
+
+        // 2. Generate InventoryItemData (Resource)
+        let item_res_path = actor_root.join(format!("{}_item.tres", item_name));
+        let mut item_res_content = format!(
+r#"[gd_resource type="Resource" script_class="InventoryItemData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://items/inventory_item_data.gd" id="1_script"]
+[ext_resource type="SpriteFrames" path="{}/{}_spriteframes.tres" id="2_sprites"]
+"# , rel_path, item_name);
+
+        if !first_sprite_path.is_empty() {
+             item_res_content.push_str(&format!("[ext_resource type=\"Texture2D\" path=\"{}\" id=\"3_icon\"]\n", first_sprite_path));
+        }
+
+        item_res_content.push_str(&format!(
+r#"
+[resource]
+script = ExtResource("1_script")
+item_name = "{}"
+sprite_frames = ExtResource("2_sprites")
+"# , actor.name));
+
+        if !first_sprite_path.is_empty() {
+            item_res_content.push_str("icon = ExtResource(\"3_icon\")\n");
+        }
+
+        let _ = fs::write(&item_res_path, item_res_content);
+
+        // 3. Generate Pickup Scene
+        let pickup_path = actor_root.join(format!("{}_pickup.tscn", item_name));
+        let pickup_content = format!(
+r#"[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://items/pickup.gd" id="1_pickup"]
+[ext_resource type="Resource" path="{}/{}_item.tres" id="2_data"]
+[ext_resource type="SpriteFrames" path="{}/{}_spriteframes.tres" id="3_sprites"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_1"]
+radius = 0.5
+
+[node name="Pickup" type="Area3D"]
+collision_layer = 4
+collision_mask = 2
+script = ExtResource("1_pickup")
+data = ExtResource("2_data")
+mode = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+shape = SubResource("SphereShape3D_1")
+
+[node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+billboard = 2
+texture_filter = 0
+sprite_frames = ExtResource("3_sprites")
+autoplay = "{}"
+"#, rel_path, item_name, rel_path, item_name, autoplay_anim);
+        
+        let _ = fs::write(&pickup_path, pickup_content);
     }
 }

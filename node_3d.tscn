@@ -23,6 +23,9 @@
 [ext_resource type="PackedScene" uid="uid://dfu8ux3qx10qv" path="res://assets/props/demonic_props/godot_data/demonpedestal.tscn" id="21_s0gvp"]
 [ext_resource type="PackedScene" uid="uid://wq7jq8taaawf" path="res://assets/props/demonic_props/godot_data/demonbrazier2.tscn" id="22_s0gvp"]
 [ext_resource type="PackedScene" path="res://weapons/melee/arcaneaxe/godot_data/quakeaxe_pickup.tscn" id="23_vxd74"]
+[ext_resource type="PackedScene" uid="uid://uskdi4242ngs" path="res://assets/rift/rift.tscn" id="24_dhlwf"]
+[ext_resource type="PackedScene" path="res://items/crosses/cross_1/godot_data/blackcrosskey_pickup.tscn" id="25_5t8nk"]
+[ext_resource type="PackedScene" uid="uid://ncxbsny2rh0x" path="res://assets/props/doors/dungeon_door.tscn" id="26_j3e5s"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_i5arm"]
 shader = ExtResource("1_jka67")
@@ -243,3 +246,13 @@ transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 4.5666003, 3.85074, 0.9394176
 
 [node name="Pickup2" parent="." unique_id=83717827 instance=ExtResource("23_vxd74")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5879593, 5.05, -1.4095681)
+
+[node name="rift_small" parent="." unique_id=1646518957 instance=ExtResource("24_dhlwf")]
+transform = Transform3D(-0.03294584, 0, -0.9994571, 0, 1, 0, 0.9994571, 0, -0.03294584, -14.885087, 7.266092, -12.386184)
+
+[node name="Pickup3" parent="." unique_id=55469419 instance=ExtResource("25_5t8nk")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -14.44028, 4.542476, -9.671931)
+
+[node name="Door" parent="." unique_id=1795032391 instance=ExtResource("26_j3e5s")]
+transform = Transform3D(1.8982803, 0, -0.629708, 0, 2, 0, 0.629708, 0, 1.8982803, 2.5662248, 4.9651356, 0.1787306)
+required_item = null

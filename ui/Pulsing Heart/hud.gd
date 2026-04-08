@@ -8,6 +8,8 @@ extends CanvasLayer
 @onready var crosshair = $CenterContainer/TextureRect
 @onready var damage_flash = $DamageFlash
 @onready var pickup_label = $CenterContainer/PickupLabel
+@onready var inventory_icon = $InventoryIcon
+@onready var inventory_count = $InventoryIcon/CountLabel
 
 func _ready():
 	# Force the heart to start pulsing the moment the HUD loads
@@ -56,6 +58,19 @@ func update_weapon_ui(weapon: WeaponData):
 	else:
 		bullets.hide()
 		magazines.hide()
+
+func update_inventory_ui(item: InventoryItemData, count: int):
+	if item == null or count <= 0:
+		inventory_icon.hide()
+		return
+		
+	inventory_icon.show()
+	inventory_icon.texture = item.icon
+	if count > 1:
+		inventory_count.text = str(count)
+		inventory_count.show()
+	else:
+		inventory_count.hide()
 
 func set_pickup_hint(text: String):
 	if pickup_label:

@@ -1,0 +1,381 @@
+[gd_resource type="SpriteFrames" format=3]
+
+[ext_resource type="Texture2D" path="res://enemies/beholder/godot_data/sprites/beholder/beholder/attack/BHLDE1.png" id="1_ext"]
+[ext_resource type="Texture2D" path="res://enemies/beholder/godot_data/sprites/beholder/beholder/attack/BHLDG1.png" id="2_ext"]
+[ext_resource type="Texture2D" path="res://enemies/beholder/godot_data/sprites/beholder/beholder/attack/BHLDE2E8.png" id="3_ext"]
+[ext_resource type="Texture2D" path="res://enemies/beholder/godot_data/sprites/beholder/beholder/attack/BHLDG2G8.png" id="4_ext"]
+[ext_resource type="Texture2D" path="res://enemies/beholder/godot_data/sprites/beholder/beholder/attack/BHLDE3E7.png" id="5_ext"]
+[ext_resource type="Texture2D" path="res://enemies/beholder/godot_data/sprites/beholder/beholder/attack/BHLDG3G7.png" id="6_ext"]
+[ext_resource type="Texture2D" path="res://enemies/beholder/godot_data/sprites/beholder/beholder/attack/BHLDE4E6.png" id="7_ext"]
+[ext_resource type="Texture2D" path="res://enemies/beholder/godot_data/sprites/beholder/beholder/attack/BHLDG4G6.png" id="8_ext"]
+[ext_resource type="Texture2D" path="res://enemies/beholder/godot_data/sprites/beholder/beholder/attack/BHLDE5.png" id="9_ext"]
+[ext_resource type="Texture2D" path="res://enemies/beholder/godot_data/sprites/beholder/beholder/attack/BHLDG5.png" id="10_ext"]
+[ext_resource type="Texture2D" path="res://enemies/beholder/godot_data/sprites/beholder/beholder/death/BHLDJ0.png" id="11_ext"]
+[ext_resource type="Texture2D" path="res://enemies/beholder/godot_data/sprites/beholder/beholder/death/BHLDK0.png" id="12_ext"]
+[ext_resource type="Texture2D" path="res://enemies/beholder/godot_data/sprites/beholder/beholder/death/BHLDN0.png" id="13_ext"]
+[ext_resource type="Texture2D" path="res://enemies/beholder/godot_data/sprites/beholder/beholder/pain/BHLDH1.png" id="14_ext"]
+[ext_resource type="Texture2D" path="res://enemies/beholder/godot_data/sprites/beholder/beholder/pain/BHLDH2H8.png" id="15_ext"]
+[ext_resource type="Texture2D" path="res://enemies/beholder/godot_data/sprites/beholder/beholder/pain/BHLDH3H7.png" id="16_ext"]
+[ext_resource type="Texture2D" path="res://enemies/beholder/godot_data/sprites/beholder/beholder/pain/BHLDH4H6.png" id="17_ext"]
+[ext_resource type="Texture2D" path="res://enemies/beholder/godot_data/sprites/beholder/beholder/pain/BHLDH5.png" id="18_ext"]
+[ext_resource type="Texture2D" path="res://enemies/beholder/godot_data/sprites/beholder/beholder/walk/BHLDA1.png" id="19_ext"]
+[ext_resource type="Texture2D" path="res://enemies/beholder/godot_data/sprites/beholder/beholder/walk/BHLDB1.png" id="20_ext"]
+[ext_resource type="Texture2D" path="res://enemies/beholder/godot_data/sprites/beholder/beholder/walk/BHLDC1.png" id="21_ext"]
+[ext_resource type="Texture2D" path="res://enemies/beholder/godot_data/sprites/beholder/beholder/walk/BHLDD1.png" id="22_ext"]
+[ext_resource type="Texture2D" path="res://enemies/beholder/godot_data/sprites/beholder/beholder/walk/BHLDA2A8.png" id="23_ext"]
+[ext_resource type="Texture2D" path="res://enemies/beholder/godot_data/sprites/beholder/beholder/walk/BHLDB2B8.png" id="24_ext"]
+[ext_resource type="Texture2D" path="res://enemies/beholder/godot_data/sprites/beholder/beholder/walk/BHLDC2C8.png" id="25_ext"]
+[ext_resource type="Texture2D" path="res://enemies/beholder/godot_data/sprites/beholder/beholder/walk/BHLDD2D8.png" id="26_ext"]
+[ext_resource type="Texture2D" path="res://enemies/beholder/godot_data/sprites/beholder/beholder/walk/BHLDA3A7.png" id="27_ext"]
+[ext_resource type="Texture2D" path="res://enemies/beholder/godot_data/sprites/beholder/beholder/walk/BHLDB3B7.png" id="28_ext"]
+[ext_resource type="Texture2D" path="res://enemies/beholder/godot_data/sprites/beholder/beholder/walk/BHLDC3C7.png" id="29_ext"]
+[ext_resource type="Texture2D" path="res://enemies/beholder/godot_data/sprites/beholder/beholder/walk/BHLDD3D7.png" id="30_ext"]
+[ext_resource type="Texture2D" path="res://enemies/beholder/godot_data/sprites/beholder/beholder/walk/BHLDA4A6.png" id="31_ext"]
+[ext_resource type="Texture2D" path="res://enemies/beholder/godot_data/sprites/beholder/beholder/walk/BHLDB4B6.png" id="32_ext"]
+[ext_resource type="Texture2D" path="res://enemies/beholder/godot_data/sprites/beholder/beholder/walk/BHLDC4C6.png" id="33_ext"]
+[ext_resource type="Texture2D" path="res://enemies/beholder/godot_data/sprites/beholder/beholder/walk/BHLDD4D6.png" id="34_ext"]
+[ext_resource type="Texture2D" path="res://enemies/beholder/godot_data/sprites/beholder/beholder/walk/BHLDA5.png" id="35_ext"]
+[ext_resource type="Texture2D" path="res://enemies/beholder/godot_data/sprites/beholder/beholder/walk/BHLDB5.png" id="36_ext"]
+[ext_resource type="Texture2D" path="res://enemies/beholder/godot_data/sprites/beholder/beholder/walk/BHLDC5.png" id="37_ext"]
+[ext_resource type="Texture2D" path="res://enemies/beholder/godot_data/sprites/beholder/beholder/walk/BHLDD5.png" id="38_ext"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 4,
+"texture": ExtResource("1_ext")
+}, {
+"duration": 4,
+"texture": ExtResource("2_ext")
+}, {
+"duration": 8,
+"texture": ExtResource("2_ext")
+}],
+"loop": true,
+"name": &"attack_1",
+"speed": 35.0
+}, {
+"frames": [{
+"duration": 4,
+"texture": ExtResource("3_ext")
+}, {
+"duration": 4,
+"texture": ExtResource("4_ext")
+}, {
+"duration": 8,
+"texture": ExtResource("4_ext")
+}],
+"loop": true,
+"name": &"attack_2",
+"speed": 35.0
+}, {
+"frames": [{
+"duration": 4,
+"texture": ExtResource("5_ext")
+}, {
+"duration": 4,
+"texture": ExtResource("6_ext")
+}, {
+"duration": 8,
+"texture": ExtResource("6_ext")
+}],
+"loop": true,
+"name": &"attack_3",
+"speed": 35.0
+}, {
+"frames": [{
+"duration": 4,
+"texture": ExtResource("7_ext")
+}, {
+"duration": 4,
+"texture": ExtResource("8_ext")
+}, {
+"duration": 8,
+"texture": ExtResource("8_ext")
+}],
+"loop": true,
+"name": &"attack_4",
+"speed": 35.0
+}, {
+"frames": [{
+"duration": 4,
+"texture": ExtResource("9_ext")
+}, {
+"duration": 4,
+"texture": ExtResource("10_ext")
+}, {
+"duration": 8,
+"texture": ExtResource("10_ext")
+}],
+"loop": true,
+"name": &"attack_5",
+"speed": 35.0
+}, {
+"frames": [{
+"duration": 8,
+"texture": ExtResource("11_ext")
+}, {
+"duration": 8,
+"texture": ExtResource("12_ext")
+}, {
+"duration": 8,
+"texture": ExtResource("13_ext")
+}],
+"loop": false,
+"name": &"death_1",
+"speed": 35.0
+}, {
+"frames": [{
+"duration": 8,
+"texture": ExtResource("11_ext")
+}, {
+"duration": 8,
+"texture": ExtResource("12_ext")
+}, {
+"duration": 8,
+"texture": ExtResource("13_ext")
+}],
+"loop": false,
+"name": &"death_2",
+"speed": 35.0
+}, {
+"frames": [{
+"duration": 1,
+"texture": ExtResource("14_ext")
+}, {
+"duration": 1,
+"texture": ExtResource("15_ext")
+}, {
+"duration": 1,
+"texture": ExtResource("16_ext")
+}, {
+"duration": 1,
+"texture": ExtResource("17_ext")
+}, {
+"duration": 1,
+"texture": ExtResource("18_ext")
+}, {
+"duration": 8,
+"texture": ExtResource("14_ext")
+}, {
+"duration": 8,
+"texture": ExtResource("15_ext")
+}, {
+"duration": 8,
+"texture": ExtResource("16_ext")
+}, {
+"duration": 8,
+"texture": ExtResource("17_ext")
+}, {
+"duration": 8,
+"texture": ExtResource("18_ext")
+}],
+"loop": false,
+"name": &"pain_1",
+"speed": 35.0
+}, {
+"frames": [{
+"duration": 3,
+"texture": ExtResource("19_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("19_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("20_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("20_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("21_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("21_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("22_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("22_ext")
+}, {
+"duration": 10,
+"texture": ExtResource("19_ext")
+}, {
+"duration": 10,
+"texture": ExtResource("20_ext")
+}, {
+"duration": 10,
+"texture": ExtResource("21_ext")
+}, {
+"duration": 10,
+"texture": ExtResource("22_ext")
+}],
+"loop": true,
+"name": &"walk_1",
+"speed": 35.0
+}, {
+"frames": [{
+"duration": 3,
+"texture": ExtResource("23_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("23_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("24_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("24_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("25_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("25_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("26_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("26_ext")
+}, {
+"duration": 10,
+"texture": ExtResource("23_ext")
+}, {
+"duration": 10,
+"texture": ExtResource("24_ext")
+}, {
+"duration": 10,
+"texture": ExtResource("25_ext")
+}, {
+"duration": 10,
+"texture": ExtResource("26_ext")
+}],
+"loop": true,
+"name": &"walk_2",
+"speed": 35.0
+}, {
+"frames": [{
+"duration": 3,
+"texture": ExtResource("27_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("27_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("28_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("28_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("29_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("29_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("30_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("30_ext")
+}, {
+"duration": 10,
+"texture": ExtResource("27_ext")
+}, {
+"duration": 10,
+"texture": ExtResource("28_ext")
+}, {
+"duration": 10,
+"texture": ExtResource("29_ext")
+}, {
+"duration": 10,
+"texture": ExtResource("30_ext")
+}],
+"loop": true,
+"name": &"walk_3",
+"speed": 35.0
+}, {
+"frames": [{
+"duration": 3,
+"texture": ExtResource("31_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("31_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("32_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("32_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("33_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("33_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("34_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("34_ext")
+}, {
+"duration": 10,
+"texture": ExtResource("31_ext")
+}, {
+"duration": 10,
+"texture": ExtResource("32_ext")
+}, {
+"duration": 10,
+"texture": ExtResource("33_ext")
+}, {
+"duration": 10,
+"texture": ExtResource("34_ext")
+}],
+"loop": true,
+"name": &"walk_4",
+"speed": 35.0
+}, {
+"frames": [{
+"duration": 3,
+"texture": ExtResource("35_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("35_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("36_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("36_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("37_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("37_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("38_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("38_ext")
+}, {
+"duration": 10,
+"texture": ExtResource("35_ext")
+}, {
+"duration": 10,
+"texture": ExtResource("36_ext")
+}, {
+"duration": 10,
+"texture": ExtResource("37_ext")
+}, {
+"duration": 10,
+"texture": ExtResource("38_ext")
+}],
+"loop": true,
+"name": &"walk_5",
+"speed": 35.0
+}]

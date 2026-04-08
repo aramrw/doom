@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="InventoryItemData" load_steps=2 format=3 uid="uid://blue_card_item"]
+
+[ext_resource type="Script" uid="uid://items/inventory_item_data.gd" path="res://items/inventory_item_data.gd" id="1_blue_card"]
+
+[resource]
+script = ExtResource("1_blue_card")
+item_name = "Blue Card"
+description = "A blue security card"
+is_consumable = false
+max_stack = 1

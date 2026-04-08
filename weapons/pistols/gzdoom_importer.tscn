@@ -1,5 +1,5 @@
 [gd_scene format=3 uid="uid://b8x6l0pho2vbp"]
 
 [node name="GZDOOM_IMPORTER" type="Realm667Importer" unique_id=1185607918]
-pk3_path = "res://weapons/melee/ArcaneAxe.zip"
-import_mode = 1
+pk3_path = "res://items/crosses/cross_1.zip"
+import_mode = 3

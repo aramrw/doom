@@ -4,8 +4,10 @@ extends Node3D
 @onready var shake_gimbal: Node3D = $CharacterBody3D/ShakeGimbal
 @onready var body: CharacterBody3D = $CharacterBody3D
 @onready var weapon_manager = $WeaponManager
+@onready var inventory_manager = $InventoryManager
 @onready var default_height = camera.position.y
 @onready var gun_sprite = $WeaponManager/WeaponLayer/GunSprite
+@onready var item_sprite = $ItemLayer/ItemSprite
 @onready var hud = $Hud
 
 var trauma: float = 0.0
@@ -40,6 +42,7 @@ const GUN_BOB_AMP_Y = 5.0
 
 var tbob = 0.0
 var gun_default_pos = Vector2.ZERO 
+var item_default_pos = Vector2.ZERO
 var last_targeted_node: Node3D = null
 
 # --- NEW HEALTH VARIABLES ---
@@ -50,6 +53,7 @@ func _ready():
 	add_to_group("Player")
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	gun_default_pos = gun_sprite.position
+	item_default_pos = item_sprite.position
 	
 	noise.seed = randi()
 	noise.frequency = 0.5
@@ -60,11 +64,26 @@ func _ready():
 	weapon_manager.magazine_count_updated.connect(hud.update_magazines)
 	hud.update_magazines(weapon_manager.magazine_count)
 	
+	inventory_manager.inventory_changed.connect(_on_inventory_changed)
+	_on_inventory_changed()
+	
 	if weapon_manager.current_weapon:
 		hud.update_weapon_ui(weapon_manager.current_weapon)
 	
 	if hud:
 		hud.update_health(health)
+
+func _on_inventory_changed():
+	if hud:
+		var active = inventory_manager.get_active_item()
+		var count = 0
+		if active:
+			count = inventory_manager.counts.get(active.item_name, 0)
+			item_sprite.texture = active.icon
+			item_sprite.visible = true
+		else:
+			item_sprite.visible = false
+		hud.update_inventory_ui(active, count)
 
 func _process(delta):
 	# Don't allow shooting/reloading while dialogue is active
@@ -76,6 +95,16 @@ func _process(delta):
 			weapon_manager.fire()
 		if Input.is_action_just_pressed("reload"):
 			weapon_manager.reload()
+		
+		if Input.is_action_just_pressed("inv_next"):
+			inventory_manager.cycle_next()
+		if Input.is_action_just_pressed("inv_prev"):
+			inventory_manager.cycle_prev()
+		if Input.is_action_just_pressed("inv_use"):
+			inventory_manager.use_active_item(self)
+			
+		if Input.is_key_pressed(KEY_5):
+			inventory_manager.cycle_next()
 		
 	if Input.is_action_just_pressed("interact"):
 		handle_interaction()
@@ -170,7 +199,7 @@ func handle_interaction():
 		while current:
 			if current.has_method("interact"):
 				print("Player: Calling interact() on ", current.name)
-				current.interact()
+				current.interact(self)
 				return
 			current = current.get_parent()
 		
@@ -192,11 +221,14 @@ func handle_interaction():
 		var collider = result.collider
 		print("Player: proximity found: ", collider.name, " on layer: ", collider.collision_layer)
 		if collider.has_method("interact"):
-			collider.interact()
+			collider.interact(self)
 			return
 		elif collider.get_parent() and collider.get_parent().has_method("interact"):
-			collider.get_parent().interact()
+			collider.get_parent().interact(self)
 			return
+
+func get_inventory_manager() -> Node:
+	return inventory_manager
 
 func _physics_process(delta: float) -> void:
 	if not body.is_on_floor():
@@ -252,13 +284,22 @@ func _physics_process(delta: float) -> void:
 	gun_bob_pos.y = sin(tbob * BOB_FREQ) * GUN_BOB_AMP_Y
 	gun_bob_pos.x = cos(tbob * BOB_FREQ / 2) * GUN_BOB_AMP_X
 	gun_sprite.position = gun_default_pos + gun_bob_pos
+	
+	# 6. Handle Item Bob
+	var item_bob_pos = Vector2.ZERO
+	item_bob_pos.y = sin(tbob * BOB_FREQ * 0.8) * GUN_BOB_AMP_Y * 0.5
+	item_bob_pos.x = cos(tbob * BOB_FREQ / 2.5) * GUN_BOB_AMP_X * 0.5
+	item_sprite.position = item_default_pos + item_bob_pos
 
-	# 6. Actually move the body
+	# 7. Actually move the body
 	body.move_and_slide()
 	
 func handle_pickup(resource: PickupResource) -> bool:
 	if resource == null:
 		return false
+		
+	if resource is InventoryItemData:
+		return inventory_manager.add_item(resource as InventoryItemData)
 		
 	if resource is ItemData:
 		var item = resource as ItemData
@@ -330,6 +371,9 @@ func die():
 
 func add_trauma(amount: float):
 	trauma = clamp(trauma + amount, 0.0, 1.0)
+
+func has_inventory_item(item_name: String) -> bool:
+	return inventory_manager.has_item(item_name)
 
 func _process_camera_shake(delta):
 	if trauma > 0:
