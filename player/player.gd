@@ -5,9 +5,9 @@ extends Node3D
 @onready var body: CharacterBody3D = $CharacterBody3D
 @onready var weapon_manager = $WeaponManager
 @onready var inventory_manager = $InventoryManager
+@onready var item_manager = $ItemManager
 @onready var default_height = camera.position.y
 @onready var gun_sprite = $WeaponManager/WeaponLayer/GunSprite
-@onready var item_sprite = $ItemLayer/ItemSprite
 @onready var hud = $Hud
 
 var trauma: float = 0.0
@@ -53,7 +53,7 @@ func _ready():
 	add_to_group("Player")
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	gun_default_pos = gun_sprite.position
-	item_default_pos = item_sprite.position
+	item_default_pos = item_manager.item_sprite.position
 	
 	noise.seed = randi()
 	noise.frequency = 0.5
@@ -79,10 +79,8 @@ func _on_inventory_changed():
 		var count = 0
 		if active:
 			count = inventory_manager.counts.get(active.item_name, 0)
-			item_sprite.texture = active.icon
-			item_sprite.visible = true
-		else:
-			item_sprite.visible = false
+		
+		item_manager.update_item(active)
 		hud.update_inventory_ui(active, count)
 
 func _process(delta):
@@ -91,10 +89,11 @@ func _process(delta):
 	var in_dialogue = dialogue_ui and dialogue_ui.is_active
 	
 	if not in_dialogue:
-		if Input.is_action_just_pressed("shoot"): 
-			weapon_manager.fire()
-		if Input.is_action_just_pressed("reload"):
-			weapon_manager.reload()
+		if not item_manager.is_active:
+			if Input.is_action_just_pressed("shoot"): 
+				weapon_manager.fire()
+			if Input.is_action_just_pressed("reload"):
+				weapon_manager.reload()
 		
 		if Input.is_action_just_pressed("inv_next"):
 			inventory_manager.cycle_next()
@@ -104,22 +103,27 @@ func _process(delta):
 			inventory_manager.use_active_item(self)
 			
 		if Input.is_key_pressed(KEY_5):
-			inventory_manager.cycle_next()
+			var active = inventory_manager.get_active_item()
+			if active:
+				item_manager.activate(active)
 		
 	if Input.is_action_just_pressed("interact"):
 		handle_interaction()
 		
 	if Input.is_key_pressed(KEY_1):
+		item_manager.deactivate()
 		weapon_manager.switch_to_slot("primary")
 		if weapon_manager.current_weapon:
 			hud.update_weapon_ui(weapon_manager.current_weapon)
 	
 	if Input.is_key_pressed(KEY_2):
+		item_manager.deactivate()
 		weapon_manager.switch_to_slot("secondary")
 		if weapon_manager.current_weapon:
 			hud.update_weapon_ui(weapon_manager.current_weapon)
 	
 	if Input.is_key_pressed(KEY_3):
+		item_manager.deactivate()
 		weapon_manager.switch_to_slot("third")
 		if weapon_manager.current_weapon:
 			hud.update_weapon_ui(weapon_manager.current_weapon)
@@ -286,10 +290,11 @@ func _physics_process(delta: float) -> void:
 	gun_sprite.position = gun_default_pos + gun_bob_pos
 	
 	# 6. Handle Item Bob
-	var item_bob_pos = Vector2.ZERO
-	item_bob_pos.y = sin(tbob * BOB_FREQ * 0.8) * GUN_BOB_AMP_Y * 0.5
-	item_bob_pos.x = cos(tbob * BOB_FREQ / 2.5) * GUN_BOB_AMP_X * 0.5
-	item_sprite.position = item_default_pos + item_bob_pos
+	if item_manager.is_active:
+		var item_bob_pos = Vector2.ZERO
+		item_bob_pos.y = sin(tbob * BOB_FREQ * 0.8) * GUN_BOB_AMP_Y * 0.5
+		item_bob_pos.x = cos(tbob * BOB_FREQ / 2.5) * GUN_BOB_AMP_X * 0.5
+		item_manager.item_sprite.position = item_default_pos + item_bob_pos
 
 	# 7. Actually move the body
 	body.move_and_slide()
