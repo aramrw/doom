@@ -10,6 +10,10 @@ extends Node3D
 @export var required_item: InventoryItemData
 @export var is_open: bool = false
 
+func _ready():
+	if not Engine.is_editor_hint():
+		_setup_shader()
+
 func _setup_shader():
 	if not door_mesh: return
 	
