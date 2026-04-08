@@ -112,7 +112,7 @@ func take_damage(amount: int):
 		target_node = player.body
 	super.take_damage(amount)
 
-func interact():
+func interact(_player: Node = null):
 	if npc_state == NPCState.COMBAT: return
 	
 	print("NPC: Interaction started with ", npc_display_name)

@@ -6,17 +6,11 @@
 [ext_resource type="Texture2D" uid="uid://dilamubi83bjj" path="res://weapons/melee/arcaneaxe/godot_data/sprites/arcaneaxe/quakeaxe/shoot/QAXEC0.png" id="10_ext"]
 [ext_resource type="Texture2D" uid="uid://cru5c1ml0ch4a" path="res://weapons/melee/arcaneaxe/godot_data/sprites/arcaneaxe/quakeaxe/shoot/QAXED0.png" id="12_ext"]
 [ext_resource type="Texture2D" uid="uid://cenur3lp8bbxp" path="res://weapons/melee/arcaneaxe/godot_data/sprites/arcaneaxe/quakeaxe/shoot/QAXEE0.png" id="14_ext"]
-[ext_resource type="Texture2D" uid="uid://dq2dsgymf1nm" path="res://weapons/melee/arcaneaxe/godot_data/sprites/arcaneaxe/quakeaxe/shoot/QAXEF0.png" id="18_ext"]
-[ext_resource type="Texture2D" uid="uid://wgrvym2i0qs" path="res://weapons/melee/arcaneaxe/godot_data/sprites/arcaneaxe/quakeaxe/shoot/QAXEG0.png" id="20_ext"]
-[ext_resource type="Texture2D" uid="uid://c87fi4xn7fr1w" path="res://weapons/melee/arcaneaxe/godot_data/sprites/arcaneaxe/quakeaxe/shoot/QAXEH0.png" id="22_ext"]
 [ext_resource type="Texture2D" uid="uid://co8iirpdmh7gf" path="res://weapons/melee/arcaneaxe/godot_data/sprites/arcaneaxe/quakeaxe/shoot/QAXEI0.png" id="24_ext"]
 
 [resource]
 animations = [{
 "frames": [{
-"duration": 1.0,
-"texture": ExtResource("2_ext")
-}, {
 "duration": 1.0,
 "texture": ExtResource("2_ext")
 }],
@@ -25,9 +19,6 @@ animations = [{
 "speed": 35.0
 }, {
 "frames": [{
-"duration": 1.0,
-"texture": ExtResource("4_ext")
-}, {
 "duration": 1.0,
 "texture": ExtResource("4_ext")
 }],
@@ -39,9 +30,6 @@ animations = [{
 "duration": 1.0,
 "texture": ExtResource("8_ext")
 }, {
-"duration": 1.0,
-"texture": ExtResource("8_ext")
-}, {
 "duration": 2.0,
 "texture": ExtResource("8_ext")
 }, {
@@ -65,30 +53,6 @@ animations = [{
 }, {
 "duration": 2.0,
 "texture": ExtResource("14_ext")
-}, {
-"duration": 2.0,
-"texture": ExtResource("24_ext")
-}, {
-"duration": 2.0,
-"texture": ExtResource("24_ext")
-}, {
-"duration": 2.0,
-"texture": ExtResource("18_ext")
-}, {
-"duration": 2.0,
-"texture": ExtResource("18_ext")
-}, {
-"duration": 2.0,
-"texture": ExtResource("20_ext")
-}, {
-"duration": 2.0,
-"texture": ExtResource("20_ext")
-}, {
-"duration": 2.0,
-"texture": ExtResource("22_ext")
-}, {
-"duration": 2.0,
-"texture": ExtResource("22_ext")
 }, {
 "duration": 2.0,
 "texture": ExtResource("24_ext")

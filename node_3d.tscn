@@ -19,7 +19,6 @@
 [ext_resource type="PackedScene" uid="uid://b45e5hjqdka1g" path="res://npcs/shotgun_monk.tscn" id="18_monk"]
 [ext_resource type="PackedScene" uid="uid://by41h2dwu1l1k" path="res://assets/lights/torches/fire/fire.tscn" id="20_jsnrv"]
 [ext_resource type="PackedScene" uid="uid://bdyggv7inv1k1" path="res://weapons/magic/holysnow/godot_data/holysnow_pickup.tscn" id="20_lggff"]
-[ext_resource type="PackedScene" uid="uid://dtq7atqe1rcdd" path="res://enemies/plaguerat/godot_data/plaguerat.tscn" id="21_lggff"]
 [ext_resource type="PackedScene" uid="uid://dfu8ux3qx10qv" path="res://assets/props/demonic_props/godot_data/demonpedestal.tscn" id="21_s0gvp"]
 [ext_resource type="PackedScene" uid="uid://wq7jq8taaawf" path="res://assets/props/demonic_props/godot_data/demonbrazier2.tscn" id="22_s0gvp"]
 [ext_resource type="PackedScene" path="res://weapons/melee/arcaneaxe/godot_data/quakeaxe_pickup.tscn" id="23_vxd74"]
@@ -27,6 +26,7 @@
 [ext_resource type="PackedScene" path="res://items/crosses/cross_1/godot_data/blackcrosskey_pickup.tscn" id="25_5t8nk"]
 [ext_resource type="PackedScene" uid="uid://ncxbsny2rh0x" path="res://assets/props/doors/dungeon_door.tscn" id="26_j3e5s"]
 [ext_resource type="Resource" uid="uid://b4tivwmucef5q" path="res://items/crosses/cross_1/godot_data/blackcrosskey_item.tres" id="27_nu31w"]
+[ext_resource type="Resource" path="res://items/crosses/cross_1/godot_data/redcrosskey_item.tres" id="28_obt1j"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_i5arm"]
 shader = ExtResource("1_jka67")
@@ -113,11 +113,31 @@ transform = Transform3D(37.587704, 0, 1.7101004, 0, 20, 0, -13.680803, 0, 4.6984
 mesh = SubResource("BoxMesh_jka67")
 
 [node name="ShipWall8" parent="NavigationRegion3D" unique_id=1192730142 instance=ExtResource("3_a0tk4")]
-transform = Transform3D(37.587704, 0, 1.7101004, 0, 20, 0, -13.680803, 0, 4.698463, -21.27398, 3.0055518, 38.12054)
+transform = Transform3D(37.587704, 0, 1.7101004, 0, 20, 0, -13.680803, 0, 4.698463, -17.987465, 3.0055518, 38.12054)
+mesh = SubResource("BoxMesh_jka67")
+
+[node name="ShipWall12" parent="NavigationRegion3D" unique_id=740816259 instance=ExtResource("3_a0tk4")]
+transform = Transform3D(37.587704, 0, 1.7101004, 0, 20, 0, -13.680803, 0, 4.698463, -17.987465, 3.0055518, 60.79554)
+mesh = SubResource("BoxMesh_jka67")
+
+[node name="ShipWall13" parent="NavigationRegion3D" unique_id=1811090289 instance=ExtResource("3_a0tk4")]
+transform = Transform3D(37.587704, 0, 1.7101004, 0, 20, 0, -13.680803, 0, 4.698463, -47.710056, 13.699953, 68.03515)
+mesh = SubResource("BoxMesh_jka67")
+
+[node name="ShipWall14" parent="NavigationRegion3D" unique_id=1076484717 instance=ExtResource("3_a0tk4")]
+transform = Transform3D(37.587704, 0, 1.7101004, 0, 20, 0, -13.680803, 0, 4.698463, 17.525433, 13.699953, 42.503876)
+mesh = SubResource("BoxMesh_jka67")
+
+[node name="ShipWall10" parent="NavigationRegion3D" unique_id=1293829854 instance=ExtResource("3_a0tk4")]
+transform = Transform3D(17.301056, 0, 4.5081058, 0, 19.999998, 0, -36.064846, 0, 2.162632, -21.27398, 2.9833279, 30.62941)
 mesh = SubResource("BoxMesh_jka67")
 
 [node name="ShipWall9" parent="NavigationRegion3D" unique_id=1449198761 instance=ExtResource("3_a0tk4")]
 transform = Transform3D(37.587704, 0, 1.7101004, 0, 20, 0, -13.680803, 0, 4.698463, -58.712494, 2.9010606, 51.506832)
+mesh = SubResource("BoxMesh_jka67")
+
+[node name="ShipWall11" parent="NavigationRegion3D" unique_id=1827299597 instance=ExtResource("3_a0tk4")]
+transform = Transform3D(15.214409, 0, -4.6241913, 0, 19.999998, 0, 36.99353, 0, 1.9018011, -65.33133, 2.9010606, 33.50639)
 mesh = SubResource("BoxMesh_jka67")
 
 [node name="ShipWall2" parent="NavigationRegion3D" unique_id=1140889312 instance=ExtResource("3_a0tk4")]
@@ -145,7 +165,7 @@ transform = Transform3D(16.879135, 0.13849756, 3.6881711, 0.62314993, 19.983416,
 mesh = SubResource("BoxMesh_jka67")
 
 [node name="ShipCeiling" parent="NavigationRegion3D" unique_id=1475911580 instance=ExtResource("6_i5arm")]
-transform = Transform3D(100, 0, 0, 0, 0.1, 0, 0, 0, 100, -20.814, 5, -1.693)
+transform = Transform3D(200, 0, 0, 0, 0.2, 0, 0, 0, 200, -20.814, 5, -1.693)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="NavigationRegion3D" unique_id=943102905]
 cast_shadow = 0
@@ -193,6 +213,15 @@ transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -1.8501658, 10.3097725, -13.3
 [node name="WallTorchBlack5" parent="." unique_id=1229692305 instance=ExtResource("13_imku0")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -16.56237, 6.7422633, -12.564887)
 
+[node name="WallTorchBlack15" parent="." unique_id=2030222232 instance=ExtResource("13_imku0")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -26.078598, 6.7422633, -12.022412)
+
+[node name="WallTorchBlack16" parent="." unique_id=1267153315 instance=ExtResource("13_imku0")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -34.480827, 6.7422633, -7.933001)
+
+[node name="WallTorchBlack17" parent="." unique_id=1933221357 instance=ExtResource("13_imku0")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -43.828564, 6.7422633, -3.9410822)
+
 [node name="WallTorchBlack" parent="." unique_id=355198309 instance=ExtResource("14_wlxy5")]
 transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, -5.8310413, 5.9201093, 2.0631137)
 
@@ -201,6 +230,21 @@ transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 2.465754, 6.136967, -2.980298
 
 [node name="WallTorchBlack7" parent="." unique_id=220572612 instance=ExtResource("14_wlxy5")]
 transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, -22.752525, 5.9201093, 4.8539376)
+
+[node name="WallTorchBlack11" parent="." unique_id=10013908 instance=ExtResource("14_wlxy5")]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, -54.915676, 5.9201093, 4.8539376)
+
+[node name="WallTorchBlack12" parent="." unique_id=1054695455 instance=ExtResource("14_wlxy5")]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, -63.014614, 5.9201093, 29.44283)
+
+[node name="WallTorchBlack14" parent="." unique_id=2112900652 instance=ExtResource("14_wlxy5")]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, -50.378796, 5.9865727, 44.786476)
+
+[node name="WallTorchBlack18" parent="." unique_id=1331989703 instance=ExtResource("14_wlxy5")]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, -41.654823, 5.9865727, 22.584173)
+
+[node name="WallTorchBlack13" parent="." unique_id=264976258 instance=ExtResource("14_wlxy5")]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, -62.619347, 5.9201093, 12.092464)
 
 [node name="Column" parent="." unique_id=1734774161 instance=ExtResource("15_3v7ru")]
 transform = Transform3D(19, 0, 0, 0, 19, 0, 0, 0, 19, -31.991247, 17.27365, 13.375191)
@@ -227,14 +271,8 @@ follows_player = false
 meleerange = 4.0
 health = 500
 
-[node name="Fire" parent="." unique_id=494991560 instance=ExtResource("20_jsnrv")]
-transform = Transform3D(40, 0, 0, 0, 40, 0, 0, 0, 40, -12.998892, 16.37592, 8.25909)
-
 [node name="Fire2" parent="." unique_id=1944567405 instance=ExtResource("20_jsnrv")]
 transform = Transform3D(24.290804, 0, -17.605587, 0, 29.999998, 0, 17.605587, 0, 24.290804, -8.910022, 10.895618, -11.1331415)
-
-[node name="DoomEnemy" parent="." unique_id=715377368 instance=ExtResource("21_lggff")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -42.780758, 5.165, 4.4505496)
 
 [node name="Pickup" parent="." unique_id=392349365 instance=ExtResource("20_lggff")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.053176165, 5.05, -8.93398)
@@ -257,3 +295,7 @@ transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -14.44028, 4.542476, -9
 [node name="Door" parent="." unique_id=1795032391 instance=ExtResource("26_j3e5s")]
 transform = Transform3D(1.8982803, 0, -0.629708, 0, 2, 0, 0.629708, 0, 1.8982803, 2.5662248, 4.9651356, 0.1787306)
 required_item = ExtResource("27_nu31w")
+
+[node name="Door2" parent="." unique_id=203964868 instance=ExtResource("26_j3e5s")]
+transform = Transform3D(0.42567152, 0, -1.4383337, 0, 1.5, 0, 1.4383337, 0, 0.42567152, -38.414143, 5.1286755, 46.318546)
+required_item = ExtResource("28_obt1j")
