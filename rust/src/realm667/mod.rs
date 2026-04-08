@@ -1,13 +1,12 @@
 pub mod actor;
 pub mod asset_handler;
-pub mod lexer;
-pub mod parser;
+pub mod nom_parser;
 pub mod resource_gen;
 pub mod parser_tests;
 
 use crate::realm667::actor::{ActorCategory, ActorDefinition};
 use crate::realm667::asset_handler::AssetHandler;
-use crate::realm667::parser::Parser;
+use crate::realm667::nom_parser::{parse_document, parse_sndinfo};
 use crate::realm667::resource_gen::ResourceGenerator;
 use godot::classes::{ProjectSettings, EditorInterface};
 use godot::prelude::*;
@@ -115,8 +114,13 @@ impl Realm667Importer {
             return;
         }
 
-        let mut parser = Parser::new(&script_content);
-        let mut actors = parser.parse_actors();
+        let mut actors = match parse_document(&script_content) {
+            Ok(a) => a,
+            Err(e) => {
+                godot_error!("Realm667Importer: Parse error: {}", e);
+                return;
+            }
+        };
 
         if actors.is_empty() {
             godot_warn!("Realm667Importer: No actors found in scripts.");
@@ -232,8 +236,7 @@ impl Realm667Importer {
         for snd_name in sndinfo_names {
             let mut visited = HashSet::new();
             if let Some(content) = self.read_zip_file_recursive(&mut archive, snd_name, &mut visited) {
-                let mut snd_parser = Parser::new(&content);
-                sounds_map = snd_parser.parse_sndinfo();
+                sounds_map = parse_sndinfo(&content);
                 break;
             }
         }

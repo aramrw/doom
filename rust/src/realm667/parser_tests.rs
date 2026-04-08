@@ -1,20 +1,7 @@
 #[cfg(test)]
 mod tests {
-    use crate::realm667::lexer::{Lexer, Token};
     use crate::realm667::actor::GZValue;
-    use crate::realm667::parser::Parser;
-
-    #[test]
-    fn test_lexer_tokens() {
-        let input = "actor MyActor // comment\n{ }";
-        let mut lexer = Lexer::new(input);
-        
-        assert_eq!(lexer.next_token(), Token::Identifier("actor".to_string()));
-        assert_eq!(lexer.next_token(), Token::Identifier("MyActor".to_string()));
-        assert_eq!(lexer.next_token(), Token::Comment(" comment".to_string()));
-        assert_eq!(lexer.next_token(), Token::BraceOpen);
-        assert_eq!(lexer.next_token(), Token::BraceClose);
-    }
+    use crate::realm667::nom_parser::parse_document;
 
     #[test]
     fn test_parser_actor_properties() {
@@ -28,8 +15,7 @@ mod tests {
                 }
             }
         ";
-        let mut parser = Parser::new(input);
-        let actors = parser.parse_actors();
+        let actors = parse_document(input).unwrap();
         assert_eq!(actors.len(), 1);
         let actor = &actors[0];
         assert_eq!(actor.name, "MyActor");
@@ -54,8 +40,7 @@ mod tests {
                 }
             }
         ";
-        let mut parser = Parser::new(input);
-        let actors = parser.parse_actors();
+        let actors = parse_document(input).unwrap();
         assert_eq!(actors.len(), 1);
         let actor = &actors[0];
         
@@ -82,8 +67,7 @@ mod tests {
                 }
             }
         ";
-        let mut parser = Parser::new(input);
-        let actors = parser.parse_actors();
+        let actors = parse_document(input).unwrap();
         assert_eq!(actors.len(), 1);
         let actor = &actors[0];
         let spawn_states = actor.states.get("Spawn").unwrap();
@@ -107,8 +91,7 @@ mod tests {
                 }
             }
         ";
-        let mut parser = Parser::new(input);
-        let actors = parser.parse_actors();
+        let actors = parse_document(input).unwrap();
         assert_eq!(actors.len(), 1);
         let actor = &actors[0];
         assert_eq!(actor.name, "MyZScriptActor");
@@ -131,8 +114,7 @@ mod tests {
                 }
             }
         ";
-        let mut parser = Parser::new(input);
-        let actors = parser.parse_actors();
+        let actors = parse_document(input).unwrap();
         assert_eq!(actors.len(), 1);
         let actor = &actors[0];
         let fire_states = actor.states.get("Fire").unwrap();
@@ -158,8 +140,7 @@ mod tests {
                         Loop
             }
         ";
-        let mut parser = Parser::new(input);
-        let actors = parser.parse_actors();
+        let actors = parse_document(input).unwrap();
         assert_eq!(actors.len(), 1);
         let actor = &actors[0];
         assert!(actor.states.contains_key("Spawn"));
