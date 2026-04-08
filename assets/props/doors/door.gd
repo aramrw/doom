@@ -14,6 +14,7 @@ extends Node3D
 func _ready():
 	if not Engine.is_editor_hint():
 		_setup_shader()
+		print("Door: " + name + " ready. Required item: " + (required_item.item_name if required_item else "NONE"))
 
 func _setup_shader():
 	if not door_mesh: return
@@ -43,7 +44,12 @@ func interact(player: Node):
 	
 	var active_item = inv.get_active_item()
 	
+	var req_name = required_item.item_name if required_item else "NULL"
+	var act_name = active_item.item_name if active_item else "NULL"
+	print("Door: Interaction - Required=" + req_name + " Active=" + act_name)
+	
 	if required_item == null:
+		print("Door: No item required, opening.")
 		open_door()
 		return
 		
@@ -51,10 +57,11 @@ func interact(player: Node):
 	if active_item and active_item.item_name == required_item.item_name:
 		print("Door: Player used ", active_item.item_name)
 		if consume_on_use:
+			print("Door: Consuming item ", active_item.item_name)
 			inv.consume_item(active_item.item_name, 1)
 		open_door()
 	else:
-		print("Door: You need ", required_item.item_name, " to open this.")
+		print("Door: You need " + req_name + " to open this. You are holding: " + act_name)
 
 func open_door():
 	if is_open: return

@@ -26,6 +26,7 @@
 [ext_resource type="PackedScene" uid="uid://uskdi4242ngs" path="res://assets/rift/rift.tscn" id="24_dhlwf"]
 [ext_resource type="PackedScene" path="res://items/crosses/cross_1/godot_data/blackcrosskey_pickup.tscn" id="25_5t8nk"]
 [ext_resource type="PackedScene" uid="uid://ncxbsny2rh0x" path="res://assets/props/doors/dungeon_door.tscn" id="26_j3e5s"]
+[ext_resource type="Resource" uid="uid://b4tivwmucef5q" path="res://items/crosses/cross_1/godot_data/blackcrosskey_item.tres" id="27_nu31w"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_i5arm"]
 shader = ExtResource("1_jka67")
@@ -255,4 +256,4 @@ transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -14.44028, 4.542476, -9
 
 [node name="Door" parent="." unique_id=1795032391 instance=ExtResource("26_j3e5s")]
 transform = Transform3D(1.8982803, 0, -0.629708, 0, 2, 0, 0.629708, 0, 1.8982803, 2.5662248, 4.9651356, 0.1787306)
-required_item = null
+required_item = ExtResource("27_nu31w")
