@@ -1,0 +1,62 @@
+ACTOR DSparilStatueRed 10300
+{
+	//$Title D'Sparil Statue Red Flame
+	//$Category Obstacles
+	//$IsDecoration
+	//$NotAngled
+
+	Radius 14
+	Height 96
+	Scale 0.9
+
+	+SOLID
+
+		States
+		{
+			Spawn:
+				STAR ABC 6 Bright
+				Loop
+		}
+}
+
+ACTOR DSparilStatueBlue 10301
+{
+	//$Title D'Sparil Statue Blue Flame
+	//$Category Obstacles
+	//$IsDecoration
+	//$NotAngled
+
+	Radius 14
+	Height 96
+	Scale 0.9
+
+	+SOLID
+
+		States
+		{
+			Spawn:
+				STAB ABC 6 Bright
+				Loop
+		}
+}
+
+ACTOR DSparilStatueGreen 10302
+{
+	//$Title D'Sparil Statue Green Flame
+	//$Category Obstacles
+	//$IsDecoration
+	//$NotAngled
+
+	Radius 14
+	Height 96
+	Scale 0.9
+
+	+SOLID
+
+		States
+		{
+			Spawn:
+				STAG ABC 6 Bright
+				Loop
+		}
+}

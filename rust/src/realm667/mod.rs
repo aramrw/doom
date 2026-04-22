@@ -3,12 +3,13 @@ pub mod asset_handler;
 pub mod nom_parser;
 pub mod resource_gen;
 pub mod parser_tests;
+pub mod hell_apprentice_test;
 
 use crate::realm667::actor::{ActorCategory, ActorDefinition};
 use crate::realm667::asset_handler::AssetHandler;
 use crate::realm667::nom_parser::{parse_document, parse_sndinfo};
 use crate::realm667::resource_gen::ResourceGenerator;
-use godot::classes::{ProjectSettings, EditorInterface};
+use godot::classes::{ProjectSettings, EditorInterface, Engine};
 use godot::prelude::*;
 use std::collections::{HashMap, HashSet};
 use std::fs;
@@ -143,6 +144,8 @@ impl Realm667Importer {
         }
 
         for (child_idx, parent_idx) in actors_to_update {
+            if child_idx == parent_idx { continue; }
+            
             let (child, parent) = if child_idx < parent_idx {
                 let (left, right) = actors.split_at_mut(parent_idx);
                 (&mut left[child_idx], &right[0])
@@ -249,8 +252,22 @@ impl Realm667Importer {
 
             // Respect forced import mode if not Automatic
             let category = match self.import_mode {
-                ImportMode::Weapon => ActorCategory::Weapon,
-                ImportMode::Enemy => ActorCategory::Enemy,
+                ImportMode::Weapon => {
+                    let det = actor.determine_category();
+                    if det == ActorCategory::Projectile {
+                        ActorCategory::Projectile
+                    } else {
+                        ActorCategory::Weapon
+                    }
+                }
+                ImportMode::Enemy => {
+                    let det = actor.determine_category();
+                    if det == ActorCategory::Projectile {
+                        ActorCategory::Projectile
+                    } else {
+                        ActorCategory::Enemy
+                    }
+                }
                 ImportMode::Prop => ActorCategory::Prop,
                 ImportMode::Projectile => ActorCategory::Projectile,
                 ImportMode::Item => ActorCategory::Item,
@@ -338,9 +355,11 @@ impl Realm667Importer {
         godot_print!("Realm667Importer: IMPORT FINISHED SUCCESSFULLY");
         godot_print!("--------------------------------------------------");
 
-        let editor = EditorInterface::singleton();
-        if let Some(mut fs) = editor.get_resource_filesystem() {
-            fs.scan();
+        if Engine::singleton().is_editor_hint() {
+            let editor = EditorInterface::singleton();
+            if let Some(mut fs) = editor.get_resource_filesystem() {
+                fs.scan();
+            }
         }
     }
 
@@ -452,6 +471,8 @@ impl Realm667Importer {
 
         if category == ActorCategory::Weapon {
             label_to_folder.insert("Ready", "idle".to_string());
+            label_to_folder.insert("Idle", "idle".to_string());
+            label_to_folder.insert("Select", "idle".to_string());
             label_to_folder.insert("Fire", "shoot".to_string());
             label_to_folder.insert("Fire2", "shoot".to_string());
             label_to_folder.insert("Hold", "shoot".to_string());
@@ -460,22 +481,27 @@ impl Realm667Importer {
             label_to_folder.insert("Death", "death".to_string());
             label_to_folder.insert("Spawn", "ground".to_string());
         } else if category == ActorCategory::Enemy {
-            label_to_folder.insert("Spawn", "walk".to_string());
+            label_to_folder.insert("Spawn", "idle".to_string());
+            label_to_folder.insert("Idle", "idle".to_string());
             label_to_folder.insert("See", "walk".to_string());
+            label_to_folder.insert("Walk", "walk".to_string());
             label_to_folder.insert("Missile", "attack".to_string());
             label_to_folder.insert("Melee", "attack".to_string());
             label_to_folder.insert("Pain", "pain".to_string());
             label_to_folder.insert("Death", "death".to_string());
             label_to_folder.insert("XDeath", "xdeath".to_string());
+            label_to_folder.insert("Raise", "raise".to_string());
         } else if category == ActorCategory::Projectile {
             label_to_folder.insert("Spawn", "spawn".to_string());
             label_to_folder.insert("Fly", "spawn".to_string());
             label_to_folder.insert("Idle", "spawn".to_string());
+            label_to_folder.insert("Fade", "spawn".to_string());
             label_to_folder.insert("Death", "death".to_string());
             label_to_folder.insert("Crash", "death".to_string());
             label_to_folder.insert("XDeath", "death".to_string());
         } else if category == ActorCategory::Item || category == ActorCategory::Ammo {
             label_to_folder.insert("Spawn", "idle".to_string());
+            label_to_folder.insert("Idle", "idle".to_string());
         } else if category == ActorCategory::Prop {
             // For props, we use literal state names as folders
             for label in actor.states.keys() {
@@ -490,15 +516,39 @@ impl Realm667Importer {
         sorted_labels.sort(); // Consistent order
 
         for label in sorted_labels {
-            if let Some(folder_name) = label_to_folder.get(label.as_str()) {
+            let label_upper = label.to_uppercase();
+            let folder_name = if let Some(f) = label_to_folder.get(label.as_str()) {
+                Some(f.clone())
+            } else if label_upper.starts_with("MISSILE") || label_upper.starts_with("MELEE") {
+                Some("attack".to_string())
+            } else if label_upper.starts_with("DEATH") {
+                Some("death".to_string())
+            } else if label_upper.starts_with("XDEATH") {
+                Some("xdeath".to_string())
+            } else if label_upper.starts_with("PAIN") {
+                Some("pain".to_string())
+            } else if label_upper.starts_with("SEE") || label_upper.starts_with("WALK") {
+                Some("walk".to_string())
+            } else if label_upper.starts_with("RAISE") {
+                Some("raise".to_string())
+            } else if label_upper.starts_with("SPAWN") || label_upper.starts_with("IDLE") {
+                if category == ActorCategory::Projectile {
+                    Some("spawn".to_string())
+                } else {
+                    Some("idle".to_string())
+                }
+            } else {
+                None
+            };
+
+            if let Some(folder_name) = folder_name {
                 let frames = &actor.states[label];
                 let actor_name = actor.name.to_lowercase();
                 let state_dir = godot_data_root
                     .join("sprites")
                     .join(mod_name)
                     .join(&actor_name)
-                    .join(folder_name);
-                let mut sprite_paths = Vec::new();
+                    .join(&folder_name);
 
                 for frame in frames {
                     let extracted = self.extract_sprites_for_frame(frame, archive, &state_dir);
@@ -511,15 +561,11 @@ impl Realm667Importer {
                             folder_name,
                             p.file_name().unwrap().to_str().unwrap()
                         );
-                        sprite_paths.push((rel_res, frame.duration));
+                        
+                        let entry = result_map.entry(folder_name.clone()).or_insert_with(Vec::new);
+                        entry.push((rel_res, frame.duration));
                     }
                 }
-
-                // Aggregate frames for labels that map to the same folder (e.g. Ready -> idle)
-                result_map
-                    .entry(folder_name.to_string())
-                    .or_insert_with(Vec::new)
-                    .extend(sprite_paths);
             }
         }
 
@@ -550,8 +596,8 @@ impl Realm667Importer {
             for frame in frames {
                 for action in &frame.actions {
                     let lower_name = action.name.to_lowercase();
-                    if lower_name == "a_playsound" || lower_name == "a_startsound" || lower_name == "a_playweaponsound" {
-                        if let Some(alias) = action.args.get(0) {
+                    if lower_name == "a_playsound" || lower_name == "a_startsound" || lower_name == "a_playweaponsound" || lower_name == "a_custommeleeattack" {
+                        if let Some(alias) = action.args.get(if lower_name == "a_custommeleeattack" { 1 } else { 0 }) {
                             let alias_str = alias.to_string_lossy().to_uppercase();
                             if let Some(file_path) = sounds_map.get(&alias_str) {
                                 self.extract_sound_file(file_path, archive, &sounds_dir);
@@ -572,9 +618,11 @@ impl Realm667Importer {
         dest_dir: &Path,
     ) -> Vec<PathBuf> {
         let mut extracted_paths = Vec::new();
+
         for f_char in frame.frames.chars() {
-            // Standard Doom naming: PREFIX + FRAME + ROTATION (e.g., POSSA1, POSSA2A8)
-            let sprite_search_prefix = format!("{}{}", frame.sprite_prefix, f_char).to_uppercase();
+            let mut seen_filenames = HashSet::new();
+            let f_char_upper = f_char.to_uppercase().next().unwrap();
+            let prefix_upper = frame.sprite_prefix.to_uppercase();
 
             for i in 0..archive.len() {
                 let entry_name = archive
@@ -591,11 +639,29 @@ impl Realm667Importer {
                 }
 
                 // Match sprite prefix and frame char
-                // Handle both normal (XXXXA1.PNG) and prefixed (0007_XXXXA1.LMP)
-                let is_match = if file_name.starts_with(&sprite_search_prefix) {
-                    true
+                // Standard Doom sprite: XXXXA1 or XXXXA2A8 or XXXXA1B1
+                let is_match = if file_name.starts_with(&prefix_upper) {
+                    if file_name.len() > 4 {
+                        let char_at_4 = file_name.chars().nth(4).unwrap();
+                        let char_at_6 = file_name.chars().nth(6);
+                        
+                        char_at_4 == f_char_upper || (char_at_6.is_some() && char_at_6.unwrap() == f_char_upper)
+                    } else {
+                        false
+                    }
                 } else if let Some(pos) = file_name.find('_') {
-                    file_name[pos+1..].starts_with(&sprite_search_prefix)
+                    let sub = &file_name[pos+1..];
+                    if sub.starts_with(&prefix_upper) {
+                        if sub.len() > 4 {
+                            let char_at_4 = sub.chars().nth(4).unwrap();
+                            let char_at_6 = sub.chars().nth(6);
+                            char_at_4 == f_char_upper || (char_at_6.is_some() && char_at_6.unwrap() == f_char_upper)
+                        } else {
+                            false
+                        }
+                    } else {
+                        false
+                    }
                 } else {
                     false
                 };
@@ -607,18 +673,21 @@ impl Realm667Importer {
                     } else {
                         &file_name
                     };
-                    
+
                     let actual_base = if let Some(pos) = base_name.find('_') {
                         &base_name[pos+1..]
                     } else {
                         base_name
                     };
 
-                    if actual_base.len() >= sprite_search_prefix.len() {
-                        if let Some(path) =
-                            AssetHandler::extract_with_extension_fix(archive, i, dest_dir)
-                        {
-                            extracted_paths.push(path);
+                    if actual_base.len() >= prefix_upper.len() {
+                        if !seen_filenames.contains(&file_name) {
+                            if let Some(path) =
+                                AssetHandler::extract_with_extension_fix(archive, i, dest_dir)
+                            {
+                                extracted_paths.push(path);
+                                seen_filenames.insert(file_name);
+                            }
                         }
                     }
                 }
@@ -626,7 +695,6 @@ impl Realm667Importer {
         }
         extracted_paths
     }
-
     fn extract_sound_file(
         &self,
         sound_path: &str,

@@ -1,0 +1,41 @@
+flickerlight2 DSPARILSTATUERED
+{
+    color 1.0 0.6 0.0
+    size 64
+    secondarySize 68
+    interval 0.1
+    offset 0 104 0
+}
+
+object DSparilStatueRed
+{
+    frame STAR { light DSPARILSTATUERED }
+}
+
+flickerlight2 DSPARILSTATUEBLUE
+{
+    color 0.4 0.4 1.0
+    size 64
+    secondarySize 68
+    interval 0.1
+    offset 0 104 0
+}
+
+object DSparilStatueBlue
+{
+    frame STAB { light DSPARILSTATUEBLUE }
+}
+
+flickerlight2 DSPARILSTATUEGREEN
+{
+    color 0.0 1.0 0.5
+    size 64
+    secondarySize 68
+    interval 0.1
+    offset 0 104 0
+}
+
+object DSparilStatueGreen
+{
+    frame STAG { light DSPARILSTATUEGREEN }
+}

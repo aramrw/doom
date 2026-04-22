@@ -2,7 +2,7 @@ use nom::{
     branch::alt,
     bytes::complete::{is_not, tag, tag_no_case, take_until},
     character::complete::{alpha1, alphanumeric1, char, digit1, multispace1, none_of},
-    combinator::{map, map_res, opt, recognize, value},
+    combinator::{map, map_res, opt, peek, recognize, value, eof},
     multi::{many0, many1, separated_list0},
     sequence::{delimited, pair, preceded, terminated, tuple},
     IResult,
@@ -27,14 +27,59 @@ where
     delimited(sp, inner, sp)
 }
 
-/// Parse a GZValue
+/// Parse a GZValue or a complex expression (as a string)
 pub fn parse_gz_value(input: &str) -> IResult<&str, GZValue> {
-    alt((
-        parse_float,
-        parse_integer,
+    // Peek to ensure we are not parsing a flag (+FLAG or -FLAG) as a value.
+    // Negative numbers (-1, -0.5) are still allowed as values.
+    if let Ok(_) = peek::<&str, _, nom::error::Error<&str>, _>(pair(alt((char('+'), char('-'))), alpha1))(input) {
+         return Err(nom::Err::Error(nom::error::Error::new(input, nom::error::ErrorKind::Tag)));
+    }
+
+    ws(alt((
         parse_string_literal,
-        parse_identifier_value,
-    ))(input)
+        // Match numbers ONLY if followed by a delimiter
+        terminated(parse_float, peek(alt((
+            value((), tag(",")),
+            value((), tag(")")),
+            value((), tag(";")),
+            value((), tag("}")),
+            value((), multispace1),
+            value((), eof),
+        )))),
+        terminated(parse_integer, peek(alt((
+            value((), tag(",")),
+            value((), tag(")")),
+            value((), tag(";")),
+            value((), tag("}")),
+            value((), multispace1),
+            value((), eof),
+        )))),
+        parse_expression_value,
+    )))(input)
+}
+
+fn parse_expression_value(input: &str) -> IResult<&str, GZValue> {
+    let mut depth = 0;
+    let mut end_pos = 0;
+    let bytes = input.as_bytes();
+    for (i, &b) in bytes.iter().enumerate() {
+        if b == b'(' { depth += 1; }
+        else if b == b')' {
+            if depth == 0 { break; }
+            depth -= 1;
+        }
+        else if (b == b',' || b == b';') && depth == 0 { break; }
+        else if (b == b' ' || b == b'\t' || b == b'\n' || b == b'\r') && depth == 0 {
+            if i > 0 { break; }
+        }
+        end_pos = i + 1;
+    }
+    if end_pos == 0 {
+        return Err(nom::Err::Error(nom::error::Error::new(input, nom::error::ErrorKind::AlphaNumeric)));
+    }
+    let val = &input[..end_pos];
+    let rest = &input[end_pos..];
+    Ok((rest, GZValue::Identifier(val.trim().to_string())))
 }
 
 fn parse_integer(input: &str) -> IResult<&str, GZValue> {
@@ -58,16 +103,6 @@ fn parse_string_literal(input: &str) -> IResult<&str, GZValue> {
     )(input)
 }
 
-fn parse_identifier_value(input: &str) -> IResult<&str, GZValue> {
-    map(
-        recognize(pair(
-            alt((alpha1, tag("_"), tag("+"), tag("-"))),
-            many0(alt((alphanumeric1, tag("_"), tag("."), tag("-"), tag("+"), tag("$"))))
-        )),
-        |s: &str| GZValue::Identifier(s.to_string())
-    )(input)
-}
-
 /// Parse a function call
 pub fn parse_function_call(input: &str) -> IResult<&str, GZFunctionCall> {
     let (input, name) = ws(recognize(pair(
@@ -76,9 +111,9 @@ pub fn parse_function_call(input: &str) -> IResult<&str, GZFunctionCall> {
     )))(input)?;
     
     let (input, args) = delimited(
-        char('('),
+        ws(char('(')),
         separated_list0(ws(char(',')), parse_gz_value),
-        char(')')
+        ws(char(')'))
     )(input)?;
     
     Ok((input, GZFunctionCall {
@@ -164,19 +199,18 @@ pub fn parse_states_block(input: &str) -> IResult<&str, HashMap<String, Vec<Stat
         }
         
         // Try to parse a label (e.g., "Spawn:")
-        if let Ok((next_input, label)) = terminated(ws(alphanumeric1), ws(char(':')))(input) {
+        if let Ok((next_input, label)) = terminated(ws(recognize(many1(alt((alphanumeric1, tag("_"), tag(".")))))), ws(char(':')))(input) {
             current_labels.push(label.to_string());
             input = next_input;
             continue;
         }
-        
-        // Try to parse flow control (Loop, Stop, Wait, Goto)
-        let flow_control = alt((
+
+        // Try to parse flow control (Loop, Stop, Wait, Fail)
+        let flow_control = alt::<&str, &str, nom::error::Error<&str>, _>((
             tag_no_case("loop"),
             tag_no_case("stop"),
             tag_no_case("wait"),
             tag_no_case("fail"),
-            recognize(pair(tag_no_case("goto"), preceded(multispace1, alphanumeric1))),
         ));
         
         if let Ok((next_input, _)) = ws(flow_control)(input) {
@@ -186,6 +220,16 @@ pub fn parse_states_block(input: &str) -> IResult<&str, HashMap<String, Vec<Stat
             current_labels.clear();
             continue;
         }
+
+        // Try to parse Goto separately for better error handling
+        if let Ok((next_input, _)) = ws(tag_no_case("goto"))(input) {
+            let (next_input, _) = is_not::<&str, &str, nom::error::Error<&str>>(" \t\n\r;}")(next_input)?;
+            let (next_input, _) = opt(ws(char(';')))(next_input)?;
+            input = next_input;
+            current_labels.clear();
+            continue;
+        }
+
         
         // Try to parse a state frame
         match parse_state_frame(input) {
@@ -195,7 +239,11 @@ pub fn parse_states_block(input: &str) -> IResult<&str, HashMap<String, Vec<Stat
                 }
                 input = next_input;
             }
-            Err(e) => return Err(e),
+            Err(_e) => {
+                #[cfg(test)]
+                println!("DEBUG: parse_state_frame failed: {:?}", _e);
+                return Err(_e);
+            }
         }
     }
     
@@ -204,21 +252,20 @@ pub fn parse_states_block(input: &str) -> IResult<&str, HashMap<String, Vec<Stat
 
 /// Parse a property or flag
 pub fn parse_property_or_flag(input: &str) -> IResult<&str, PropertyOrFlag> {
-    alt((
-        // Flag: +SOLID or -SOLID
-        map(
-            recognize(pair(alt((char('+'), char('-'))), alphanumeric1)),
-            |s: &str| PropertyOrFlag::Flag(s.to_string())
+    let flag_parser = map(
+        ws(recognize(pair(alt((char('+'), char('-'))), many1(alt((alphanumeric1, tag("_"))))))),
+        |s: &str| PropertyOrFlag::Flag(s.to_string())
+    );
+    
+    let prop_parser = map(
+        pair(
+            ws(recognize(pair(alt((alpha1, tag("_"))), many0(alt((alphanumeric1, tag("_"), tag("."))))))),
+            terminated(separated_list0(ws(char(',')), parse_gz_value), opt(ws(char(';'))))
         ),
-        // Property: Health 100
-        map(
-            pair(
-                ws(recognize(pair(alpha1, many0(alt((alphanumeric1, tag("."))))))),
-                terminated(separated_list0(ws(char(',')), parse_gz_value), opt(ws(char(';'))))
-            ),
-            |(name, values)| PropertyOrFlag::Property(name.to_string(), values)
-        )
-    ))(input)
+        |(name, values)| PropertyOrFlag::Property(name.to_string(), values)
+    );
+
+    alt((flag_parser, prop_parser))(input)
 }
 
 pub enum PropertyOrFlag {
@@ -230,13 +277,13 @@ pub enum PropertyOrFlag {
 pub fn parse_actor(input: &str) -> IResult<&str, ActorDefinition> {
     let (input, _) = ws(alt((tag_no_case("actor"), tag_no_case("class"))))(input)?;
     
-    let (input, name) = ws(recognize(pair(alpha1, many0(alt((alphanumeric1, tag("_")))))))(input)?;
+    let (input, name) = ws(recognize(pair(alt((alpha1, tag("_"))), many0(alt((alphanumeric1, tag("_")))))))(input)?;
     
-    let (input, parent) = opt(preceded(ws(char(':')), ws(recognize(pair(alpha1, many0(alt((alphanumeric1, tag("_")))))))))(input)?;
+    let (input, parent) = opt(preceded(ws(char(':')), ws(recognize(pair(alt((alpha1, tag("_"))), many0(alt((alphanumeric1, tag("_")))))))))(input)?;
     
     let (input, ed_number) = opt(ws(map_res(digit1, |s: &str| s.parse::<i32>())))(input)?;
     
-    let (input, _replaces) = opt(preceded(ws(tag_no_case("replaces")), ws(recognize(pair(alpha1, many0(alt((alphanumeric1, tag("_")))))))))(input)?;
+    let (input, _replaces) = opt(preceded(ws(tag_no_case("replaces")), ws(recognize(pair(alt((alpha1, tag("_"))), many0(alt((alphanumeric1, tag("_")))))))))(input)?;
 
     let (input, _) = ws(char('{'))(input)?;
     
@@ -249,11 +296,52 @@ pub fn parse_actor(input: &str) -> IResult<&str, ActorDefinition> {
     
     let mut input = input;
     loop {
+        // Stop if we hit the end of the class
         if let Ok((next_input, _)) = ws(char('}'))(input) {
             input = next_input;
             break;
         }
         
+        if input.is_empty() { break; }
+
+        // Parse ZScript methods/functions
+        if let Ok((next_input, (_modifier, _return_type, name, _))) = ws(tuple::<&str, _, nom::error::Error<&str>, _>((
+            opt(alt((tag_no_case("action"), tag_no_case("override"), tag_no_case("virtual"), tag_no_case("static"), tag_no_case("protected"), tag_no_case("private"), tag_no_case("native")))),
+            ws(recognize(pair(alt((alpha1, tag("_"))), many0(alt((alphanumeric1, tag("_"), tag("."))))))), // return type or void
+            ws(recognize(pair(alt((alpha1, tag("_"))), many0(alt((alphanumeric1, tag("_"))))))), // name
+            ws(delimited(char('('), take_until(")"), char(')'))),
+            // No ws(char('{')) here yet
+        )))(input) {
+            if let Ok((next_input, _)) = ws(char::<&str, nom::error::Error<&str>>('{'))(next_input) {
+                let mut temp_input = next_input;
+                let mut body_actions = Vec::new();
+                
+                loop {
+                    if let Ok((next, _)) = ws(char::<&str, nom::error::Error<&str>>('}'))(temp_input) {
+                        temp_input = next;
+                        break;
+                    }
+                    
+                    if let Ok((next, action)) = terminated(ws(parse_function_call), opt(ws(char(';'))))(temp_input) {
+                        body_actions.push(action);
+                        temp_input = next;
+                    } else if !temp_input.is_empty() {
+                        // Skip one token if it doesn't match an action call
+                        if let Ok((next, _)) = ws(recognize::<&str, _, nom::error::Error<&str>, _>(many1(none_of(" \t\n\r;}"))))(temp_input) {
+                            temp_input = next;
+                        } else {
+                            temp_input = &temp_input[1..];
+                        }
+                    } else {
+                        break;
+                    }
+                }
+                actor.methods.insert(name.to_string(), body_actions);
+                input = temp_input;
+                continue;
+            }
+        }
+
         // Handle ZScript Default block
         if let Ok((next_input, _)) = ws(tag_no_case("Default"))(input) {
              let (next_input, _) = ws(char('{'))(next_input)?;
@@ -263,12 +351,21 @@ pub fn parse_actor(input: &str) -> IResult<&str, ActorDefinition> {
                      inner_input = final_input;
                      break;
                  }
+                 if inner_input.is_empty() { break; }
+
                  match parse_property_or_flag(inner_input) {
                      Ok((next_inner, item)) => {
                          apply_property_or_flag(&mut actor, item);
                          inner_input = next_inner;
                      }
-                     Err(e) => return Err(e),
+                     Err(_) => {
+                         // Skip one token in Default block if parsing fails
+                         if let Ok((next, _)) = ws(recognize(many1(none_of(" \t\n\r;}"))))(inner_input) {
+                             inner_input = next;
+                         } else {
+                             inner_input = &inner_input[1..];
+                         }
+                     }
                  }
              }
              input = inner_input;
@@ -276,22 +373,27 @@ pub fn parse_actor(input: &str) -> IResult<&str, ActorDefinition> {
         }
 
         // Handle States block
-        if let Ok((next_input, states)) = parse_states_block(input) {
-            actor.states.extend(states);
-            input = next_input;
-            continue;
+        match parse_states_block(input) {
+            Ok((next_input, states)) => {
+                actor.states.extend(states);
+                input = next_input;
+                continue;
+            }
+            Err(_e) => {
+                #[cfg(test)]
+                println!("DEBUG: parse_states_block failed for actor {}: {:?}", actor.name, _e);
+            }
         }
         
-        // Handle standalone property/flag
+        // Handle standalone property/flag or unknown item (like void functions)
         match parse_property_or_flag(input) {
             Ok((next_input, item)) => {
                 apply_property_or_flag(&mut actor, item);
                 input = next_input;
             }
-            Err(_e) => {
-                // Skip unknown things in actor block for robustness
+            Err(_) => {
+                // Robust skip: skip balanced braces or single tokens
                 if let Ok((next_input, _)) = ws(char('{'))(input) {
-                    // Skip balanced block
                     let mut depth = 1;
                     let mut temp_input = next_input;
                     while depth > 0 && !temp_input.is_empty() {
@@ -327,19 +429,21 @@ fn apply_property_or_flag(actor: &mut ActorDefinition, item: PropertyOrFlag) {
         PropertyOrFlag::Flag(f) => {
             if f.starts_with('+') {
                 actor.flags.push(f[1..].to_string());
+            } else if f.starts_with('-') {
+                // Ignore for now or handle removal
             }
         }
         PropertyOrFlag::Property(name, values) => {
-            if !values.is_empty() {
-                if values.len() == 1 {
-                    actor.properties.insert(name, values[0].clone());
-                } else {
-                    let joined = values.iter()
-                        .map(|v| v.to_string_lossy())
-                        .collect::<Vec<_>>()
-                        .join(", ");
-                    actor.properties.insert(name, GZValue::String(joined));
-                }
+            if values.is_empty() {
+                actor.flags.push(name);
+            } else if values.len() == 1 {
+                actor.properties.insert(name, values[0].clone());
+            } else {
+                let joined = values.iter()
+                    .map(|v| v.to_string_lossy())
+                    .collect::<Vec<_>>()
+                    .join(", ");
+                actor.properties.insert(name, GZValue::String(joined));
             }
         }
     }
@@ -351,7 +455,7 @@ pub fn parse_sndinfo(input: &str) -> HashMap<String, String> {
     
     while !input.trim().is_empty() {
         let mut parse_entry = pair(
-            ws(recognize(pair(alpha1, many0(alt((alphanumeric1, tag("_"), tag("."), tag("-"))))))),
+            ws(recognize(pair(alt((alpha1, tag("_"))), many0(alt((alphanumeric1, tag("_"), tag("."), tag("-"))))))),
             alt((
                 map(ws(delimited(char('"'), is_not("\""), char('"'))), |s: &str| s.to_string()),
                 map(ws(recognize(many1(none_of(" \t\n\r")))), |s: &str| s.to_string())

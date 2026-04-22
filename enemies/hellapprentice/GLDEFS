@@ -1,0 +1,100 @@
+Pointlight STracer1
+{
+Color 0.6 0.5 0.0
+Size 16
+}
+
+Pointlight STracer2
+{
+Color 0.8 0.6 0.0
+Size 48
+}
+
+Pointlight STracer3
+{
+Color 1.0 0.8 0.0
+Size 64
+}
+
+Pointlight STracer4
+{
+Color 0.8 0.3 0.0
+Size 56
+}
+
+Pointlight STracer5
+{
+Color 0.6 0.0 0.0
+Size 48
+}
+
+Pointlight STracer6
+{
+Color 0.3 0.0 0.0
+Size 24
+}
+
+Object STracerPuff_HA
+{
+Frame FTRA { Light STracer1 }
+}
+
+Object STracer_HA
+{
+Frame FTRAK { Light STracer2 }
+Frame FTRAL { Light STracer3 }
+Frame FTRAM { Light STracer4 }
+Frame FTRAN { Light STracer5 }
+Frame FTRAO { Light STracer6 }
+}
+
+Pointlight HellShot1
+{
+Color 1.0 0.4 0.0
+Size 48
+}
+
+Pointlight HellShot2
+{
+Color 1.0 0.0 0.0
+Size 16
+}
+
+Pointlight HellShot3
+{
+Color 1.0 0.4 0.0
+Size 32
+}
+
+Pointlight HellShot4
+{
+Color 1.0 0.6 0.0
+Size 64
+}
+
+Pointlight HellShot5
+{
+Color 1.0 0.4 0.0
+Size 32
+Offset 0 16 0
+}
+
+Pointlight HellShot6
+{
+Color 1.0 0.0 0.0
+Size 16
+Offset 0 24 0
+}
+
+Object HellShot
+{
+Frame HBALA { Light HellShot1 }
+Frame HBALB { Light HellShot1 }
+Frame HBALC { Light HellShot1 }
+Frame HBALD { Light HellShot1 }
+Frame HBALE { Light HellShot2 }
+Frame HBALF { Light HellShot3 }
+Frame HBALG { Light HellShot4 }
+Frame HBALI { Light HellShot5 }
+Frame HBALJ { Light HellShot6 }
+}

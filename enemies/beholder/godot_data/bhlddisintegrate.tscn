@@ -8,7 +8,7 @@
 radius = 0.5000
 height = 1.4000
 
-[node name="DoomEnemy" type="CharacterBody3D"]
+[node name="bhlddisintegrate" type="CharacterBody3D" groups=["Enemies"]]
 floor_stop_on_slope = false
 safe_margin = 0.5
 script = ExtResource("1_script")
@@ -29,6 +29,7 @@ billboard = 2
 shaded = true
 texture_filter = 0
 sprite_frames = ExtResource("3_sprites")
+autoplay = "idle_1"
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
 simplify_path = true

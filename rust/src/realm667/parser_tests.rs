@@ -145,4 +145,87 @@ mod tests {
         let actor = &actors[0];
         assert!(actor.states.contains_key("Spawn"));
     }
+
+    #[test]
+    fn test_parser_flags_with_whitespace() {
+        let input = "
+            Class SmithGhost1 : Actor
+            {
+              Default
+              {
+                Radius 40;
+                Height 70;
+                Speed 1;
+                Damage 0;
+                RenderStyle \"Translucent\";
+                Alpha 0.5;
+                +NORADIUSDMG
+                +BOSS
+                +FIRERESIST
+                +NOTARGET
+                +MISSILEMORE
+                PROJECTILE;
+              }
+              states
+              {
+              Spawn:
+                SMT1 O 35;
+              Fade:
+                SMT1 O 2 A_FadeOut(0.10);
+                Loop;
+              }
+            }
+        ";
+        let actors = parse_document(input).unwrap();
+        assert_eq!(actors.len(), 1);
+        let actor = &actors[0];
+        assert_eq!(actor.name, "SmithGhost1");
+        assert!(actor.flags.contains(&"NORADIUSDMG".to_string()));
+        assert!(actor.flags.contains(&"BOSS".to_string()));
+        assert!(actor.flags.contains(&"PROJECTILE".to_string()));
+    }
+
+    #[test]
+    fn test_parser_zscript_methods() {
+        let input = "
+            class MyActor : Actor {
+                void MyMethod() {
+                    A_Log(\"Hello\");
+                }
+                States {
+                    Spawn:
+                        PLAY A 10
+                        Loop
+                }
+            }
+        ";
+        let actors = parse_document(input).unwrap();
+        assert_eq!(actors.len(), 1);
+        let actor = &actors[0];
+        assert!(actor.states.contains_key("Spawn"));
+    }
+
+    #[test]
+    fn test_parser_complex_expression() {
+        let input = "
+            actor MyActor {
+                States {
+                    Spawn:
+                        SMT1 L 10 A_CustomMeleeAttack(15*random(1,8), \"monster/hamhit\")
+                        Goto See
+                }
+            }
+        ";
+        let actors = parse_document(input).unwrap();
+        assert_eq!(actors.len(), 1);
+        let actor = &actors[0];
+        let spawn_states = actor.states.get("Spawn").unwrap();
+        let state = &spawn_states[0];
+        
+        assert_eq!(state.actions.len(), 1);
+        let action = &state.actions[0];
+        assert_eq!(action.name, "A_CustomMeleeAttack");
+        assert_eq!(action.args.len(), 2);
+        assert_eq!(action.args[0].to_string_lossy(), "15*random(1,8)");
+    }
 }

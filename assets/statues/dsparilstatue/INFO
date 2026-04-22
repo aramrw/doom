@@ -1,0 +1,21 @@
+Information:
+Name: D'Sparil Statue
+Connection: None
+Palette: Heretic
+Summon: DSparilStatue(Red/Blue/Green)
+Ambient Sound: No
+De-/Activatable: No
+Destroyable: No
+Special Effects: No
+Brightmaps: No
+Actor modification: No
+ACS: No
+
+Credits:
+Code: Captain Toenail
+GLDefs: Captain Toenail
+Sprites: Heretic
+Sprite Edit: Captain Toenail
+
+Description:
+	A statue of D'Sparil with arms outstretched, magical flame in each hand.

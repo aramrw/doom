@@ -1,0 +1,22 @@
+[gd_resource type="SpriteFrames" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/statues/dsparilstatue/godot_data/sprites/dsparilstatue/dsparilstatuegreen/spawn/STAGA0.png" id="1_ext"]
+[ext_resource type="Texture2D" path="res://assets/statues/dsparilstatue/godot_data/sprites/dsparilstatue/dsparilstatuegreen/spawn/STAGB0.png" id="2_ext"]
+[ext_resource type="Texture2D" path="res://assets/statues/dsparilstatue/godot_data/sprites/dsparilstatue/dsparilstatuegreen/spawn/STAGC0.png" id="3_ext"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 6,
+"texture": ExtResource("1_ext")
+}, {
+"duration": 6,
+"texture": ExtResource("2_ext")
+}, {
+"duration": 6,
+"texture": ExtResource("3_ext")
+}],
+"loop": true,
+"name": &"spawn",
+"speed": 35.0
+}]

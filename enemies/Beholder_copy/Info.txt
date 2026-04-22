@@ -1,0 +1,9 @@
+Name: Beholder
+Summon: Beholder
+Difficulty: Medium
+Melee: Yes
+Distance: Projectile
+Type: Demon, Magical
+Brightmaps: No
+Actor modification: No
+ACS: No

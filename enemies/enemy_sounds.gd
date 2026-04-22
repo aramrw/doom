@@ -73,3 +73,9 @@ func _play_random_from_dir(dir_path: String):
 			var random_file = file_names[randi() % file_names.size()]
 			self.stream = load(dir_path + "/" + random_file)
 			self.play()
+
+func play_custom(sound: AudioStream, pitch_rand: float = 0.05):
+	if not sound: return
+	self.stream = sound
+	self.pitch_scale = base_pitch + randf_range(-pitch_rand, pitch_rand)
+	self.play()

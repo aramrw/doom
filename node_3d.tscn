@@ -6,9 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://dh5cqpdjfub83" path="res://assets/scifitextures/ship/ship_wall_0.tscn" id="3_a0tk4"]
 [ext_resource type="Texture2D" uid="uid://bjydiwnnwago8" path="res://assets/scifitextures/wall_ship_0.png" id="4_r3fl7"]
 [ext_resource type="PackedScene" uid="uid://bw0uup8kykjce" path="res://assets/scifitextures/ship/ship_ceiling.tscn" id="6_i5arm"]
-[ext_resource type="PackedScene" uid="uid://bmx87k8st5vy0" path="res://enemies/grin/grin.tscn" id="7_wc5p8"]
 [ext_resource type="PackedScene" uid="uid://d1jpcw1ontism" path="res://assets/camping/sleeping_bag.tscn" id="8_jsk3o"]
-[ext_resource type="PackedScene" uid="uid://b7hwuaxqyod5w" path="res://enemies/cultist/cultist.tscn" id="11_tereu"]
 [ext_resource type="PackedScene" uid="uid://db1lhq4oxjxt7" path="res://assets/camping/sleeping_bag/sleeping_bag.glb" id="12_cdqbm"]
 [ext_resource type="PackedScene" uid="uid://c4qn7bhw133js" path="res://assets/lights/torches/wall_torch_black/wall_torch_black.tscn" id="13_imku0"]
 [ext_resource type="PackedScene" uid="uid://bqj5ruls621w0" path="res://assets/lights/torches/ground_torch_black_thick/ground_torch_black.tscn" id="14_wlxy5"]
@@ -18,7 +16,6 @@
 [ext_resource type="PackedScene" uid="uid://0lefihnkg1ip" path="res://ui/dialogue_ui.tscn" id="17_dialogue"]
 [ext_resource type="PackedScene" uid="uid://b45e5hjqdka1g" path="res://npcs/shotgun_monk.tscn" id="18_monk"]
 [ext_resource type="PackedScene" uid="uid://by41h2dwu1l1k" path="res://assets/lights/torches/fire/fire.tscn" id="20_jsnrv"]
-[ext_resource type="PackedScene" uid="uid://bdyggv7inv1k1" path="res://weapons/magic/holysnow/godot_data/holysnow_pickup.tscn" id="20_lggff"]
 [ext_resource type="PackedScene" uid="uid://dfu8ux3qx10qv" path="res://assets/props/demonic_props/godot_data/demonpedestal.tscn" id="21_s0gvp"]
 [ext_resource type="PackedScene" uid="uid://wq7jq8taaawf" path="res://assets/props/demonic_props/godot_data/demonbrazier2.tscn" id="22_s0gvp"]
 [ext_resource type="PackedScene" path="res://weapons/melee/arcaneaxe/godot_data/quakeaxe_pickup.tscn" id="23_vxd74"]
@@ -26,6 +23,7 @@
 [ext_resource type="PackedScene" path="res://items/crosses/cross_1/godot_data/blackcrosskey_pickup.tscn" id="25_5t8nk"]
 [ext_resource type="PackedScene" uid="uid://ncxbsny2rh0x" path="res://assets/props/doors/dungeon_door.tscn" id="26_j3e5s"]
 [ext_resource type="Resource" uid="uid://b4tivwmucef5q" path="res://items/crosses/cross_1/godot_data/blackcrosskey_item.tres" id="27_nu31w"]
+[ext_resource type="PackedScene" uid="uid://bds01h6u0moes" path="res://assets/statues/dsparilstatue/godot_data/dsparilstatuered.tscn" id="28_2yde8"]
 [ext_resource type="Resource" path="res://items/crosses/cross_1/godot_data/redcrosskey_item.tres" id="28_obt1j"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_i5arm"]
@@ -183,18 +181,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.3071127, 0.57033074, -10.39
 [node name="SleepingBag" parent="." unique_id=843237321 instance=ExtResource("8_jsk3o")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2597854, 0.5225768, -3.640376)
 
-[node name="Cultist" parent="." unique_id=118476925 instance=ExtResource("11_tereu")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.638075, 5.7639313, 11.138747)
-
-[node name="Cultist3" parent="." unique_id=1006558139 instance=ExtResource("11_tereu")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -122.089615, 5.7639313, -2.2949705)
-
-[node name="Cultist2" parent="." unique_id=1111420264 instance=ExtResource("11_tereu")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -61.904438, 0.50049996, 17.022404)
-
-[node name="Grin2" parent="." unique_id=2054395248 instance=ExtResource("7_wc5p8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.337135, 1.1373085, -1.9675949)
-
 [node name="WallTorchBlack4" parent="." unique_id=1695822108 instance=ExtResource("13_imku0")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 7.235615, 6.7422633, -11.901457)
 
@@ -274,9 +260,6 @@ health = 500
 [node name="Fire2" parent="." unique_id=1944567405 instance=ExtResource("20_jsnrv")]
 transform = Transform3D(24.290804, 0, -17.605587, 0, 29.999998, 0, 17.605587, 0, 24.290804, -8.910022, 10.895618, -11.1331415)
 
-[node name="Pickup" parent="." unique_id=392349365 instance=ExtResource("20_lggff")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.053176165, 5.05, -8.93398)
-
 [node name="DemonPedestal" parent="." unique_id=1923286135 instance=ExtResource("21_s0gvp")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 5.104932, 4.0200067, 0.02118361)
 
@@ -299,3 +282,6 @@ required_item = ExtResource("27_nu31w")
 [node name="Door2" parent="." unique_id=203964868 instance=ExtResource("26_j3e5s")]
 transform = Transform3D(0.42567152, 0, -1.4383337, 0, 1.5, 0, 1.4383337, 0, 0.42567152, -38.414143, 5.1286755, 46.318546)
 required_item = ExtResource("28_obt1j")
+
+[node name="DSparilStatueRed" parent="." unique_id=1448162188 instance=ExtResource("28_2yde8")]
+transform = Transform3D(6, 0, 0, 0, 6, 0, 0, 0, 6, -33.624943, 1.3420897, 30.905537)

@@ -8,6 +8,7 @@ pub struct ActorDefinition {
     pub properties: HashMap<String, GZValue>,
     pub flags: Vec<String>,
     pub states: HashMap<String, Vec<StateFrame>>,
+    pub methods: HashMap<String, Vec<GZFunctionCall>>,
     pub metadata: HashMap<String, String>,
 }
 
@@ -85,6 +86,7 @@ impl ActorDefinition {
     pub fn determine_category(&self) -> ActorCategory {
         let lower_name = self.name.to_lowercase();
         let parent = self.parent.as_deref().unwrap_or("").to_lowercase();
+        let l_flags: Vec<String> = self.flags.iter().map(|f| f.to_lowercase().replace('+', "").replace('-', "")).collect();
 
         // 1. Check metadata hints first
         if let Some(cat) = self.metadata.get("category") {
@@ -100,9 +102,20 @@ impl ActorDefinition {
             }
         }
 
-        // 2. Heuristics as fallback
-        if self.flags.contains(&"Monster".to_string())
+        // 2. Heuristics
+        if l_flags.contains(&"projectile".to_string())
+            || l_flags.contains(&"missile".to_string())
+            || self.properties.contains_key("Projectile")
+            || parent.contains("projectile")
+            || lower_name.contains("missile")
+            || lower_name.contains("projectile")
+        {
+            return ActorCategory::Projectile;
+        }
+
+        if l_flags.contains(&"monster".to_string())
             || parent.contains("enemy")
+            || parent.contains("monster")
             || self.states.contains_key("See")
             || self.states.contains_key("Missile")
             || self.states.contains_key("Melee")
@@ -110,31 +123,16 @@ impl ActorDefinition {
             return ActorCategory::Enemy;
         }
 
-        if parent == "weapon"
-            || self.properties.contains_key("Weapon.AmmoType")
-            || self.properties.contains_key("Weapon.SlotNumber")
-        {
-            return ActorCategory::Weapon;
-        }
-
-        if self.flags.contains(&"Projectile".to_string())
-            || self.properties.contains_key("Projectile")
-            || parent.contains("projectile")
-            || lower_name.contains("missile")
-        {
-            return ActorCategory::Projectile;
-        }
-
         if parent == "ammo" || lower_name.contains("ammo") {
             return ActorCategory::Ammo;
         }
 
-        if parent == "inventory" || parent == "custominventory" || parent.contains("item") {
+        if parent == "inventory" || parent == "custominventory" || parent.contains("item") || lower_name.contains("pickup") {
             return ActorCategory::Item;
         }
 
         // Detect Props
-        if self.flags.contains(&"Solid".to_string()) 
+        if l_flags.contains(&"solid".to_string()) 
             || self.properties.contains_key("Radius") 
             || self.properties.contains_key("Height")
             || lower_name.contains("statue")

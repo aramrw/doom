@@ -27,22 +27,23 @@ else
     echo "Build failed."
     exit 1
 fi
-cd "../"
 
-# Ensure destination directory exists
+# We are still in the rust/ folder
+# Ensure destination directory exists in the project root
 mkdir -p "../$BIN_DIR"
 
 # Copy the binary to the Godot bin folder
 cp "target/$MODE/$BINARY_NAME" "../$BIN_DIR/"
-echo "Copied target/$MODE/$BINARY_NAME to $BIN_DIR/"
+echo "Copied target/$MODE/$BINARY_NAME to ../$BIN_DIR/"
 
 # Sign the binary (required on Apple Silicon to avoid CODESIGNING crashes)
 if [[ "$OSTYPE" == "darwin"* ]]; then
     echo "Signing binary..."
-    codesign -s - "../$BIN_DIR/$BINARY_NAME"
+    codesign -f -s - "../$BIN_DIR/$BINARY_NAME"
 fi
 
-echo "+Rust build successfull--"
+cd "../"
+echo "+Rust build successful--"
 echo "--Running Godot Game Window+:"
 
 /Applications/Godot.app/Contents/MacOS/Godot --path . -d

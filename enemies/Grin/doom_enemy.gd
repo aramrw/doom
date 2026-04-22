@@ -21,6 +21,8 @@ var current_anim_state: String = "walk"
 
 # --- PROJECTILE ---
 @export var projectile_scene: PackedScene = null
+@export var missile_action: Resource = null # WeaponAction
+@export var melee_action: Resource = null # WeaponAction
 
 # --- STATE VARIABLES ---
 var is_attacking: bool = false
@@ -29,6 +31,7 @@ var is_hit: bool = false  # For the flinch/pain state
 var is_dead: bool = false # For the corpse state
 
 @export var health: int = 100
+@export var use_gravity: bool = true
 var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 
 # --- VISUAL VARIABLES ---
@@ -68,8 +71,9 @@ func set_outline(active: bool, color: Color = Color.RED):
 
 func _physics_process(delta):
 	# Always apply gravity, even to corpses, so they don't float
-	if not is_on_floor():
-		velocity.y -= gravity * delta
+	if use_gravity or is_dead:
+		if not is_on_floor():
+			velocity.y -= gravity * delta
 
 	# If he's dead, he just falls to the floor and does nothing else
 	if is_dead:
@@ -268,37 +272,93 @@ func attack():
 	if global_position.distance_to(look_target) > 0.1:
 		look_at(look_target, Vector3.UP)
 	
-	await get_tree().create_timer(0.4).timeout
+	var distance_to_target = global_position.distance_to(target_body.global_position)
 	
-	# Only do damage if the enemy wasn't killed or stunned during the 0.4s wind-up!
-	if not is_dead and not is_hit:
-		if projectile_scene:
-			var proj = projectile_scene.instantiate()
-			get_tree().root.add_child(proj)
-			# Fire from chest height (around 1.2 meters)
-			proj.global_position = global_position + Vector3(0, 1.2, 0) 
-			
-			# Target the target's body
-			var dir = global_position.direction_to(target_body.global_position)
-			proj.setup(self, dir, damage, 15.0) # Speed 15.0 for magic ball
-			
-			sfx.taunt()
-		else:
-			# Fallback to raycast/melee
-			los_raycast.force_raycast_update()
-			if los_raycast.get_collider() == target_body:
-				if target_body.has_method("take_damage"):
-					target_body.take_damage(damage)
-				elif target_body.get_parent() and target_body.get_parent().has_method("take_damage"):
-					target_body.get_parent().take_damage(damage)
+	# Determine which action to use
+	var action_to_use = null
+	if distance_to_target <= meleerange and melee_action:
+		action_to_use = melee_action
+	elif missile_action:
+		action_to_use = missile_action
+		
+	if action_to_use:
+		await perform_action(action_to_use)
+	else:
+		# Original Fallback logic
+		await get_tree().create_timer(0.4).timeout
+		
+		# Only do damage if the enemy wasn't killed or stunned during the 0.4s wind-up!
+		if not is_dead and not is_hit:
+			if projectile_scene:
+				var proj = projectile_scene.instantiate()
+				get_tree().root.add_child(proj)
+				# Fire from chest height (around 1.2 meters)
+				proj.global_position = global_position + Vector3(0, 1.2, 0) 
 				
-				# trigger taunt
+				# Target the target's body
+				var dir = global_position.direction_to(target_body.global_position)
+				proj.setup(self, dir, damage, 15.0) # Speed 15.0 for magic ball
+				
 				sfx.taunt()
+			else:
+				# Fallback to raycast/melee
+				los_raycast.force_raycast_update()
+				if los_raycast.get_collider() == target_body:
+					if target_body.has_method("take_damage"):
+						target_body.take_damage(damage)
+					elif target_body.get_parent() and target_body.get_parent().has_method("take_damage"):
+						target_body.get_parent().take_damage(damage)
+					
+					# trigger taunt
+					sfx.taunt()
 		
 	is_attacking = false
 	
 	await get_tree().create_timer(reactiontime).timeout
 	on_cooldown = false
+
+func perform_action(action: Resource):
+	if not action: return
+	
+	for step in action.steps:
+		if is_dead or is_hit: break
+		
+		# Wait until the sprite reaches the target frame
+		while sprite.frame < step.frame_index and not is_dead and not is_hit:
+			await get_tree().process_frame
+			
+		if is_dead or is_hit: break
+		
+		# Execute effects
+		for effect in step.effects:
+			execute_effect(effect)
+
+func execute_effect(effect: Resource):
+	if not effect: return
+	
+	if effect.has_method("apply"):
+		# Most effects have an apply(user) method
+		effect.apply(self)
+	elif effect.get_script().get_global_name() == "ProjectileEffect":
+		# Hardcoded fallback for known effect types if needed
+		spawn_projectile(effect.projectile_scene)
+	elif effect.get_script().get_global_name() == "SoundEffect":
+		if effect.sound:
+			sfx.play_custom(effect.sound)
+
+func spawn_projectile(p_scene: PackedScene):
+	if not p_scene: return
+	var proj = p_scene.instantiate()
+	get_tree().root.add_child(proj)
+	proj.global_position = global_position + Vector3(0, 1.2, 0)
+	
+	var target_body = target_node
+	if target_node.has_node("CharacterBody3D"):
+		target_body = target_node.get_node("CharacterBody3D")
+	
+	var dir = global_position.direction_to(target_body.global_position)
+	if proj.has_method("setup"):
+		proj.setup(self, dir, damage, 15.0)
 
 # --- VISUALS ---
 func update_sprite_angle():

@@ -294,10 +294,10 @@ autoplay = "ground"
             let stem = Path::new(s).file_stem().unwrap_or_default().to_str().unwrap_or_default().to_uppercase();
             if stem.ends_with('0') { return true; }
             
-            // Typical Doom sprite: XXXXA1 or XXXXA2A8
-            // We look at the characters after the frame char.
-            // A frame char is usually at index 4 (0-indexed).
+            // Standard Doom sprite: PREFIX + FRAME + ROTATION (e.g., XXXXA1 or XXXXA2A8)
+            // or multi-frame: XXXXA1B1 (A=frame1, 1=rot1, B=frame2, 1=rot2)
             if stem.len() >= 6 {
+                // Check all characters from index 5 onwards for the direction digit
                 let rotations = &stem[5..];
                 rotations.contains(dir_char)
             } else {
@@ -350,6 +350,120 @@ autoplay = "ground"
         let r_val: f32 = radius.parse().unwrap_or(20.0) / 40.0;
         let h_val: f32 = height.parse().unwrap_or(56.0) / 40.0;
 
+        let use_gravity = !actor.flags.contains(&"NOGRAVITY".to_string());
+
+        // 0. Process ActionSteps (similar to weapons)
+        let mut action_ext_resources = Vec::new();
+        let mut step_id_counter = 1;
+        let mut label_to_steps = HashMap::new();
+
+        // Process all labels
+        for (label, frames) in &actor.states {
+            let mut steps = Vec::new();
+            for (frame_idx, frame) in frames.iter().enumerate() {
+                if frame.actions.is_empty() {
+                    continue;
+                }
+
+                let mut effect_ext_resources = Vec::new();
+                let mut effect_array_items = Vec::new();
+
+                for (action_idx, action) in frame.actions.iter().enumerate() {
+                    let _lower_name = action.name.to_lowercase();
+                    // If it's a custom method call, we should expand it into its constituent actions
+                    let mut actual_actions = Vec::new();
+                    if let Some(method_body) = actor.methods.get(&action.name) {
+                        actual_actions.extend(method_body.clone());
+                    } else {
+                        actual_actions.push(action.clone());
+                    }
+
+                    for (sub_idx, sub_action) in actual_actions.iter().enumerate() {
+                        let sub_lower_name = sub_action.name.to_lowercase();
+                        let effect_filename = format!("{}_{}_f{}_a{}_s{}_effect.tres", enemy_name, label.to_lowercase(), frame_idx, action_idx, sub_idx);
+                        let effect_path = actor_root.join(&effect_filename);
+
+                        let (_script_path, effect_content) = if sub_lower_name == "a_spawnprojectile" || sub_lower_name == "a_fireprojectile" || sub_lower_name == "a_firecustommissile" {
+                             let path = "res://weapons/effects/projectile_effect.gd";
+                             let p_name = sub_action.args.get(0).map(|v| v.to_string_lossy().to_lowercase()).unwrap_or_else(|| "unknown".to_string());
+                             let projectile_res_path = format!("{}/{}.tscn", rel_path, p_name);
+
+                             (path, format!(
+r#"[gd_resource type="Resource" script_class="ProjectileEffect" format=3]
+[ext_resource type="Script" path="{}" id="1_script"]
+[ext_resource type="PackedScene" path="{}" id="2_proj"]
+[resource]
+script = ExtResource("1_script")
+projectile_scene = ExtResource("2_proj")
+speed = 15.0
+damage = 20
+"#, path, projectile_res_path))
+                        } else if sub_lower_name == "a_playsound" || sub_lower_name == "a_startsound" {
+                            let path = "res://weapons/effects/sound_effect.gd";
+                            let sound_alias = sub_action.args.get(0).map(|v| v.to_string_lossy().to_uppercase()).unwrap_or_else(|| "NONE".to_string());
+                            // For enemies, sounds are already extracted to sounds/mod/alias.ogg
+                            let sound_rel_res = format!("{}/sounds/{}/{}.ogg", rel_path, enemy_name, sound_alias.to_lowercase());
+                            
+                            (path, format!(
+r#"[gd_resource type="Resource" script_class="SoundEffect" format=3]
+[ext_resource type="Script" path="{}" id="1_script"]
+[ext_resource type="AudioStream" path="{}" id="2_sound"]
+[resource]
+script = ExtResource("1_script")
+sound = ExtResource("2_sound")
+pitch_randomness = 0.05
+"#, path, sound_rel_res))
+                        } else {
+                            // Raw fallback
+                             let path = "res://weapons/effects/raw_zscript_effect.gd";
+                             let args_str = sub_action.args.iter()
+                                .map(|v| format!("\"{}\"", v.to_string_lossy()))
+                                .collect::<Vec<_>>()
+                                .join(", ");
+                             (path, format!(
+r#"[gd_resource type="Resource" script_class="RawZScriptEffect" format=3]
+[ext_resource type="Script" path="{}" id="1_script"]
+[resource]
+script = ExtResource("1_script")
+function_name = "{}"
+arguments = [{}]
+"#, path, sub_action.name, args_str))
+                        };
+
+                        let _ = fs::write(&effect_path, effect_content);
+                        let res_id = format!("eff_{}_{}_{}_{}", label.to_lowercase(), frame_idx, action_idx, sub_idx);
+                        effect_ext_resources.push(format!("[ext_resource type=\"Resource\" path=\"{}/{}\" id=\"{}\"]", rel_path, effect_filename, res_id));
+                        effect_array_items.push(format!("ExtResource(\"{}\")", res_id));
+                    }
+                }
+
+                if !effect_array_items.is_empty() {
+                    let step_filename = format!("{}_{}_f{}_step.tres", enemy_name, label.to_lowercase(), frame_idx);
+                    let step_path = actor_root.join(&step_filename);
+                    let step_id = format!("step_{}", step_id_counter);
+                    
+                    let step_content = format!(
+r#"[gd_resource type="Resource" script_class="ActionStep" format=3]
+[ext_resource type="Script" path="res://weapons/action_step.gd" id="1_script"]
+[ext_resource type="Script" path="res://weapons/effects/weapon_effect.gd" id="2_base"]
+{}
+[resource]
+script = ExtResource("1_script")
+frame_index = {}
+effects = Array[ExtResource("2_base")]([{}])
+"#, effect_ext_resources.join("\n"), frame_idx, effect_array_items.join(", "));
+                    
+                    let _ = fs::write(&step_path, step_content);
+                    action_ext_resources.push(format!("[ext_resource type=\"Resource\" path=\"{}/{}\" id=\"{}\"]", rel_path, step_filename, step_id));
+                    steps.push(format!("ExtResource(\"{}\")", step_id));
+                    step_id_counter += 1;
+                }
+            }
+            if !steps.is_empty() {
+                label_to_steps.insert(label.clone(), steps);
+            }
+        }
+
         // 1. Generate SpriteFrames
         let sprite_frames_path = actor_root.join(format!("{}_spriteframes.tres", enemy_name));
         let mut sf_content = String::from("[gd_resource type=\"SpriteFrames\" format=3]\n\n");
@@ -366,7 +480,7 @@ autoplay = "ground"
             let sprites = label_sprites.get(anim_name).unwrap();
             if sprites.is_empty() { continue; }
 
-            if anim_name == "walk" || anim_name == "attack" {
+            if anim_name == "walk" || anim_name == "attack" || anim_name == "idle" || anim_name == "raise" {
                 for i in 1..=5 {
                     let dir_sprites = Self::get_direction_sprites(sprites, i);
                     let active_sprites = if dir_sprites.is_empty() { sprites } else { &dir_sprites };
@@ -485,6 +599,43 @@ r#"{{
         sf_content.push_str("]\n");
         let _ = fs::write(&sprite_frames_path, sf_content);
 
+        let autoplay_anim = if label_sprites.contains_key("idle") {
+            "idle_1"
+        } else if label_sprites.contains_key("walk") {
+            "walk_1"
+        } else {
+            label_sprites.keys().next().map(|s| s.as_str()).unwrap_or("")
+        };
+
+        // 1.5 Generate WeaponActions for the enemy
+        let mut action_tres_ext = Vec::new();
+        let mut action_props = Vec::new();
+        
+        let action_labels = ["Missile", "Melee"];
+        for label in action_labels {
+            if let Some(steps) = label_to_steps.get(label) {
+                let action_filename = format!("{}_{}_action.tres", enemy_name, label.to_lowercase());
+                let action_path = actor_root.join(&action_filename);
+                let action_id = format!("action_{}", label.to_lowercase());
+                
+                let action_content = format!(
+r#"[gd_resource type="Resource" script_class="WeaponAction" format=3]
+[ext_resource type="Script" path="res://weapons/weapon_action.gd" id="1_script"]
+{}
+[resource]
+script = ExtResource("1_script")
+animation_name = "attack"
+steps = [{}]
+loop = false
+consumes_ammo = false
+"#, action_ext_resources.join("\n"), steps.join(", "));
+                
+                let _ = fs::write(&action_path, action_content);
+                action_tres_ext.push(format!("[ext_resource type=\"Resource\" path=\"{}/{}\" id=\"{}\"]", rel_path, action_filename, action_id));
+                action_props.push(format!("{}_action = ExtResource(\"{}\")", label.to_lowercase(), action_id));
+            }
+        }
+
         // 2. Generate TSCN
         let tscn_path = actor_root.join(format!("{}.tscn", enemy_name));
         let tscn_content = format!(
@@ -493,12 +644,13 @@ r#"[gd_scene load_steps=6 format=3]
 [ext_resource type="Script" path="res://enemies/grin/doom_enemy.gd" id="1_script"]
 [ext_resource type="Script" path="res://enemies/enemy_sounds.gd" id="2_sounds"]
 [ext_resource type="SpriteFrames" path="{}/{}_spriteframes.tres" id="3_sprites"]
+{}
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1"]
 radius = {:.4}
 height = {:.4}
 
-[node name="DoomEnemy" type="CharacterBody3D"]
+[node name="{}" type="CharacterBody3D" groups=["Enemies"]]
 floor_stop_on_slope = false
 safe_margin = 0.5
 script = ExtResource("1_script")
@@ -508,6 +660,8 @@ damage = {}
 reactiontime = {:.4}
 pain_chance = {}
 health = {}
+use_gravity = {}
+{}
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, {:.4}, 0)
@@ -519,6 +673,7 @@ billboard = 2
 shaded = true
 texture_filter = 0
 sprite_frames = ExtResource("3_sprites")
+autoplay = "{}"
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
 simplify_path = true
@@ -533,10 +688,15 @@ hurt_folder = "{}/sounds/{}/hurt"
 taunt_folder = "{}/sounds/{}/taunt"
 "#, 
             rel_path, enemy_name, 
+            action_tres_ext.join("\n"),
             r_val, h_val,
+            enemy_name,
             speed_val, meleerange_val, damage, reactiontime_val, pain_chance, health,
+            use_gravity,
+            action_props.join("\n"),
             h_val / 2.0, // collision y transform
             h_val / 2.0, // sprite y transform
+            autoplay_anim,
             rel_path, enemy_name, rel_path, enemy_name, rel_path, enemy_name
         );
         let _ = fs::write(&tscn_path, tscn_content);
