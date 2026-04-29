@@ -46,9 +46,11 @@
 [ext_resource type="Texture2D" uid="uid://xk8ccsp0hrx4" path="res://npcs/ShotgunMonk/sprites/MARAP6P4.png" id="44_tex"]
 [ext_resource type="Texture2D" uid="uid://ygau8v5l03db" path="res://npcs/ShotgunMonk/sprites/MARAG5.png" id="45_tex"]
 [ext_resource type="Texture2D" uid="uid://dycal7h44tsy6" path="res://npcs/ShotgunMonk/sprites/MARAP5.png" id="46_tex"]
-[ext_resource type="AudioStream" uid="uid://bkikuail7xstn" path="res://npcs/ShotgunMonk/dialogue/audio/ElevenLabs_2026-04-29T18_50_26_Hiro - Calm, Measured and Husky_pvc_sp100_s50_sb75_v3.mp3" id="47_my845"]
 [ext_resource type="AudioStream" uid="uid://kgiybjyuki2i" path="res://npcs/ShotgunMonk/dialogue/audio/ElevenLabs_2026-04-29T18_58_47_Hiro - Calm, Measured and Husky_pvc_sp100_s50_sb75_v3.mp3" id="48_rpv6j"]
 [ext_resource type="AudioStream" uid="uid://bs4wogvfmk14o" path="res://npcs/ShotgunMonk/dialogue/audio/ElevenLabs_2026-04-29T19_02_52_Hiro - Calm, Measured and Husky_pvc_sp100_s50_sb75_v3.mp3" id="49_ckj4m"]
+[ext_resource type="AudioStream" uid="uid://pw76dqxgyuli" path="res://npcs/ShotgunMonk/dialogue/audio/ElevenLabs_2026-04-29T19_25_02_Hiro - Calm, Measured and Husky_pvc_sp100_s50_sb75_v3.mp3" id="49_s8yxr"]
+[ext_resource type="AudioStream" uid="uid://btys4ag67r867" path="res://npcs/ShotgunMonk/dialogue/audio/ElevenLabs_2026-04-29T19_32_52_Hiro - Calm, Measured and Husky_pvc_sp100_s50_sb75_v3.mp3" id="51_nxkge"]
+[ext_resource type="AudioStream" uid="uid://cgpryuq0wr0y3" path="res://npcs/ShotgunMonk/dialogue/audio/ElevenLabs_2026-04-29T19_34_20_Hiro - Calm, Measured and Husky_pvc_sp100_s50_sb75_v3.mp3" id="52_4reaw"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1"]
 radius = 1.1286621
@@ -252,9 +254,14 @@ animations = [{
 [sub_resource type="SphereShape3D" id="SphereShape3D_au4qf"]
 radius = 2.019645
 
+[sub_resource type="DialogueLine" id="DialogueLine_udfx5"]
+text = "俺はヴァチカン特務第１３課イスカリオテ機関の藤沢マーレでございます。これからよろしく"
+audio = ExtResource("49_s8yxr")
+
 [sub_resource type="DialogueLine" id="DialogueLine_my845"]
 text = "忘れてたか...ヤベー。"
 audio = ExtResource("48_rpv6j")
+next_line = SubResource("DialogueLine_udfx5")
 
 [sub_resource type="DialogueChoice" id="DialogueChoice_rpv6j"]
 label = "誰だお前？"
@@ -268,11 +275,23 @@ audio = ExtResource("49_ckj4m")
 label = "なんだこの圧力！"
 next_node = SubResource("DialogueLine_s8yxr")
 
+[sub_resource type="DialogueLine" id="DialogueLine_31sx5"]
+text = "そりゃどうでもいい、とにかく銃を見つけなきゃこまる。"
+audio = ExtResource("52_4reaw")
+
+[sub_resource type="DialogueLine" id="DialogueLine_kv7hp"]
+text = "落ち着け。お前も、この腐れた洞窟の事もなにも知らぬ。"
+audio = ExtResource("51_nxkge")
+next_line = SubResource("DialogueLine_31sx5")
+
+[sub_resource type="DialogueChoice" id="DialogueChoice_rqp60"]
+label = "俺は誰、とどこかここ！"
+next_node = SubResource("DialogueLine_kv7hp")
+
 [sub_resource type="DialogueLine" id="DialogueLine_au4qf"]
-text = "生きてたのか。無事でよかった。"
-audio = ExtResource("47_my845")
+text = "まだ生きてる事こそ称えます"
 line_type = 1
-choices = Array[DialogueChoice]([SubResource("DialogueChoice_rpv6j"), SubResource("DialogueChoice_udfx5")])
+choices = Array[DialogueChoice]([SubResource("DialogueChoice_rpv6j"), SubResource("DialogueChoice_udfx5"), SubResource("DialogueChoice_rqp60")])
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_my845"]
 radius = 3.3916233
@@ -322,8 +341,8 @@ shape = SubResource("SphereShape3D_au4qf")
 
 [node name="DialogueManager" type="DialogueManager" parent="." unique_id=909343281]
 root_node = SubResource("DialogueLine_au4qf")
-audio_bus_name = &"SfxBus"
-reverb_bus_enabled = true
+audio_bus_override = true
+audio_bus_name = &"NPC"
 reverb_bus_name = &"SfxBus"
 reverb_bus_amount = 0.55
 

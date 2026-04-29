@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://pw76dqxgyuli"
+path="res://.godot/imported/ElevenLabs_2026-04-29T19_25_02_Hiro - Calm, Measured and Husky_pvc_sp100_s50_sb75_v3.mp3-86b54a896d29f92036079a701cc247c2.mp3str"
+
+[deps]
+
+source_file="res://npcs/ShotgunMonk/dialogue/audio/ElevenLabs_2026-04-29T19_25_02_Hiro - Calm, Measured and Husky_pvc_sp100_s50_sb75_v3.mp3"
+dest_files=["res://.godot/imported/ElevenLabs_2026-04-29T19_25_02_Hiro - Calm, Measured and Husky_pvc_sp100_s50_sb75_v3.mp3-86b54a896d29f92036079a701cc247c2.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

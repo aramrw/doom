@@ -1,0 +1,41 @@
+[gd_scene load_steps=5 format=3]
+
+    [ext_resource type="Script" path="res://assets/base_prop.gd" id="1_script"]
+    [ext_resource type="SpriteFrames" path="res://assets/props/burning/godot_data/burningcorpse2_spriteframes.tres" id="2_sprites"]
+
+    [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1"]
+    radius = 0.2000
+    height = 2.7000
+
+    [node name="BurningCorpse2" type="StaticBody3D"]
+    script = ExtResource("1_script")
+    initial_state = "spawn"
+    
+    [node name="Sprite3D_0" type="AnimatedSprite3D" parent="."]
+    transform = Transform3D(1.0000, 0, 0.0000, 0, 1, 0, -0.0000, 0, 1.0000, 0, 1.3500, 0)
+    shaded = true
+    texture_filter = 0
+    sprite_frames = ExtResource("2_sprites")
+    autoplay = "spawn"
+    
+    [node name="Sprite3D_1" type="AnimatedSprite3D" parent="."]
+    transform = Transform3D(0.7071, 0, 0.7071, 0, 1, 0, -0.7071, 0, 0.7071, 0, 1.3500, 0)
+    shaded = true
+    texture_filter = 0
+    sprite_frames = ExtResource("2_sprites")
+    autoplay = "spawn"
+    
+    [node name="Sprite3D_2" type="AnimatedSprite3D" parent="."]
+    transform = Transform3D(-0.0000, 0, 1.0000, 0, 1, 0, -1.0000, 0, -0.0000, 0, 1.3500, 0)
+    shaded = true
+    texture_filter = 0
+    sprite_frames = ExtResource("2_sprites")
+    autoplay = "spawn"
+    
+    [node name="Sprite3D_3" type="AnimatedSprite3D" parent="."]
+    transform = Transform3D(-0.7071, 0, 0.7071, 0, 1, 0, -0.7071, 0, -0.7071, 0, 1.3500, 0)
+    shaded = true
+    texture_filter = 0
+    sprite_frames = ExtResource("2_sprites")
+    autoplay = "spawn"
+    

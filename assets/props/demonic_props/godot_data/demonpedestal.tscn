@@ -1,12 +1,35 @@
 [gd_scene format=3 uid="uid://dfu8ux3qx10qv"]
 
+[ext_resource type="Script" uid="uid://c0okqj0p3xl4o" path="res://assets/props/demonic_props/godot_data/demonpedestal.gd" id="1_hls0w"]
 [ext_resource type="SpriteFrames" path="res://assets/props/demonic_props/godot_data/demonpedestal_spriteframes.tres" id="1_sprites"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1"]
 radius = 0.45
 height = 1.6
 
+[sub_resource type="DialogueLine" id="DialogueLine_v8ggl"]
+text = "かつて、争いを嫌った彫刻師が、己の平穏を守るために一度だけ武器を作った。"
+
+[sub_resource type="DialogueChoice" id="DialogueChoice_bcldn"]
+label = "伝承"
+next_node = SubResource("DialogueLine_v8ggl")
+
+[sub_resource type="DialogueChoice" id="DialogueChoice_hls0w"]
+label = "去る"
+
+[sub_resource type="DialogueLine" id="DialogueLine_pa666"]
+text = "最後の一品として残した、芸術品のように美しい斧。"
+line_type = 1
+choices = Array[DialogueChoice]([SubResource("DialogueChoice_bcldn"), SubResource("DialogueChoice_hls0w")])
+
+[sub_resource type="DialogueLine" id="DialogueLine_hls0w"]
+text = "案2：断罪と祝福の斧「アタラクシア」静寂（アタラクシア）を愛した伝説の彫刻師が、"
+next_line = SubResource("DialogueLine_pa666")
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hls0w"]
+
 [node name="DemonPedestal" type="StaticBody3D" unique_id=1384483749]
+script = ExtResource("1_hls0w")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=310275115]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
@@ -20,3 +43,10 @@ texture_filter = 0
 sprite_frames = ExtResource("1_sprites")
 animation = &"spawn"
 autoplay = "spawn"
+
+[node name="DialogueManager" type="DialogueManager" parent="." unique_id=1895326246]
+root_node = SubResource("DialogueLine_hls0w")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DialogueManager" unique_id=1408482735]
+transform = Transform3D(0.3733926, 0.9276734, 0, -0.9276734, 0.3733926, 0, 0, 0, 1, 0, 0.7573616, 0)
+shape = SubResource("CapsuleShape3D_hls0w")

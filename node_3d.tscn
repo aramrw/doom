@@ -24,7 +24,9 @@
 [ext_resource type="PackedScene" uid="uid://ncxbsny2rh0x" path="res://assets/props/doors/dungeon_door.tscn" id="26_j3e5s"]
 [ext_resource type="Script" uid="uid://bowe0a0w404ck" path="res://music.gd" id="26_nu31w"]
 [ext_resource type="Resource" uid="uid://b4tivwmucef5q" path="res://items/crosses/cross_1/godot_data/blackcrosskey_item.tres" id="27_nu31w"]
+[ext_resource type="PackedScene" uid="uid://b7hwuaxqyod5w" path="res://enemies/cultist/cultist.tscn" id="27_obt1j"]
 [ext_resource type="PackedScene" uid="uid://bds01h6u0moes" path="res://assets/statues/dsparilstatue/godot_data/dsparilstatuered.tscn" id="28_2yde8"]
+[ext_resource type="PackedScene" uid="uid://bl36g86yxxb04" path="res://assets/props/burning/godot_data/burningcorpse1.tscn" id="28_id0nj"]
 [ext_resource type="Resource" path="res://items/crosses/cross_1/godot_data/redcrosskey_item.tres" id="28_obt1j"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_i5arm"]
@@ -254,7 +256,6 @@ layer = 100
 
 [node name="ShotgunMonk2" parent="." unique_id=295704134 instance=ExtResource("18_monk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.3531837, 5.7549996, -4.1861115)
-follows_player = false
 meleerange = 4.0
 health = 500
 
@@ -287,3 +288,9 @@ transform = Transform3D(6, 0, 0, 0, 6, 0, 0, 0, 6, -33.624943, 1.3420897, 30.905
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=1543212967]
 stream = ExtResource("25_j3e5s")
 script = ExtResource("26_nu31w")
+
+[node name="Cultist" parent="." unique_id=1006558139 instance=ExtResource("27_obt1j")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -47.2899, 16.566841, 33.10798)
+
+[node name="BurningCorpse1" parent="." unique_id=612204658 instance=ExtResource("28_id0nj")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -39.906803, 3.5039892, 26.40787)
