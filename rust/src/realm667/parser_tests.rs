@@ -228,4 +228,37 @@ mod tests {
         assert_eq!(action.args.len(), 2);
         assert_eq!(action.args[0].to_string_lossy(), "15*random(1,8)");
     }
+
+    #[test]
+    fn test_parser_enemy_properties() {
+        let input = "
+            actor MyEnemy : Actor 999 {
+                Health 100
+                Speed 8
+                PainChance 50
+                Radius 20
+                Height 56
+                +NOGRAVITY
+                States {
+                    Spawn:
+                        PLAY A 10
+                        Loop
+                    See:
+                        PLAY B 5
+                        Loop
+                }
+            }
+        ";
+        let actors = parse_document(input).unwrap();
+        assert_eq!(actors.len(), 1);
+        let actor = &actors[0];
+        assert_eq!(actor.name, "MyEnemy");
+        assert_eq!(actor.ed_number, Some(999));
+        assert_eq!(actor.properties.get("Health"), Some(&GZValue::Integer(100)));
+        assert_eq!(actor.properties.get("Speed"), Some(&GZValue::Integer(8)));
+        assert_eq!(actor.properties.get("PainChance"), Some(&GZValue::Integer(50)));
+        assert!(actor.flags.contains(&"NOGRAVITY".to_string()));
+        assert!(actor.states.contains_key("Spawn"));
+        assert!(actor.states.contains_key("See"));
+    }
 }

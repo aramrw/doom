@@ -15,13 +15,14 @@
 [ext_resource type="AudioStream" uid="uid://b3un15ghkddtr" path="res://audio/cave_ambience.mp3" id="16_tuemg"]
 [ext_resource type="PackedScene" uid="uid://0lefihnkg1ip" path="res://ui/dialogue_ui.tscn" id="17_dialogue"]
 [ext_resource type="PackedScene" uid="uid://b45e5hjqdka1g" path="res://npcs/shotgun_monk.tscn" id="18_monk"]
-[ext_resource type="PackedScene" uid="uid://by41h2dwu1l1k" path="res://assets/lights/torches/fire/fire.tscn" id="20_jsnrv"]
 [ext_resource type="PackedScene" uid="uid://dfu8ux3qx10qv" path="res://assets/props/demonic_props/godot_data/demonpedestal.tscn" id="21_s0gvp"]
 [ext_resource type="PackedScene" uid="uid://wq7jq8taaawf" path="res://assets/props/demonic_props/godot_data/demonbrazier2.tscn" id="22_s0gvp"]
 [ext_resource type="PackedScene" path="res://weapons/melee/arcaneaxe/godot_data/quakeaxe_pickup.tscn" id="23_vxd74"]
 [ext_resource type="PackedScene" uid="uid://uskdi4242ngs" path="res://assets/rift/rift.tscn" id="24_dhlwf"]
 [ext_resource type="PackedScene" path="res://items/crosses/cross_1/godot_data/blackcrosskey_pickup.tscn" id="25_5t8nk"]
+[ext_resource type="AudioStream" uid="uid://bi1aw38qhrect" path="res://music/output.mp3" id="25_j3e5s"]
 [ext_resource type="PackedScene" uid="uid://ncxbsny2rh0x" path="res://assets/props/doors/dungeon_door.tscn" id="26_j3e5s"]
+[ext_resource type="Script" uid="uid://bowe0a0w404ck" path="res://music.gd" id="26_nu31w"]
 [ext_resource type="Resource" uid="uid://b4tivwmucef5q" path="res://items/crosses/cross_1/godot_data/blackcrosskey_item.tres" id="27_nu31w"]
 [ext_resource type="PackedScene" uid="uid://bds01h6u0moes" path="res://assets/statues/dsparilstatue/godot_data/dsparilstatuered.tscn" id="28_2yde8"]
 [ext_resource type="Resource" path="res://items/crosses/cross_1/godot_data/redcrosskey_item.tres" id="28_obt1j"]
@@ -257,9 +258,6 @@ follows_player = false
 meleerange = 4.0
 health = 500
 
-[node name="Fire2" parent="." unique_id=1944567405 instance=ExtResource("20_jsnrv")]
-transform = Transform3D(24.290804, 0, -17.605587, 0, 29.999998, 0, 17.605587, 0, 24.290804, -8.910022, 10.895618, -11.1331415)
-
 [node name="DemonPedestal" parent="." unique_id=1923286135 instance=ExtResource("21_s0gvp")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 5.104932, 4.0200067, 0.02118361)
 
@@ -285,3 +283,7 @@ required_item = ExtResource("28_obt1j")
 
 [node name="DSparilStatueRed" parent="." unique_id=1448162188 instance=ExtResource("28_2yde8")]
 transform = Transform3D(6, 0, 0, 0, 6, 0, 0, 0, 6, -33.624943, 1.3420897, 30.905537)
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=1543212967]
+stream = ExtResource("25_j3e5s")
+script = ExtResource("26_nu31w")

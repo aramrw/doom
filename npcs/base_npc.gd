@@ -12,20 +12,41 @@ var npc_state = NPCState.IDLE
 
 @export_group("Dialogue")
 @export var npc_display_name: String = "NPC"
-@export var dialogue_lines: Array[String] = ["Hello there!"]
+@export var start_node: DialogueNode # ALLOWS EDITING IN INSPECTOR
+@export var dialogue_lines: Array[String] = [] # Fallback simple lines
+
+var dialogue_script = load("res://dialogue_interactable.gd")
+var dialogue_interactable: Node
 
 func _ready():
 	super._ready()
 	add_to_group("NPCs")
 	if follows_player:
 		npc_state = NPCState.FOLLOW
+		
+	# Find or create a dialogue component
+	dialogue_interactable = get_node_or_null("DialogueInteractable")
+	if not dialogue_interactable:
+		for child in get_children():
+			if child.has_method("interact") and child.get_script() and child.get_script().get_path().contains("dialogue_interactable"):
+				dialogue_interactable = child
+				break
+	
+	# AGNOSTIC: If still not found, add it dynamically
+	if not dialogue_interactable:
+		dialogue_interactable = dialogue_script.new()
+		dialogue_interactable.name = "DialogueInteractable"
+		add_child(dialogue_interactable)
+	
+	if dialogue_interactable:
+		dialogue_interactable.display_name = npc_display_name
+		dialogue_interactable.start_node = start_node # Pass the inspector-set node
 
 func _physics_process(delta):
 	if is_dead:
 		super._physics_process(delta)
 		return
 		
-	# Global target scanning (unless talking)
 	if npc_state != NPCState.TALKING:
 		check_for_targets()
 		
@@ -51,7 +72,7 @@ func process_follow(_delta):
 	var target_pos = player.body.global_position
 	var dist = global_position.distance_to(target_pos)
 	
-	target_node = player.body # Ensure look logic has a target
+	target_node = player.body
 	if dist > 4.0:
 		chase_target()
 	else:
@@ -64,7 +85,6 @@ func process_talking(_delta):
 	velocity.x = 0
 	velocity.z = 0
 	move_and_slide()
-	# Look at player while talking
 	var dir_to_player = global_position.direction_to(player.body.global_position)
 	var look_target = global_position - dir_to_player
 	look_target.y = global_position.y
@@ -72,7 +92,6 @@ func process_talking(_delta):
 		look_at(look_target, Vector3.UP)
 
 func check_for_targets():
-	# 1. Check for hostile enemies first
 	var enemies = get_tree().get_nodes_in_group("Enemies")
 	var nearest_enemy = null
 	var min_dist = detection_range
@@ -85,7 +104,6 @@ func check_for_targets():
 			
 		var d = global_position.distance_to(enemy_body.global_position)
 		if d < min_dist:
-			# Check Line of Sight
 			los_raycast.target_position = to_local(enemy_body.global_position) + Vector3(0, 1, 0)
 			los_raycast.force_raycast_update()
 			if los_raycast.get_collider() == enemy_body:
@@ -112,19 +130,20 @@ func take_damage(amount: int):
 		target_node = player.body
 	super.take_damage(amount)
 
-func interact(_player: Node = null):
+func interact(_p: Node = null):
 	if npc_state == NPCState.COMBAT: return
 	
-	print("NPC: Interaction started with ", npc_display_name)
-	npc_state = NPCState.TALKING
-	var dialogue_ui = get_tree().get_first_node_in_group("DialogueUI")
-	if dialogue_ui:
-		print("NPC: DialogueUI found, starting dialogue.")
-		dialogue_ui.start_dialogue(npc_display_name, dialogue_lines)
-		if not dialogue_ui.dialogue_finished.is_connected(_on_dialogue_finished):
-			dialogue_ui.dialogue_finished.connect(_on_dialogue_finished, CONNECT_ONE_SHOT)
-	else:
-		print("NPC: ERROR - DialogueUI NOT found in group 'DialogueUI'")
+	if dialogue_interactable:
+		print("BaseNPC: interacting with DialogueInteractable")
+		npc_state = NPCState.TALKING
+		dialogue_interactable.interact()
+		var manager = dialogue_interactable.manager
+		if not manager.dialogue_finished.is_connected(_on_dialogue_finished):
+			manager.dialogue_finished.connect(_on_dialogue_finished, CONNECT_ONE_SHOT)
 
 func _on_dialogue_finished():
-	npc_state = NPCState.IDLE # Will transition back to FOLLOW if enabled
+	print("BaseNPC: Dialogue finished signal received")
+	npc_state = NPCState.IDLE
+
+func _on_dialogue_action(action_id: String):
+	print("NPC: Action triggered: ", action_id)

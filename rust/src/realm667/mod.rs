@@ -4,6 +4,7 @@ pub mod nom_parser;
 pub mod resource_gen;
 pub mod parser_tests;
 pub mod hell_apprentice_test;
+pub mod cultist_integration_test;
 
 use crate::realm667::actor::{ActorCategory, ActorDefinition};
 use crate::realm667::asset_handler::AssetHandler;

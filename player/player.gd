@@ -189,10 +189,9 @@ func update_target_outline():
 
 func handle_interaction():
 	print("Player: handle_interaction called")
-	# 1. If dialogue is already open, advance it and return
+	# 1. If dialogue is already open, do nothing (dialogue UI handles its own input)
 	var dialogue_ui = get_tree().get_first_node_in_group("DialogueUI")
 	if dialogue_ui and dialogue_ui.visible:
-		dialogue_ui.advance()
 		return
 		
 	# 2. Otherwise, look for something to interact with

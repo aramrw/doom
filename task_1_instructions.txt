@@ -1,0 +1,5 @@
+Implementer subagent: Please perform the following:
+1. Modify rust/src/realm667/nom_parser.rs.
+2. Remove the silent 'robust skip' logic in parse_actor and other helper functions where it exists.
+3. Ensure the parser returns Err when parsing fails, stopping the process.
+4. Run 'cargo test' to ensure all tests pass (or update tests if the parsing logic changes significantly).

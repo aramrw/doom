@@ -358,13 +358,8 @@ pub fn parse_actor(input: &str) -> IResult<&str, ActorDefinition> {
                          apply_property_or_flag(&mut actor, item);
                          inner_input = next_inner;
                      }
-                     Err(_) => {
-                         // Skip one token in Default block if parsing fails
-                         if let Ok((next, _)) = ws(recognize(many1(none_of(" \t\n\r;}"))))(inner_input) {
-                             inner_input = next;
-                         } else {
-                             inner_input = &inner_input[1..];
-                         }
+                    Err(e) => {
+                         return Err(e);
                      }
                  }
              }
@@ -373,52 +368,21 @@ pub fn parse_actor(input: &str) -> IResult<&str, ActorDefinition> {
         }
 
         // Handle States block
-        match parse_states_block(input) {
-            Ok((next_input, states)) => {
-                actor.states.extend(states);
-                input = next_input;
-                continue;
-            }
-            Err(_e) => {
-                #[cfg(test)]
-                println!("DEBUG: parse_states_block failed for actor {}: {:?}", actor.name, _e);
-            }
+        if let Ok((next_input, states)) = parse_states_block(input) {
+            actor.states.extend(states);
+            input = next_input;
+            continue;
         }
         
-        // Handle standalone property/flag or unknown item (like void functions)
-        match parse_property_or_flag(input) {
-            Ok((next_input, item)) => {
-                apply_property_or_flag(&mut actor, item);
-                input = next_input;
-            }
-            Err(_) => {
-                // Robust skip: skip balanced braces or single tokens
-                if let Ok((next_input, _)) = ws(char('{'))(input) {
-                    let mut depth = 1;
-                    let mut temp_input = next_input;
-                    while depth > 0 && !temp_input.is_empty() {
-                        if let Ok((next, _)) = char::<&str, nom::error::Error<&str>>('{')(temp_input) {
-                            depth += 1;
-                            temp_input = next;
-                        } else if let Ok((next, _)) = char::<&str, nom::error::Error<&str>>('}')(temp_input) {
-                            depth -= 1;
-                            temp_input = next;
-                        } else if let Ok((next, _)) = multispace1::<&str, nom::error::Error<&str>>(temp_input) {
-                            temp_input = next;
-                        } else if !temp_input.is_empty() {
-                            temp_input = &temp_input[1..];
-                        }
-                    }
-                    input = temp_input;
-                } else if let Ok((next_input, _)) = ws(recognize(many1(none_of(" \t\n\r{}"))))(input) {
-                    input = next_input;
-                } else if !input.is_empty() {
-                    input = &input[1..];
-                } else {
-                    break;
-                }
-            }
+        // Handle standalone property/flag
+        if let Ok((next_input, item)) = parse_property_or_flag(input) {
+            apply_property_or_flag(&mut actor, item);
+            input = next_input;
+            continue;
         }
+        
+        // If nothing matches, we hit an unexpected token
+        return Err(nom::Err::Failure(nom::error::Error::new(input, nom::error::ErrorKind::Tag)));
     }
     
     Ok((input, actor))
