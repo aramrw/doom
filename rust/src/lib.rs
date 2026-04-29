@@ -6,6 +6,8 @@ pub mod inventory;
 pub mod dialogue {
     pub mod manager;
     pub mod resource;
+    pub use manager::*;
+    pub use resource::*;
     #[cfg(test)]
     pub mod tests;
 }

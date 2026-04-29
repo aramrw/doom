@@ -1,20 +1,20 @@
 use godot::prelude::*;
 use godot::classes::AudioStream;
 
+#[derive(GodotConvert, Var, Export, Debug, Clone, Copy, PartialEq, Eq, Default)]
+#[godot(via = i32)]
+pub enum DialogueType {
+    #[default]
+    Static = 0,
+    MultiChoice = 1,
+}
+
 #[derive(GodotClass)]
 #[class(base=Resource, init)]
 pub struct DialogueChoice {
-    #[base]
-    pub base: Base<Resource>,
-
-    #[export]
-    pub text: GString,
-
-    #[export]
-    pub next_node: Option<Gd<DialogueNode>>,
-
-    #[export]
-    pub action_id: GString,
+    #[base] pub base: Base<Resource>,
+    #[export] pub label: GString,
+    #[export] pub next_node: Option<Gd<DialogueLine>>,
 }
 
 #[godot_api]
@@ -22,19 +22,23 @@ impl DialogueChoice {}
 
 #[derive(GodotClass)]
 #[class(base=Resource, init)]
-pub struct DialogueNode {
-    #[base]
-    pub base: Base<Resource>,
-
-    #[export]
-    pub dialogue_text: GString,
-
-    #[export]
-    pub choices: Array<Variant>,
-
-    #[export]
-    pub audio: Option<Gd<AudioStream>>,
+pub struct DialogueLine {
+    #[base] pub base: Base<Resource>,
+    #[export] pub text: GString,
+    #[export] pub audio: Option<Gd<AudioStream>>,
+    #[export] pub line_type: DialogueType,
+    #[export] pub next_line: Option<Gd<DialogueLine>>,
+    #[export] pub choices: Array<Gd<DialogueChoice>>,
 }
 
 #[godot_api]
-impl DialogueNode {}
+impl DialogueLine {}
+
+#[derive(GodotClass)]
+#[class(base=Resource, init)]
+pub struct DialogueResource {
+    #[base] pub base: Base<Resource>,
+}
+
+#[godot_api]
+impl DialogueResource {}

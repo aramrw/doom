@@ -4,7 +4,7 @@ class_name BaseDialogue
 # --- Exports ---
 @export_group("Dialogue")
 @export var npc_display_name: String = "NPC"
-@export var start_node: DialogueNode # Using Rust DialogueNode
+@export var dialogue_resource: DialogueResource # New resource based system
 
 @export_group("Behavior")
 @export var follows_player: bool = false
@@ -38,7 +38,7 @@ func _ready():
 	
 	# Connect manager signals
 	dialogue_manager.dialogue_started.connect(_on_dialogue_started)
-	dialogue_manager.node_changed.connect(_on_dialogue_node_changed)
+	dialogue_manager.line_changed.connect(_on_dialogue_line_changed)
 	dialogue_manager.dialogue_finished.connect(_on_dialogue_finished_rs)
 	dialogue_manager.action_triggered.connect(_on_dialogue_action)
 
@@ -61,15 +61,15 @@ func _physics_process(delta):
 
 # --- Dialogue Callbacks ---
 
-func _on_dialogue_started(node):
+func _on_dialogue_started(line):
 	var dialogue_ui = get_tree().get_first_node_in_group("DialogueUI")
 	if dialogue_ui:
-		dialogue_ui.start_dialogue_rs(npc_display_name, node)
+		dialogue_ui.start_dialogue_rs(npc_display_name, line, dialogue_manager)
 
-func _on_dialogue_node_changed(node):
+func _on_dialogue_line_changed(line):
 	var dialogue_ui = get_tree().get_first_node_in_group("DialogueUI")
 	if dialogue_ui:
-		dialogue_ui.update_node(node)
+		dialogue_ui.update_line(line)
 
 func _on_dialogue_finished_rs():
 	var dialogue_ui = get_tree().get_first_node_in_group("DialogueUI")
@@ -154,12 +154,8 @@ func take_damage(_amount: int):
 func interact(_p: Node = null):
 	if npc_state == NPCState.COMBAT: return
 	
-	var effective_node = start_node
-	if not effective_node and npc_display_name.contains("僧"):
-		effective_node = DialogueTreeFactory.create_shotgun_monk_demo()
-	
-	if effective_node:
+	if dialogue_resource:
 		npc_state = NPCState.TALKING
-		dialogue_manager.start_dialogue(effective_node)
+		dialogue_manager.start_dialogue(dialogue_resource)
 	else:
-		push_warning("NPC: No start_node assigned!")
+		push_warning("NPC: No dialogue_resource assigned!")

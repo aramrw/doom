@@ -12,35 +12,12 @@ var npc_state = NPCState.IDLE
 
 @export_group("Dialogue")
 @export var npc_display_name: String = "NPC"
-@export var start_node: DialogueNode # ALLOWS EDITING IN INSPECTOR
-@export var dialogue_lines: Array[String] = [] # Fallback simple lines
-
-var dialogue_script = load("res://dialogue_interactable.gd")
-var dialogue_interactable: Node
 
 func _ready():
 	super._ready()
 	add_to_group("NPCs")
 	if follows_player:
 		npc_state = NPCState.FOLLOW
-		
-	# Find or create a dialogue component
-	dialogue_interactable = get_node_or_null("DialogueInteractable")
-	if not dialogue_interactable:
-		for child in get_children():
-			if child.has_method("interact") and child.get_script() and child.get_script().get_path().contains("dialogue_interactable"):
-				dialogue_interactable = child
-				break
-	
-	# AGNOSTIC: If still not found, add it dynamically
-	if not dialogue_interactable:
-		dialogue_interactable = dialogue_script.new()
-		dialogue_interactable.name = "DialogueInteractable"
-		add_child(dialogue_interactable)
-	
-	if dialogue_interactable:
-		dialogue_interactable.display_name = npc_display_name
-		dialogue_interactable.start_node = start_node # Pass the inspector-set node
 
 func _physics_process(delta):
 	if is_dead:
@@ -133,17 +110,32 @@ func take_damage(amount: int):
 func interact(_p: Node = null):
 	if npc_state == NPCState.COMBAT: return
 	
-	if dialogue_interactable:
-		print("BaseNPC: interacting with DialogueInteractable")
+	# New Rust-based Dialogue Component interaction
+	var manager = get_node_or_null("DialogueManager")
+	if manager and manager.has_method("interact"):
+		print("BaseNPC: interacting with DialogueManager")
 		npc_state = NPCState.TALKING
-		dialogue_interactable.interact()
-		var manager = dialogue_interactable.manager
-		if not manager.dialogue_finished.is_connected(_on_dialogue_finished):
-			manager.dialogue_finished.connect(_on_dialogue_finished, CONNECT_ONE_SHOT)
+		
+		# Wire UI to Manager signals
+		var ui = get_tree().get_first_node_in_group("DialogueUI")
+		if ui:
+			# Use bind to pass the npc_display_name and manager reference to DialogueUI
+			if not manager.is_connected("dialogue_started", ui.start_dialogue_rs):
+				manager.connect("dialogue_started", ui.start_dialogue_rs.bind(npc_display_name, manager))
+			if not manager.is_connected("line_changed", ui.update_line):
+				manager.connect("line_changed", ui.update_line)
+			if not manager.is_connected("dialogue_finished", ui.finish):
+				manager.connect("dialogue_finished", ui.finish)
+		
+		manager.interact()
+		
+		if not manager.is_connected("dialogue_finished", _on_dialogue_finished):
+			manager.connect("dialogue_finished", _on_dialogue_finished, CONNECT_ONE_SHOT)
 
 func _on_dialogue_finished():
 	print("BaseNPC: Dialogue finished signal received")
 	npc_state = NPCState.IDLE
 
-func _on_dialogue_action(action_id: String):
-	print("NPC: Action triggered: ", action_id)
+
+func _on_dialogue_manager_dialogue_started(line: DialogueLine) -> void:
+	pass # Replace with function body.

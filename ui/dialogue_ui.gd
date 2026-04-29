@@ -10,6 +10,7 @@ signal dialogue_finished
 
 var current_node = null
 var is_active: bool = false
+var active_manager: Node = null
 
 @onready var retro_rect = get_tree().get_first_node_in_group("RetroFilter")
 
@@ -80,8 +81,9 @@ func start_dialogue(npc_name: String, lines: Array):
 		text_label.text = lines[0]
 	show()
 
-func start_dialogue_rs(npc_name: String, node):
+func start_dialogue_rs(line, npc_name: String, manager: Node = null):
 	is_active = true
+	active_manager = manager
 	name_label.text = npc_name
 	
 	if retro_rect:
@@ -90,14 +92,14 @@ func start_dialogue_rs(npc_name: String, node):
 			mat.set_shader_parameter("dialogue_focus", 1.0)
 			
 	show()
-	display_node(node)
+	display_line(line)
 
-func display_node(node):
-	current_node = node
-	text_label.text = node.dialogue_text
+func display_line(line):
+	current_node = line # Reusing variable name
+	text_label.text = line.text
 	
-	if node.audio and audio_player:
-		audio_player.stream = node.audio
+	if line.audio and audio_player:
+		audio_player.stream = line.audio
 		audio_player.play()
 	
 	if choices_container:
@@ -106,29 +108,48 @@ func display_node(node):
 		
 		var first_button = null
 		
-		for i in range(node.choices.size()):
-			var choice = node.choices[i]
+		if line.line_type == 0: # Static
 			var button = Button.new()
-			button.text = choice.text
+			button.text = "[ 次へ ]"
 			button.alignment = HORIZONTAL_ALIGNMENT_CENTER
-			# Shrink choice buttons further
 			button.add_theme_font_size_override("font_size", 6)
-			button.pressed.connect(_on_choice_selected.bind(i))
+			button.pressed.connect(_on_next_pressed)
 			choices_container.add_child(button)
-			if i == 0:
-				first_button = button
+			first_button = button
+		else: # Choice
+			for i in range(line.choices.size()):
+				var choice = line.choices[i]
+				var button = Button.new()
+				button.text = choice.label
+				button.alignment = HORIZONTAL_ALIGNMENT_CENTER
+				button.add_theme_font_size_override("font_size", 6)
+				button.pressed.connect(_on_choice_selected.bind(i))
+				choices_container.add_child(button)
+				if i == 0:
+					first_button = button
 		
 		if first_button:
 			first_button.grab_focus()
 
-func _on_choice_selected(index: int):
-	var manager = get_tree().get_first_node_in_group("DialogueManager")
-	if manager:
-		manager.select_choice(index)
+func _on_next_pressed():
+	if active_manager:
+		active_manager.advance()
+	else:
+		var manager = get_tree().get_first_node_in_group("DialogueManager")
+		if manager:
+			manager.advance()
 
-func update_node(node):
-	if node:
-		display_node(node)
+func _on_choice_selected(index: int):
+	if active_manager:
+		active_manager.select_choice(index)
+	else:
+		var manager = get_tree().get_first_node_in_group("DialogueManager")
+		if manager:
+			manager.select_choice(index)
+
+func update_line(line):
+	if line:
+		display_line(line)
 	else:
 		finish()
 

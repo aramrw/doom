@@ -2,45 +2,93 @@
 mod tests {
     use godot::prelude::*;
     use crate::dialogue::manager::DialogueManager;
-    use crate::dialogue::resource::{DialogueNode, DialogueChoice};
+    use crate::dialogue::resource::{DialogueResource, DialogueLine, DialogueChoice, DialogueType};
 
     #[test]
-    fn test_choice_navigation() {
-        // Create a basic dialogue structure: StartNode -> Choice -> TargetNode
-        let target_node = Gd::from_init_fn(|base| DialogueNode {
+    fn test_static_navigation() {
+        let line2 = Gd::from_init_fn(|base| DialogueLine {
             base,
-            dialogue_text: "Target node".into(),
-            choices: Array::new(),
+            text: "Line 2".into(),
             audio: None,
-        });
-
-        let choice = Gd::from_init_fn(|base| DialogueChoice {
-            base,
-            text: "Next".into(),
-            next_node: Some(target_node.clone()),
+            line_type: DialogueType::Static,
+            next_line_index: -1,
+            choices: Array::new(),
             action_id: "".into(),
         });
 
-        let mut choices = Array::new();
-        choices.push(&choice.to_variant());
-
-        let start_node = Gd::from_init_fn(|base| DialogueNode {
+        let line1 = Gd::from_init_fn(|base| DialogueLine {
             base,
-            dialogue_text: "Start node".into(),
-            choices,
+            text: "Line 1".into(),
             audio: None,
+            line_type: DialogueType::Static,
+            next_line_index: 1,
+            choices: Array::new(),
+            action_id: "".into(),
+        });
+
+        let resource = Gd::from_init_fn(|base| DialogueResource {
+            base,
+            lines: array![&line1.to_variant(), &line2.to_variant()],
+            start_index: 0,
         });
 
         let mut manager = Gd::from_init_fn(|base| DialogueManager {
             base,
-            current_node: Some(start_node.clone()),
+            resource: None,
+            current_line_index: -1,
         });
 
-        // Trigger selection
+        manager.bind_mut().start_dialogue(resource);
+        assert_eq!(manager.bind().current_line_index, 0);
+
+        manager.bind_mut().advance();
+        assert_eq!(manager.bind().current_line_index, 1);
+    }
+
+    #[test]
+    fn test_choice_navigation() {
+        let target_line = Gd::from_init_fn(|base| DialogueLine {
+            base,
+            text: "Target".into(),
+            audio: None,
+            line_type: DialogueType::Static,
+            next_line_index: -1,
+            choices: Array::new(),
+            action_id: "".into(),
+        });
+
+        let choice = Gd::from_init_fn(|base| DialogueChoice {
+            base,
+            text: "Pick me".into(),
+            next_line_index: 1,
+            action_id: "".into(),
+        });
+
+        let start_line = Gd::from_init_fn(|base| DialogueLine {
+            base,
+            text: "Start".into(),
+            audio: None,
+            line_type: DialogueType::Choice,
+            next_line_index: -1,
+            choices: array![&choice.to_variant()],
+            action_id: "".into(),
+        });
+
+        let resource = Gd::from_init_fn(|base| DialogueResource {
+            base,
+            lines: array![&start_line.to_variant(), &target_line.to_variant()],
+            start_index: 0,
+        });
+
+        let mut manager = Gd::from_init_fn(|base| DialogueManager {
+            base,
+            resource: None,
+            current_line_index: -1,
+        });
+
+        manager.bind_mut().start_dialogue(resource);
         manager.bind_mut().select_choice(0);
 
-        // Expectation: current_node is now target_node
-        let current = manager.bind().current_node.clone().unwrap();
-        assert_eq!(current.bind().dialogue_text.to_string(), "Target node");
+        assert_eq!(manager.bind().current_line_index, 1);
     }
 }
