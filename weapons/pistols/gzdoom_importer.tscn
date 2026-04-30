@@ -1,5 +1,5 @@
 [gd_scene format=3 uid="uid://b8x6l0pho2vbp"]
 
 [node name="GZDOOM_IMPORTER" type="Realm667Importer" unique_id=1185607918]
-pk3_path = "res://enemies/DagfallSkeleton.zip"
-import_mode = 2
+pk3_path = "res://assets/props/Rocks.zip"
+import_mode = 3

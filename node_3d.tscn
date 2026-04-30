@@ -28,6 +28,12 @@
 [ext_resource type="PackedScene" uid="uid://bds01h6u0moes" path="res://assets/statues/dsparilstatue/godot_data/dsparilstatuered.tscn" id="28_2yde8"]
 [ext_resource type="PackedScene" uid="uid://bl36g86yxxb04" path="res://assets/props/burning/godot_data/burningcorpse1.tscn" id="28_id0nj"]
 [ext_resource type="Resource" path="res://items/crosses/cross_1/godot_data/redcrosskey_item.tres" id="28_obt1j"]
+[ext_resource type="PackedScene" uid="uid://cyc287glhihug" path="res://assets/texures/lava_pool.tscn" id="29_2yde8"]
+[ext_resource type="PackedScene" uid="uid://iovxamaf6cxc" path="res://assets/props/helltrees/godot_data/helltreeburn1.tscn" id="30_id0nj"]
+[ext_resource type="PackedScene" uid="uid://bp3642qhdyh76" path="res://assets/props/helltrees/godot_data/helltreeburn2.tscn" id="31_1q667"]
+[ext_resource type="PackedScene" uid="uid://b6u2f58traqug" path="res://assets/props/helltrees/godot_data/helltreeburn3.tscn" id="32_ype4i"]
+[ext_resource type="PackedScene" uid="uid://c8jadc4i4ypji" path="res://assets/props/helltrees/godot_data/helltreescorch1.tscn" id="33_riyl1"]
+[ext_resource type="PackedScene" uid="uid://m1tfxf2q41hn" path="res://assets/props/rocks/godot_data/rockblack.tscn" id="34_pb8dk"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_i5arm"]
 shader = ExtResource("1_jka67")
@@ -218,7 +224,7 @@ transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, -5.8310413, 5.9201093, 2.0631
 transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 2.465754, 6.136967, -2.980298)
 
 [node name="WallTorchBlack7" parent="." unique_id=220572612 instance=ExtResource("14_wlxy5")]
-transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, -22.752525, 5.9201093, 4.8539376)
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, -22.752525, 5.9201093, 10.9006195)
 
 [node name="WallTorchBlack11" parent="." unique_id=10013908 instance=ExtResource("14_wlxy5")]
 transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, -54.915676, 5.9201093, 4.8539376)
@@ -294,3 +300,21 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -47.2899, 16.566841, 33.10798
 
 [node name="BurningCorpse1" parent="." unique_id=612204658 instance=ExtResource("28_id0nj")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -39.906803, 3.5039892, 26.40787)
+
+[node name="LavaPool" parent="." unique_id=224718322 instance=ExtResource("29_2yde8")]
+transform = Transform3D(9.99508, 0.31365776, -0.0032449139, -0.31325245, 9.975733, -0.6218, -0.016266195, 0.6215956, 9.980649, -25.941864, 4.6830177, -11.024285)
+
+[node name="HellTreeBurn1" parent="." unique_id=1174756042 instance=ExtResource("30_id0nj")]
+transform = Transform3D(10, 0, 0, 0, 9.844235, -1.7581345, 0, 1.7581345, 9.844235, -41.440117, 3.800982, -3.789975)
+
+[node name="HellTreeBurn2" parent="." unique_id=568098515 instance=ExtResource("31_1q667")]
+transform = Transform3D(5.918455, -0.98584414, 0, 0.98584414, 5.918455, 0, 0, 0, 6, -12.698229, 4.254096, 9.898877)
+
+[node name="HellTreeBurn3" parent="." unique_id=354458419 instance=ExtResource("32_ype4i")]
+transform = Transform3D(9.941321, -1.0756918, 0.114122845, 1.0817286, 9.88584, -1.0488136, 5.551115e-16, 1.0550042, 9.944192, -22.174414, 3.1520762, -11.915505)
+
+[node name="HellTreeScorch1" parent="." unique_id=1732684043 instance=ExtResource("33_riyl1")]
+transform = Transform3D(9, 0, 0, 0, 9, 0, 0, 0, 9, -43.071373, 4.4163957, 22.75986)
+
+[node name="RockBlack" parent="." unique_id=920121591 instance=ExtResource("34_pb8dk")]
+transform = Transform3D(20, 0, 0, 0, 20, 0, 0, 0, 20, -9.759909, 4.8950896, -11.176336)
