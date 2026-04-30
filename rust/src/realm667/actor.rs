@@ -18,6 +18,7 @@ pub enum GZValue {
     Float(f64),
     String(String),
     Identifier(String),
+    FunctionCall(GZFunctionCall),
 }
 
 impl GZValue {
@@ -27,6 +28,7 @@ impl GZValue {
             GZValue::Float(f) => f.to_string(),
             GZValue::String(s) => s.clone(),
             GZValue::Identifier(id) => id.clone(),
+            GZValue::FunctionCall(fc) => fc.to_string(),
         }
     }
 }
@@ -38,6 +40,7 @@ impl std::fmt::Display for GZValue {
             GZValue::Float(fl) => write!(f, "{}", fl),
             GZValue::String(s) => write!(f, "\"{}\"", s),
             GZValue::Identifier(id) => write!(f, "{}", id),
+            GZValue::FunctionCall(fc) => write!(f, "{}", fc),
         }
     }
 }

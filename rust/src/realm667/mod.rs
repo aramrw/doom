@@ -319,20 +319,15 @@ impl Realm667Importer {
                 );
                 godot_print!("Realm667Importer: Created Godot data for weapon {}", actor.name);
             } else if category == ActorCategory::Enemy {
-                ResourceGenerator::generate_enemy_resources(
+                if let Err(e) = ResourceGenerator::generate_enemy_resources(
                     &actor,
                     &godot_data_root,
                     &godot_data_res,
                     &label_sprites,
-                );
-                godot_print!("Realm667Importer: Created Godot data for enemy {}", actor.name);
-            } else if category == ActorCategory::Projectile {
-                ResourceGenerator::generate_projectile_resources(
-                    &actor,
-                    &godot_data_root,
-                    &godot_data_res,
-                    &label_sprites,
-                );
+                ) {
+                    godot_error!("Failed to generate enemy resources: {}", e);
+                    return;
+                }
                 godot_print!("Realm667Importer: Created Godot data for projectile {}", actor.name);
             } else if category == ActorCategory::Prop {
                 ResourceGenerator::generate_prop_resources(
@@ -516,58 +511,30 @@ impl Realm667Importer {
         let mut sorted_labels: Vec<_> = actor.states.keys().collect();
         sorted_labels.sort(); // Consistent order
 
+        let actor_name = actor.name.to_lowercase();
+        let sprites_root = godot_data_root
+            .join("sprites")
+            .join(mod_name)
+            .join(&actor_name);
+
         for label in sorted_labels {
-            let label_upper = label.to_uppercase();
-            let folder_name = if let Some(f) = label_to_folder.get(label.as_str()) {
-                Some(f.clone())
-            } else if label_upper.starts_with("MISSILE") || label_upper.starts_with("MELEE") {
-                Some("attack".to_string())
-            } else if label_upper.starts_with("DEATH") {
-                Some("death".to_string())
-            } else if label_upper.starts_with("XDEATH") {
-                Some("xdeath".to_string())
-            } else if label_upper.starts_with("PAIN") {
-                Some("pain".to_string())
-            } else if label_upper.starts_with("SEE") || label_upper.starts_with("WALK") {
-                Some("walk".to_string())
-            } else if label_upper.starts_with("RAISE") {
-                Some("raise".to_string())
-            } else if label_upper.starts_with("SPAWN") || label_upper.starts_with("IDLE") {
-                if category == ActorCategory::Projectile {
-                    Some("spawn".to_string())
-                } else {
-                    Some("idle".to_string())
-                }
-            } else {
-                None
-            };
+            let frames = &actor.states[label];
+            let mut state_frames = Vec::new();
 
-            if let Some(folder_name) = folder_name {
-                let frames = &actor.states[label];
-                let actor_name = actor.name.to_lowercase();
-                let state_dir = godot_data_root
-                    .join("sprites")
-                    .join(mod_name)
-                    .join(&actor_name)
-                    .join(&folder_name);
-
-                for frame in frames {
-                    let extracted = self.extract_sprites_for_frame(frame, archive, &state_dir);
-                    for p in extracted {
-                        let rel_res = format!(
-                            "{}/sprites/{}/{}/{}/{}",
-                            godot_data_res,
-                            mod_name,
-                            actor_name,
-                            folder_name,
-                            p.file_name().unwrap().to_str().unwrap()
-                        );
-                        
-                        let entry = result_map.entry(folder_name.clone()).or_insert_with(Vec::new);
-                        entry.push((rel_res, frame.duration));
-                    }
+            for frame in frames {
+                let extracted = self.extract_sprites_for_frame(frame, archive, &sprites_root);
+                for p in extracted {
+                    let rel_res = format!(
+                        "{}/sprites/{}/{}/{}",
+                        godot_data_res,
+                        mod_name,
+                        actor_name,
+                        p.file_name().unwrap().to_str().unwrap()
+                    );
+                    state_frames.push((rel_res, frame.duration));
                 }
             }
+            result_map.insert(label.clone(), state_frames);
         }
 
         let sound_props = [

@@ -40,7 +40,11 @@ var outline_active: bool = false
 
 func _ready():
 	player = get_tree().get_first_node_in_group("Player")
-	los_raycast.add_exception(self)
+	
+	if los_raycast:
+		los_raycast.add_exception(self)
+		los_raycast.collision_mask = 3 # Layer 1: World + Layer 2: Player
+		los_raycast.enabled = true
 	
 	# Initialize our combined visual material
 	visual_mat = ShaderMaterial.new()
@@ -95,7 +99,7 @@ func _physics_process(delta):
 			target_node = player.body if player else null
 		
 	if not target_node:
-		current_anim_state = "walk"
+		current_anim_state = "see"
 		velocity = Vector3.ZERO
 		move_and_slide()
 		return
@@ -111,7 +115,10 @@ func _physics_process(delta):
 	var ray_hit = los_raycast.get_collider()
 	
 	if distance_to_target <= detection_range: 
-		if distance_to_target <= meleerange and ray_hit == target_body: 
+		var can_melee = distance_to_target <= meleerange and melee_action != null
+		var can_missile = missile_action != null
+		
+		if (can_melee or can_missile) and ray_hit == target_body: 
 			if not on_cooldown: 
 				attack() 
 			else: 
@@ -138,7 +145,7 @@ func take_damage(amount: int):
 	else:
 		is_hit = true
 		is_attacking = false 
-		current_anim_state = "pain_1" 
+		current_anim_state = "pain" 
 		sfx.hurt()
 		
 		# --- AGGRESSIVE HIT FLASH (Shader + Modulate) ---
@@ -188,9 +195,9 @@ func die():
 	# Classic Doom extreme-death check!
 	# If health drops to -20 or lower, play the gory death
 	if health <= -20:
-		current_anim_state = "death_2"
+		current_anim_state = "xdeath"
 	else:
-		current_anim_state = "death_1"
+		current_anim_state = "death"
 	sfx.death()
 	
 	update_sprite_angle()
@@ -214,7 +221,7 @@ func chase_target():
 	if target_node.has_node("CharacterBody3D"):
 		target_body = target_node.get_node("CharacterBody3D")
 		
-	current_anim_state = "walk"
+	current_anim_state = "see"
 	nav_agent.target_position = target_body.global_position
 	var next_path_pos = nav_agent.get_next_path_position()
 	
@@ -240,7 +247,7 @@ func stand_and_stare():
 	if target_node.has_node("CharacterBody3D"):
 		target_body = target_node.get_node("CharacterBody3D")
 		
-	current_anim_state = "walk" 
+	current_anim_state = "see" 
 	velocity.x = 0
 	velocity.z = 0
 	
@@ -261,7 +268,6 @@ func attack():
 		
 	is_attacking = true
 	on_cooldown = true 
-	current_anim_state = "attack" 
 	
 	velocity.x = 0
 	velocity.z = 0 
@@ -278,8 +284,12 @@ func attack():
 	var action_to_use = null
 	if distance_to_target <= meleerange and melee_action:
 		action_to_use = melee_action
+		current_anim_state = "melee"
 	elif missile_action:
 		action_to_use = missile_action
+		current_anim_state = "missile"
+	else:
+		current_anim_state = "missile"
 		
 	if action_to_use:
 		await perform_action(action_to_use)
@@ -336,13 +346,12 @@ func perform_action(action: Resource):
 func execute_effect(effect: Resource):
 	if not effect: return
 	
-	if effect.has_method("apply"):
-		# Most effects have an apply(user) method
-		effect.apply(self)
-	elif effect.get_script().get_global_name() == "ProjectileEffect":
+	if effect.has_method("execute"):
+		effect.execute(self, null)
+	elif effect.get_script() and effect.get_script().get_global_name() == "ProjectileEffect":
 		# Hardcoded fallback for known effect types if needed
 		spawn_projectile(effect.projectile_scene)
-	elif effect.get_script().get_global_name() == "SoundEffect":
+	elif effect.get_script() and effect.get_script().get_global_name() == "SoundEffect":
 		if effect.sound:
 			sfx.play_custom(effect.sound)
 
@@ -365,46 +374,42 @@ func update_sprite_angle():
 	var camera = get_viewport().get_camera_3d()
 	if not camera: return
 	
-	# Define which states actually have 8 angles
-	var directional_states = ["walk", "attack"]
+	# Any state can potentially have 8 angles now
+	# We check if the suffixed version exists in SpriteFrames
 	
-	if current_anim_state in directional_states:
-		# --- 8-WAY DIRECTIONAL LOGIC ---
-		var forward_dir = global_transform.basis.z
-		var to_camera_dir = global_position.direction_to(camera.global_position)
-		var angle = to_camera_dir.signed_angle_to(forward_dir, Vector3.UP)
-		var angle_index = int(round(angle / (PI / 4.0)))
-		if angle_index < 0: angle_index += 8
+	var forward_dir = global_transform.basis.z
+	var to_camera_dir = global_position.direction_to(camera.global_position)
+	var angle = to_camera_dir.signed_angle_to(forward_dir, Vector3.UP)
+	var angle_index = int(round(angle / (PI / 4.0)))
+	if angle_index < 0: angle_index += 8
+	
+	var anim_suffix = ""
+	var flip = false
+	match angle_index:
+		0: anim_suffix = "1"; flip = false
+		1: anim_suffix = "2"; flip = false
+		2: anim_suffix = "3"; flip = false
+		3: anim_suffix = "4"; flip = false
+		4: anim_suffix = "5"; flip = false
+		5: anim_suffix = "4"; flip = true
+		6: anim_suffix = "3"; flip = true
+		7: anim_suffix = "2"; flip = true
 		
-		var anim_suffix = ""
-		var flip = false
-		match angle_index:
-			0: anim_suffix = "1"; flip = false
-			1: anim_suffix = "2"; flip = false
-			2: anim_suffix = "3"; flip = false
-			3: anim_suffix = "4"; flip = false
-			4: anim_suffix = "5"; flip = false
-			5: anim_suffix = "4"; flip = true
-			6: anim_suffix = "3"; flip = true
-			7: anim_suffix = "2"; flip = true
-			
+	var target_anim = current_anim_state.to_lower() + "_" + anim_suffix
+	var fallback_anim = current_anim_state.to_lower()
+	
+	if sprite.sprite_frames.has_animation(target_anim):
 		sprite.flip_h = flip
-		var target_anim = current_anim_state + "_" + anim_suffix
-		
 		if sprite.animation != target_anim:
 			var current_frame = sprite.frame
 			var current_progress = sprite.frame_progress
 			sprite.play(target_anim)
-			if sprite.animation.begins_with(current_anim_state):
+			if sprite.animation.begins_with(current_anim_state.to_lower()):
 				sprite.set_frame_and_progress(current_frame, current_progress)
-				
-	else:
-		# --- NORMAL BILLBOARD LOGIC (Pain, Death) ---
-		sprite.flip_h = false # Never flip the death/pain animations
-		
-		if sprite.animation != current_anim_state:
-			if sprite.sprite_frames.has_animation(current_anim_state):
-				sprite.play(current_anim_state)
-			elif sprite.sprite_frames.has_animation(current_anim_state.replace("_1", "")):
-				# Fallback if _1 suffix is missing
-				sprite.play(current_anim_state.replace("_1", ""))
+	elif sprite.sprite_frames.has_animation(fallback_anim):
+		sprite.flip_h = false
+		if sprite.animation != fallback_anim:
+			sprite.play(fallback_anim)
+	elif sprite.sprite_frames.has_animation(fallback_anim.replace("_1", "")):
+		sprite.flip_h = false
+		sprite.play(fallback_anim.replace("_1", ""))

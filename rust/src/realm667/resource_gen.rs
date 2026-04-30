@@ -1,7 +1,7 @@
 use std::path::{Path, PathBuf};
 use std::fs;
 use std::collections::HashMap;
-use crate::realm667::actor::ActorDefinition;
+use crate::realm667::actor::{ActorDefinition, GZValue};
 
 fn with_atomic_gen<F>(actor_root: &Path, f: F) -> std::io::Result<()>
 where F: FnOnce(&Path) -> std::io::Result<()>
@@ -407,10 +407,20 @@ impl ResourceGenerator {
                             let effect_filename = format!("{}_{}_f{}_a{}_s{}_effect.tres", enemy_name, label.to_lowercase(), frame_idx, action_idx, sub_idx);
                             let effect_path = target_dir.join(&effect_filename);
 
-                            let (_script_path, effect_content) = if sub_lower_name == "a_spawnprojectile" || sub_lower_name == "a_fireprojectile" || sub_lower_name == "a_firecustommissile" {
+                            let (_script_path, effect_content) = if sub_lower_name == "a_spawnprojectile" || sub_lower_name == "a_fireprojectile" || sub_lower_name == "a_firecustommissile" || sub_lower_name == "a_customcomboattack" {
                                  let path = "res://weapons/effects/projectile_effect.gd";
-                                 let p_name = sub_action.args.get(0).map(|v| v.to_string_lossy().to_lowercase()).unwrap_or_else(|| "unknown".to_string());
-                                 let projectile_res_path = format!("{}/{}.tscn", rel_path, p_name);
+                                 let p_name = sub_action.args.get(0)
+                                    .map(|v| v.to_string_lossy().to_lowercase().replace("\"", ""))
+                                    .unwrap_or_else(|| "unknown".to_string());
+                                 
+                                 // Try to find the projectile. If it's a known one in the current mod, use it.
+                                 // Otherwise use a fallback.
+                                 let mut projectile_res_path = format!("{}/{}.tscn", rel_path, p_name);
+                                 
+                                 // Check if we should use a fallback for common missing projectiles
+                                 if p_name == "hereticimpball" || p_name == "beastball" || p_name == "unknown" || p_name.contains('(') {
+                                     projectile_res_path = "res://weapons/projectiles/fire_crystal_projectile.tscn".to_string();
+                                 }
 
                                  (path, format!(
     r#"[gd_resource type="Resource" script_class="ProjectileEffect" format=3]
@@ -419,9 +429,26 @@ impl ResourceGenerator {
     [resource]
     script = ExtResource("1_script")
     projectile_scene = ExtResource("2_proj")
-    speed = 15.0
-    damage = 20
+    speed = 20.0
+    damage = 15
     "#, path, projectile_res_path))
+                            } else if sub_lower_name == "a_custommeleeattack" {
+                                 let path = "res://weapons/effects/hitscan_effect.gd";
+                                 let damage_val = sub_action.args.get(0).map(|v| {
+                                     match v {
+                                         GZValue::Integer(i) => *i,
+                                         _ => 10 // Fallback for complex expressions like random(...)
+                                     }
+                                 }).unwrap_or(10);
+                                 
+                                 (path, format!(
+    r#"[gd_resource type="Resource" script_class="HitscanEffect" format=3]
+    [ext_resource type="Script" path="{}" id="1_script"]
+    [resource]
+    script = ExtResource("1_script")
+    damage = {}
+    range_distance = 2.0
+    "#, path, damage_val))
                             } else if sub_lower_name == "a_playsound" || sub_lower_name == "a_startsound" {
                                 let path = "res://weapons/effects/sound_effect.gd";
                                 let sound_alias = sub_action.args.get(0).map(|v| v.to_string_lossy().to_uppercase()).unwrap_or_else(|| "NONE".to_string());
@@ -500,104 +527,25 @@ impl ResourceGenerator {
             let mut keys: Vec<_> = label_sprites.keys().collect();
             keys.sort();
 
-            for anim_name in keys {
-                let sprites = label_sprites.get(anim_name).unwrap();
+            for label in keys {
+                let sprites = label_sprites.get(label).unwrap();
                 if sprites.is_empty() { continue; }
+                
+                let anim_name = label.to_lowercase();
+                let is_looping = anim_name == "see" || anim_name == "spawn" || anim_name == "idle";
 
-                if anim_name == "walk" || anim_name == "attack" || anim_name == "idle" || anim_name == "raise" {
-                    for i in 1..=5 {
-                        let dir_sprites = Self::get_direction_sprites(sprites, i);
-                        let active_sprites = if dir_sprites.is_empty() { sprites } else { &dir_sprites };
-                        
-                        let mut frames = Vec::new();
-                        for (sprite_rel_path, duration) in active_sprites {
-                            let id = texture_to_id.entry(sprite_rel_path.clone()).or_insert_with(|| {
-                                let new_id = format!("{}_ext", id_counter);
-                                ext_resources.push(format!("[ext_resource type=\"Texture2D\" path=\"{}\" id=\"{}\"]", sprite_rel_path, new_id));
-                                id_counter += 1;
-                                new_id
-                            });
-                            let dur = if *duration <= 0 { 1.0 } else { *duration as f32 };
-                    frames.push(format!("{{\n\"duration\": {},\n\"texture\": ExtResource(\"{}\")\n}}", dur, id));
-                        }
-
-                        animations.push(format!(
-    r#"{{
-    "frames": [{}],
-    "loop": true,
-    "name": &"{}_{}",
-    "speed": 35.0
-    }}"#, frames.join(", "), anim_name, i));
-                    }
-                } else if anim_name == "pain" {
-                     let mut frames = Vec::new();
-                     for (sprite_rel_path, duration) in sprites {
-                        let id = texture_to_id.entry(sprite_rel_path.clone()).or_insert_with(|| {
-                            let new_id = format!("{}_ext", id_counter);
-                            ext_resources.push(format!("[ext_resource type=\"Texture2D\" path=\"{}\" id=\"{}\"]", sprite_rel_path, new_id));
-                            id_counter += 1;
-                            new_id
-                        });
-                        let dur = if *duration <= 0 { 1.0 } else { *duration as f32 };
-                    frames.push(format!("{{\n\"duration\": {},\n\"texture\": ExtResource(\"{}\")\n}}", dur, id));
-                     }
-                     animations.push(format!(
-    r#"{{
-    "frames": [{}],
-    "loop": false,
-    "name": &"pain_1",
-    "speed": 35.0
-    }}"#, frames.join(", ")));
-                } else if anim_name == "death" {
-                     let mut frames = Vec::new();
-                     for (sprite_rel_path, duration) in sprites {
-                        let id = texture_to_id.entry(sprite_rel_path.clone()).or_insert_with(|| {
-                            let new_id = format!("{}_ext", id_counter);
-                            ext_resources.push(format!("[ext_resource type=\"Texture2D\" path=\"{}\" id=\"{}\"]", sprite_rel_path, new_id));
-                            id_counter += 1;
-                            new_id
-                        });
-                        let dur = if *duration <= 0 { 1.0 } else { *duration as f32 };
-                    frames.push(format!("{{\n\"duration\": {},\n\"texture\": ExtResource(\"{}\")\n}}", dur, id));
-                     }
-                     animations.push(format!(
-    r#"{{
-    "frames": [{}],
-    "loop": false,
-    "name": &"death_1",
-    "speed": 35.0
-    }}"#, frames.join(", ")));
-                     if !label_sprites.contains_key("xdeath") {
-                         animations.push(format!(
-    r#"{{
-    "frames": [{}],
-    "loop": false,
-    "name": &"death_2",
-    "speed": 35.0
-    }}"#, frames.join(", ")));
-                     }
-                } else if anim_name == "xdeath" {
-                     let mut frames = Vec::new();
-                     for (sprite_rel_path, duration) in sprites {
-                        let id = texture_to_id.entry(sprite_rel_path.clone()).or_insert_with(|| {
-                            let new_id = format!("{}_ext", id_counter);
-                            ext_resources.push(format!("[ext_resource type=\"Texture2D\" path=\"{}\" id=\"{}\"]", sprite_rel_path, new_id));
-                            id_counter += 1;
-                            new_id
-                        });
-                        let dur = if *duration <= 0 { 1.0 } else { *duration as f32 };
-                    frames.push(format!("{{\n\"duration\": {},\n\"texture\": ExtResource(\"{}\")\n}}", dur, id));
-                     }
-                     animations.push(format!(
-    r#"{{
-    "frames": [{}],
-    "loop": false,
-    "name": &"death_2",
-    "speed": 35.0
-    }}"#, frames.join(", ")));
-                } else {
+                // Generate 8 directions for all states to be safe, or just 1 if no directional frames exist
+                for i in 1..=8 {
+                    let dir_sprites = Self::get_direction_sprites(sprites, i);
+                    let active_sprites = if dir_sprites.is_empty() { 
+                        if i > 1 { continue; } // Only generate _1 if no directions
+                        sprites 
+                    } else { 
+                        &dir_sprites 
+                    };
+                    
                     let mut frames = Vec::new();
-                    for (sprite_rel_path, duration) in sprites {
+                    for (sprite_rel_path, duration) in active_sprites {
                         let id = texture_to_id.entry(sprite_rel_path.clone()).or_insert_with(|| {
                             let new_id = format!("{}_ext", id_counter);
                             ext_resources.push(format!("[ext_resource type=\"Texture2D\" path=\"{}\" id=\"{}\"]", sprite_rel_path, new_id));
@@ -605,16 +553,32 @@ impl ResourceGenerator {
                             new_id
                         });
                         let dur = if *duration <= 0 { 1.0 } else { *duration as f32 };
-                    frames.push(format!("{{\n\"duration\": {},\n\"texture\": ExtResource(\"{}\")\n}}", dur, id));
+                        frames.push(format!("{{\n\"duration\": {},\n\"texture\": ExtResource(\"{}\")\n}}", dur, id));
                     }
+
                     animations.push(format!(
-    r#"{{
-    "frames": [{}],
-    "loop": {},
-    "name": &"{}",
-    "speed": 35.0
-    }}"#, frames.join(", "), if anim_name == "idle" { "true" } else { "false" }, anim_name));
+r#"{{
+"frames": [{}],
+"loop": {},
+"name": &"{}_{}",
+"speed": 35.0
+}}"#, frames.join(", "), is_looping, anim_name, i));
                 }
+                
+                // Also provide a non-suffixed version for fallback
+                let mut frames = Vec::new();
+                for (sprite_rel_path, duration) in sprites {
+                    let id = texture_to_id.get(sprite_rel_path).unwrap();
+                    let dur = if *duration <= 0 { 1.0 } else { *duration as f32 };
+                    frames.push(format!("{{\n\"duration\": {},\n\"texture\": ExtResource(\"{}\")\n}}", dur, id));
+                }
+                animations.push(format!(
+r#"{{
+"frames": [{}],
+"loop": {},
+"name": &"{}",
+"speed": 35.0
+}}"#, frames.join(", "), is_looping, anim_name));
             }
 
             sf_content.push_str(&ext_resources.join("\n"));
@@ -623,12 +587,12 @@ impl ResourceGenerator {
             sf_content.push_str("]\n");
             fs::write(&sprite_frames_path, sf_content)?;
 
-            let autoplay_anim = if label_sprites.contains_key("idle") {
-                "idle_1"
-            } else if label_sprites.contains_key("walk") {
-                "walk_1"
+            let autoplay_anim = if label_sprites.contains_key("Spawn") {
+                "spawn".to_string()
+            } else if label_sprites.contains_key("See") {
+                "see_1".to_string()
             } else {
-                label_sprites.keys().next().map(|s| s.as_str()).unwrap_or("")
+                label_sprites.keys().next().map(|s| s.to_lowercase()).unwrap_or_default()
             };
 
             // 1.5 Generate WeaponActions for the enemy
@@ -675,6 +639,8 @@ impl ResourceGenerator {
     height = {:.4}
 
     [node name="{}" type="CharacterBody3D" groups=["Enemies"]]
+    collision_layer = 4
+    collision_mask = 3
     floor_stop_on_slope = false
     safe_margin = 0.5
     script = ExtResource("1_script")
@@ -703,6 +669,7 @@ impl ResourceGenerator {
     simplify_path = true
 
     [node name="RayCast3D" type="RayCast3D" parent="."]
+    collision_mask = 3
 
     [node name="EnemySounds" type="AudioStreamPlayer3D" parent="."]
     bus = &"SfxBus"

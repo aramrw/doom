@@ -75,7 +75,7 @@ pub fn parse_gz_value(input: &str) -> IResult<&str, GZValue> {
     )))(input)
 }
 
-fn parse_expression_value(input: &str) -> IResult<&str, GZValue> {
+pub fn parse_expression_value(input: &str) -> IResult<&str, GZValue> {
     let mut depth = 0;
     let mut end_pos = 0;
     let bytes = input.as_bytes();
@@ -96,7 +96,18 @@ fn parse_expression_value(input: &str) -> IResult<&str, GZValue> {
     }
     let val = &input[..end_pos];
     let rest = &input[end_pos..];
-    Ok((rest, GZValue::Identifier(val.trim().to_string())))
+    let val_str = val.trim();
+    
+    // Try to parse as a function call if it contains parens
+    if val_str.contains('(') {
+        if let Ok((rem, call)) = parse_function_call(val_str) {
+            if rem.trim().is_empty() {
+                return Ok((rest, GZValue::FunctionCall(call)));
+            }
+        }
+    }
+    
+    Ok((rest, GZValue::Identifier(val_str.to_string())))
 }
 
 fn parse_integer(input: &str) -> IResult<&str, GZValue> {
@@ -124,7 +135,7 @@ fn parse_string_literal(input: &str) -> IResult<&str, GZValue> {
 pub fn parse_function_call(input: &str) -> IResult<&str, GZFunctionCall> {
     let (input, name) = ws(recognize(pair(
         alt((alpha1, tag("_"))),
-        many0(alt((alphanumeric1, tag("_"), tag("."))))
+        many0(alt((alphanumeric1, tag("_"), tag("."), tag("["), tag("]"))))
     )))(input)?;
     
     let (input, args) = delimited(
@@ -248,7 +259,7 @@ pub fn parse_states_block(input: &str) -> IResult<&str, HashMap<String, Vec<Stat
 
         // Try to parse Goto separately for better error handling
         if let Ok((next_input, _)) = ws(tag_no_case("goto"))(input) {
-            let (next_input, _) = is_not::<&str, &str, nom::error::Error<&str>>(" \t\n\r;}")(next_input)?;
+            let (next_input, _label) = ws(recognize(many1(none_of(" \t\n\r;}"))))(next_input)?;
             let (next_input, _) = opt(ws(char(';')))(next_input)?;
             input = next_input;
             current_labels.clear();
@@ -360,7 +371,8 @@ pub fn parse_actor(input: &str) -> IResult<&str, ActorDefinition> {
         }
 
         // Handle ZScript Default block
-        if let Ok((next_input, _)) = ws(tag_no_case("Default"))(input) {
+        if input.trim_start().to_lowercase().starts_with("default") {
+             let (next_input, _) = ws(tag_no_case("Default"))(input)?;
              let (next_input, _) = ws(char('{'))(next_input)?;
              let mut inner_input = next_input;
              loop {
@@ -385,7 +397,8 @@ pub fn parse_actor(input: &str) -> IResult<&str, ActorDefinition> {
         }
 
         // Handle States block
-        if let Ok((next_input, states)) = parse_states_block(input) {
+        if input.trim_start().to_lowercase().starts_with("states") {
+            let (next_input, states) = parse_states_block(input)?;
             actor.states.extend(states);
             input = next_input;
             continue;

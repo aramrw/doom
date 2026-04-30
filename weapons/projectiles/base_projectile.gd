@@ -44,11 +44,18 @@ func _physics_process(delta):
 
 func _on_body_entered(body: Node3D):
 	var hit_something = false
+	
+	# Explicit check for Player group on the body itself
+	var damageable = null
 	if body.has_method("take_damage"):
-		body.take_damage(damage)
-		hit_something = true
+		damageable = body
 	elif body.get_parent() and body.get_parent().has_method("take_damage"):
-		body.get_parent().take_damage(damage)
+		damageable = body.get_parent()
+	elif body.is_in_group("Player"): # Fallback for player specifically
+		damageable = body
+		
+	if damageable:
+		damageable.take_damage(damage)
 		hit_something = true
 		
 	if hit_something and firer and firer.is_in_group("Player"):

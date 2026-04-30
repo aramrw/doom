@@ -1,4 +1,4 @@
-extends DoomEnemyBase
+extends "res://enemies/grin/doom_enemy.gd"
 class_name BaseNPC
 
 enum NPCState { IDLE, FOLLOW, COMBAT, TALKING }

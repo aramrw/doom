@@ -34,7 +34,7 @@
 [ext_resource type="PackedScene" uid="uid://b6u2f58traqug" path="res://assets/props/helltrees/godot_data/helltreeburn3.tscn" id="32_ype4i"]
 [ext_resource type="PackedScene" uid="uid://c8jadc4i4ypji" path="res://assets/props/helltrees/godot_data/helltreescorch1.tscn" id="33_riyl1"]
 [ext_resource type="PackedScene" uid="uid://m1tfxf2q41hn" path="res://assets/props/rocks/godot_data/rockblack.tscn" id="34_pb8dk"]
-[ext_resource type="PackedScene" uid="uid://bkijk8d1ac827" path="res://enemies/dark gargoyle/godot_data/hereticdarkimp.tscn" id="35_2mu51"]
+[ext_resource type="PackedScene" path="res://enemies/dark gargoyle/godot_data/hereticdarkimp.tscn" id="35_2mu51"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_i5arm"]
 shader = ExtResource("1_jka67")
@@ -320,5 +320,7 @@ transform = Transform3D(9, 0, 0, 0, 9, 0, 0, 0, 9, -43.071373, 4.4163957, 22.759
 [node name="RockBlack" parent="." unique_id=920121591 instance=ExtResource("34_pb8dk")]
 transform = Transform3D(20, 0, 0, 0, 20, 0, 0, 0, 20, -9.759909, 4.8950896, -11.176336)
 
-[node name="hereticdarkimp" parent="." unique_id=310440883 instance=ExtResource("35_2mu51")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -36.17327, 5.1500006, 5.8680873)
+[node name="hereticdarkimp" parent="." unique_id=910673613 instance=ExtResource("35_2mu51")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.631376, 5.15, -4.240649)
+speed = 1.0
+reactiontime = 1.0

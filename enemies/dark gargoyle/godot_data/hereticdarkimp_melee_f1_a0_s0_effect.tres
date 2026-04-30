@@ -1,7 +1,7 @@
-[gd_resource type="Resource" script_class="RawZScriptEffect" format=3]
-    [ext_resource type="Script" path="res://weapons/effects/raw_zscript_effect.gd" id="1_script"]
+[gd_resource type="Resource" script_class="HitscanEffect" format=3]
+    [ext_resource type="Script" path="res://weapons/effects/hitscan_effect.gd" id="1_script"]
     [resource]
     script = ExtResource("1_script")
-    function_name = "A_CustomMeleeAttack"
-    arguments = ["random[ImpMeAttack](7,14)", "himp/attack"]
+    damage = 10
+    range_distance = 2.0
     
