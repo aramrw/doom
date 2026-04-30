@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="ActionStep" format=3]
+    [ext_resource type="Script" path="res://weapons/action_step.gd" id="1_script"]
+    [ext_resource type="Script" path="res://weapons/effects/weapon_effect.gd" id="2_base"]
+    [ext_resource type="Resource" path="res://enemies/dark gargoyle/godot_data/hereticdarkimp_missile_f6_a0_s0_effect.tres" id="eff_missile_6_0_0"]
+    [resource]
+    script = ExtResource("1_script")
+    frame_index = 6
+    effects = Array[ExtResource("2_base")]([ExtResource("eff_missile_6_0_0")])
+    

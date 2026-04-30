@@ -1,0 +1,48 @@
+[gd_scene format=3 uid="uid://bkijk8d1ac827"]
+
+[ext_resource type="Script" uid="uid://cs44fpyvf8m0x" path="res://enemies/grin/doom_enemy.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://38lt845hd6jo" path="res://enemies/enemy_sounds.gd" id="2_sounds"]
+[ext_resource type="SpriteFrames" uid="uid://bxhki4h3iix2o" path="res://enemies/dark gargoyle/godot_data/hereticdarkimp_spriteframes.tres" id="3_sprites"]
+[ext_resource type="Resource" path="res://enemies/dark gargoyle/godot_data/hereticdarkimp_melee_action.tres" id="action_melee"]
+[ext_resource type="Resource" path="res://enemies/dark gargoyle/godot_data/hereticdarkimp_missile_action.tres" id="action_missile"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1"]
+radius = 0.4
+height = 0.9
+
+[node name="hereticdarkimp" type="CharacterBody3D" unique_id=1368698034 groups=["Enemies"]]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 0, 0)
+floor_stop_on_slope = false
+safe_margin = 0.5
+script = ExtResource("1_script")
+speed = 3.0
+meleerange = 20.0
+reactiontime = 0.2286
+missile_action = ExtResource("action_missile")
+melee_action = ExtResource("action_melee")
+health = 120
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1362287581]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
+shape = SubResource("CapsuleShape3D_1")
+
+[node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="." unique_id=1212852303]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0.45, 0)
+billboard = 2
+shaded = true
+texture_filter = 0
+sprite_frames = ExtResource("3_sprites")
+animation = &"death_2"
+autoplay = "idle_1"
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="." unique_id=614873946]
+simplify_path = true
+
+[node name="RayCast3D" type="RayCast3D" parent="." unique_id=758137677]
+
+[node name="EnemySounds" type="AudioStreamPlayer3D" parent="." unique_id=29206957]
+bus = &"SfxBus"
+script = ExtResource("2_sounds")
+death_folder = "res://enemies/dark gargoyle/godot_data/sounds/hereticdarkimp/death"
+hurt_folder = "res://enemies/dark gargoyle/godot_data/sounds/hereticdarkimp/hurt"
+taunt_folder = "res://enemies/dark gargoyle/godot_data/sounds/hereticdarkimp/taunt"

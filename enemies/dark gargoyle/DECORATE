@@ -1,0 +1,81 @@
+//Watcher created by Ben2k9/Virtue
+
+ACTOR HereticDarkImp : HereticImp 
+{
+  Game Heretic
+  Health 120
+  Radius 16
+  Height 36
+  Mass 50
+  Speed 15
+  Painchance 50
+  scale 1.2
+  Monster
+  +FLOAT
+  +NOGRAVITY
+  +SPAWNFLOAT
+  +DONTOVERLAP
+  +MISSILEMORE
+  SeeSound "himp/sight"
+  AttackSound "himp/attack"
+  PainSound "himp/pain"
+  DeathSound "himp/death"
+  ActiveSound "himp/active"
+  Obituary "%o was burnt by a Dark Gargoyle."
+  HitObituary "%o was slashed by a Dark Gargoyle."
+  
+  States
+  {
+  Spawn:
+    DAGA ABCB 10 A_Look
+    Loop
+  See:
+    DAGA AABBCCBB 3 A_Chase
+    Loop
+  Melee:
+    DAGA DE 4 BRIGHT A_FaceTarget
+    DAGA F 4 BRIGHT A_CustomMeleeAttack(random[ImpMeAttack](7,14), "himp/attack")
+    DAGA "[\]" 4 BRIGHT A_FaceTarget
+    DAGA ] 0 BRIGHT A_CustomMeleeAttack(random[ImpMeAttack](7,14), "himp/attack")     
+    Goto See
+  Missile:
+    DAGA E 0 BRIGHT A_jump(50,"beastball")
+	
+    DAGA DE 4 BRIGHT A_FaceTarget
+    DAGA F 4 BRIGHT A_CustomComboAttack("HereticImpBall", 28, 14, "himp/leaderattack")	
+    DAGA "[\]" 4 BRIGHT A_FaceTarget
+    DAGA ] 0 BRIGHT A_CustomComboAttack("HereticImpBall", 28, -14, "himp/leaderattack")	
+    DAGA DE 4 BRIGHT A_FaceTarget
+    DAGA F 4 BRIGHT A_CustomComboAttack("HereticImpBall", 28, 14, "himp/leaderattack")    
+    Goto See
+  Beastball:
+    DAGA DE 6 BRIGHT A_FaceTarget
+    DAGA F 6 BRIGHT A_CustomComboAttack("BeastBall", 28, random[BeastAttack](1,8)*3, "beast/attack")
+    Goto See
+  Pain:
+    DAGA G 3
+    DAGA G 3 A_Pain
+    Goto See
+  Death:
+    DAGA G 4 A_ImpDeath
+    DAGA H 5
+    Wait
+  XDeath:
+    DAGA S 5 A_ImpXDeath1
+    DAGA TU 5
+    DAGA V 5 A_Gravity
+    DAGA W 5 
+    Wait
+  Crash:
+    DAGA I 7 A_ImpExplode
+    DAGA J 7 A_Scream
+    DAGA K 7
+    DAGA L -1
+    Stop
+  XCrash:
+    DAGA X 7
+    DAGA Y 7
+    DAGA Z -1
+    Stop
+  }
+}
