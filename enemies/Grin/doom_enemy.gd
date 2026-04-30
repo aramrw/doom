@@ -119,7 +119,7 @@ func _physics_process(delta):
 		var can_missile = missile_action != null
 		
 		if (can_melee or can_missile) and ray_hit == target_body: 
-			if not on_cooldown: 
+			if not on_cooldown and not is_attacking: 
 				attack() 
 			else: 
 				stand_and_stare() 
@@ -258,6 +258,8 @@ func stand_and_stare():
 		look_at(look_target, Vector3.UP)
 
 func attack():
+	print("DEBUG: Attack initiated. on_cooldown: ", on_cooldown, " is_attacking: ", is_attacking)
+	if is_attacking or on_cooldown: return
 	if not target_node or not is_instance_valid(target_node):
 		target_node = null
 		return
@@ -324,7 +326,9 @@ func attack():
 		
 	is_attacking = false
 	
+	print("DEBUG: Waiting for reactiontime: ", reactiontime)
 	await get_tree().create_timer(reactiontime).timeout
+	print("DEBUG: Reactiontime finished.")
 	on_cooldown = false
 
 func perform_action(action: Resource):

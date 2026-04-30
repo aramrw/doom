@@ -1,0 +1,104 @@
+Initialize godot-rust (API v4.6.stable.official, runtime v4.6.1.stable.official, safeguards strict)
+Godot Engine v4.6.1.stable.official.14d19694e - https://godotengine.org
+
+GDExtension initialized! (Scene stage)
+WeaponManager: _ready starting
+WeaponManager: NO primary_weapon found
+Door: Door ready. Required item: BlackCrossKey
+Door: Door2 ready. Required item: RedCrossKey
+DEBUG: Attack initiated. on_cooldown: false
+DEBUG: Waiting for reactiontime: 1.0
+Player Health: 85
+Player Health: 70
+Player Health: 55
+DEBUG: Reactiontime finished.
+DEBUG: Attack initiated. on_cooldown: false
+Player Health: 40
+DEBUG: Waiting for reactiontime: 1.0
+Player Health: 25
+Player Health: 10
+DEBUG: Reactiontime finished.
+DEBUG: Attack initiated. on_cooldown: false
+Player Health: -5
+Player Died!
+ERROR: Parameter "data.tree" is null.
+   at: get_tree (scene/main/node.h:549)
+   GDScript backtrace (most recent call first):
+       [0] perform_action (res://enemies/grin/doom_enemy.gd:341)
+SCRIPT ERROR: Invalid access to property or key 'process_frame' on a base object of type 'null instance'.
+          at: DoomEnemyBase.perform_action (res://enemies/grin/doom_enemy.gd:341)
+          GDScript backtrace (most recent call first):
+              [0] perform_action (res://enemies/grin/doom_enemy.gd:341)
+DEBUG: Waiting for reactiontime: 1.0
+ERROR: Parameter "data.tree" is null.
+   at: get_tree (scene/main/node.h:549)
+   GDScript backtrace (most recent call first):
+       [0] attack (res://enemies/grin/doom_enemy.gd:329)
+       [1] perform_action (res://enemies/grin/doom_enemy.gd:341)
+SCRIPT ERROR: Cannot call method 'create_timer' on a null value.
+          at: DoomEnemyBase.attack (res://enemies/grin/doom_enemy.gd:329)
+          GDScript backtrace (most recent call first):
+              [0] attack (res://enemies/grin/doom_enemy.gd:329)
+              [1] perform_action (res://enemies/grin/doom_enemy.gd:341)
+WeaponManager: _ready starting
+WeaponManager: NO primary_weapon found
+Door: Door ready. Required item: BlackCrossKey
+Door: Door2 ready. Required item: RedCrossKey
+DEBUG: Attack initiated. on_cooldown: false
+Player Health: 85
+Player Health: 70
+DEBUG: Waiting for reactiontime: 1.0
+Player Health: 55
+Player Health: 40
+DEBUG: Reactiontime finished.
+DEBUG: Attack initiated. on_cooldown: false
+Player Health: 25
+DEBUG: Waiting for reactiontime: 1.0
+Player Health: 10
+Player Health: -5
+Player Died!
+WeaponManager: _ready starting
+WeaponManager: NO primary_weapon found
+Door: Door ready. Required item: BlackCrossKey
+Door: Door2 ready. Required item: RedCrossKey
+DEBUG: Attack initiated. on_cooldown: false
+Player Health: 85
+DEBUG: Waiting for reactiontime: 1.0
+Player Health: 70
+Player Health: 55
+DEBUG: Reactiontime finished.
+DEBUG: Attack initiated. on_cooldown: false
+Player Health: 40
+DEBUG: Waiting for reactiontime: 1.0
+Player Health: 25
+Player Health: 10
+DEBUG: Reactiontime finished.
+DEBUG: Attack initiated. on_cooldown: false
+Player Health: -5
+Player Died!
+ERROR: Parameter "data.tree" is null.
+   at: get_tree (scene/main/node.h:549)
+   GDScript backtrace (most recent call first):
+       [0] perform_action (res://enemies/grin/doom_enemy.gd:341)
+SCRIPT ERROR: Invalid access to property or key 'process_frame' on a base object of type 'null instance'.
+          at: DoomEnemyBase.perform_action (res://enemies/grin/doom_enemy.gd:341)
+          GDScript backtrace (most recent call first):
+              [0] perform_action (res://enemies/grin/doom_enemy.gd:341)
+DEBUG: Waiting for reactiontime: 1.0
+ERROR: Parameter "data.tree" is null.
+   at: get_tree (scene/main/node.h:549)
+   GDScript backtrace (most recent call first):
+       [0] attack (res://enemies/grin/doom_enemy.gd:329)
+       [1] perform_action (res://enemies/grin/doom_enemy.gd:341)
+SCRIPT ERROR: Cannot call method 'create_timer' on a null value.
+          at: DoomEnemyBase.attack (res://enemies/grin/doom_enemy.gd:329)
+          GDScript backtrace (most recent call first):
+              [0] attack (res://enemies/grin/doom_enemy.gd:329)
+              [1] perform_action (res://enemies/grin/doom_enemy.gd:341)
+WeaponManager: _ready starting
+WeaponManager: NO primary_weapon found
+Door: Door ready. Required item: BlackCrossKey
+Door: Door2 ready. Required item: RedCrossKey
+DEBUG: Attack initiated. on_cooldown: false
+Player Health: 85
+Player Health: 70

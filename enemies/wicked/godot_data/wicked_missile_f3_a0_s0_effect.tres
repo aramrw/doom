@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="ProjectileEffect" format=3]
+    [ext_resource type="Script" path="res://weapons/effects/projectile_effect.gd" id="1_script"]
+    [ext_resource type="PackedScene" path="res://enemies/wicked/godot_data/wickedshot.tscn" id="2_proj"]
+    [resource]
+    script = ExtResource("1_script")
+    projectile_scene = ExtResource("2_proj")
+    speed = 20.0
+    damage = 15
+    

@@ -1,0 +1,7 @@
+07-08-2013 - MagicWazard
+*Changed corpse behavior so that the spawned "torso" doesn't attract friendly monsters or seeker projectiles.
+*Added decal to projectile.
+*Updated CREDITS.
+
+12-18-2018 - Ghastly
+*ZScriptification

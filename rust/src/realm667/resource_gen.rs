@@ -963,7 +963,7 @@ r#"{{
     "frames": [{}],
     "loop": true,
     "name": &"{}",
-    "speed": 5.0
+    "speed": 35.0
     }}"#, frames.join(", "), anim_name.to_lowercase()));
             }
 

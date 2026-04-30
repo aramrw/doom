@@ -44,6 +44,3 @@ autoplay = "spawn"
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=2134802688]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2052943, 0)
 shape = SubResource("CapsuleShape3D_m1clt")
-
-[node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=184443728]
-omni_range = 1.9382615
