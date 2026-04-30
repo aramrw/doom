@@ -465,76 +465,78 @@ impl Realm667Importer {
     ) -> HashMap<String, Vec<(String, i32)>> {
         let mut label_to_folder = HashMap::new();
 
+        // Helper to populate mappings
+        let mut add_mapping = |key: &str, folder: &str| {
+            label_to_folder.insert(key.to_lowercase(), folder.to_string());
+        };
+
         if category == ActorCategory::Weapon {
-            label_to_folder.insert("Ready", "idle".to_string());
-            label_to_folder.insert("Idle", "idle".to_string());
-            label_to_folder.insert("Select", "idle".to_string());
-            label_to_folder.insert("Fire", "shoot".to_string());
-            label_to_folder.insert("Fire2", "shoot".to_string());
-            label_to_folder.insert("Hold", "shoot".to_string());
-            label_to_folder.insert("AltFire", "shoot".to_string());
-            label_to_folder.insert("Pain", "pain".to_string());
-            label_to_folder.insert("Death", "death".to_string());
-            label_to_folder.insert("Spawn", "ground".to_string());
+            add_mapping("Ready", "idle");
+            add_mapping("Idle", "idle");
+            add_mapping("Select", "idle");
+            add_mapping("Fire", "shoot");
+            add_mapping("Fire2", "shoot");
+            add_mapping("Hold", "shoot");
+            add_mapping("AltFire", "shoot");
+            add_mapping("Pain", "pain");
+            add_mapping("Death", "death");
+            add_mapping("Spawn", "ground");
         } else if category == ActorCategory::Enemy {
-            label_to_folder.insert("Spawn", "idle".to_string());
-            label_to_folder.insert("Idle", "idle".to_string());
-            label_to_folder.insert("See", "walk".to_string());
-            label_to_folder.insert("Walk", "walk".to_string());
-            label_to_folder.insert("Missile", "attack".to_string());
-            label_to_folder.insert("Melee", "attack".to_string());
-            label_to_folder.insert("Pain", "pain".to_string());
-            label_to_folder.insert("Death", "death".to_string());
-            label_to_folder.insert("XDeath", "xdeath".to_string());
-            label_to_folder.insert("Raise", "raise".to_string());
+            add_mapping("Spawn", "idle");
+            add_mapping("Idle", "idle");
+            add_mapping("See", "walk");
+            add_mapping("Walk", "walk");
+            add_mapping("Missile", "attack");
+            add_mapping("Melee", "attack");
+            add_mapping("Pain", "pain");
+            add_mapping("Death", "death");
+            add_mapping("XDeath", "xdeath");
+            add_mapping("Raise", "raise");
         } else if category == ActorCategory::Projectile {
-            label_to_folder.insert("Spawn", "spawn".to_string());
-            label_to_folder.insert("Fly", "spawn".to_string());
-            label_to_folder.insert("Idle", "spawn".to_string());
-            label_to_folder.insert("Fade", "spawn".to_string());
-            label_to_folder.insert("Death", "death".to_string());
-            label_to_folder.insert("Crash", "death".to_string());
-            label_to_folder.insert("XDeath", "death".to_string());
+            add_mapping("Spawn", "spawn");
+            add_mapping("Fly", "spawn");
+            add_mapping("Idle", "spawn");
+            add_mapping("Fade", "spawn");
+            add_mapping("Death", "death");
+            add_mapping("Crash", "death");
+            add_mapping("XDeath", "death");
         } else if category == ActorCategory::Item || category == ActorCategory::Ammo {
-            label_to_folder.insert("Spawn", "idle".to_string());
-            label_to_folder.insert("Idle", "idle".to_string());
-        } else if category == ActorCategory::Prop {
-            // For props, we use literal state names as folders
-            for label in actor.states.keys() {
-                label_to_folder.insert(label.as_str(), label.to_lowercase());
-            }
+            add_mapping("Spawn", "idle");
+            add_mapping("Idle", "idle");
         }
 
         let mut result_map = HashMap::new();
-
-        // Process states in order to preserve frame sequence
-        let mut sorted_labels: Vec<_> = actor.states.keys().collect();
-        sorted_labels.sort(); // Consistent order
-
         let actor_name = actor.name.to_lowercase();
-        let sprites_root = godot_data_root
-            .join("sprites")
-            .join(mod_name)
-            .join(&actor_name);
+        for (label, frames) in &actor.states {
+            let label_lower = label.to_lowercase();
+            let folder = label_to_folder.get(&label_lower)
+                .cloned()
+                .unwrap_or_else(|| label_lower.clone());
 
-        for label in sorted_labels {
-            let frames = &actor.states[label];
+            let sprites_root = godot_data_root
+                .join("sprites")
+                .join(mod_name)
+                .join(&actor_name)
+                .join(&folder);
+
             let mut state_frames = Vec::new();
-
             for frame in frames {
                 let extracted = self.extract_sprites_for_frame(frame, archive, &sprites_root);
                 for p in extracted {
                     let rel_res = format!(
-                        "{}/sprites/{}/{}/{}",
+                        "{}/sprites/{}/{}/{}/{}",
                         godot_data_res,
                         mod_name,
                         actor_name,
+                        folder,
                         p.file_name().unwrap().to_str().unwrap()
                     );
                     state_frames.push((rel_res, frame.duration));
                 }
             }
-            result_map.insert(label.clone(), state_frames);
+            if !state_frames.is_empty() {
+                result_map.insert(label.clone(), state_frames);
+            }
         }
 
         let sound_props = [
@@ -544,8 +546,7 @@ impl Realm667Importer {
             ("DeathSound", "death"),
             ("ActiveSound", "taunt"),
             ("SelectSound", "taunt"),
-        ];
-        let sounds_dir = godot_data_root.join("sounds").join(mod_name);
+            ];        let sounds_dir = godot_data_root.join("sounds").join(mod_name);
         for (prop, subfolder) in sound_props {
             if let Some(alias) = actor.properties.get(prop) {
                 if let Some(file_path) = sounds_map.get(&alias.to_string_lossy().to_uppercase()) {
@@ -578,16 +579,17 @@ impl Realm667Importer {
 
         result_map
     }
+fn extract_sprites_for_frame(
+    &self,
+    frame: &crate::realm667::actor::StateFrame,
+    archive: &mut ZipArchive<File>,
+    dest_dir: &Path,
+) -> Vec<PathBuf> {
+    let mut extracted_paths = Vec::new();
+    godot_print!("Extracting for prefix: {} frames: {}", frame.sprite_prefix, frame.frames);
 
-    fn extract_sprites_for_frame(
-        &self,
-        frame: &crate::realm667::actor::StateFrame,
-        archive: &mut ZipArchive<File>,
-        dest_dir: &Path,
-    ) -> Vec<PathBuf> {
-        let mut extracted_paths = Vec::new();
-
-        for f_char in frame.frames.chars() {
+    for f_char in frame.frames.chars() {
+        // ... (rest of function)
             let mut seen_filenames = HashSet::new();
             let f_char_upper = f_char.to_uppercase().next().unwrap();
             let prefix_upper = frame.sprite_prefix.to_uppercase();
@@ -599,7 +601,13 @@ impl Realm667Importer {
                     .name()
                     .to_lowercase()
                     .replace('\\', "/");
-                let file_name = entry_name.split('/').last().unwrap_or("").to_uppercase();
+                let raw_file_name = entry_name.split('/').last().unwrap_or("").to_uppercase();
+                let mut file_name = raw_file_name.clone();
+                if let Some(pos) = raw_file_name.find('_') {
+                     if raw_file_name[..pos].chars().all(|c| c.is_ascii_digit()) {
+                         file_name = raw_file_name[pos+1..].to_string();
+                     }
+                }
 
                 // Skip brightmaps
                 if file_name.starts_with("BM") || file_name.starts_with("BR") {
@@ -648,7 +656,7 @@ impl Realm667Importer {
                         base_name
                     };
 
-                    if actual_base.len() >= prefix_upper.len() {
+                    if actual_base.starts_with(&prefix_upper) {
                         if !seen_filenames.contains(&file_name) {
                             if let Some(path) =
                                 AssetHandler::extract_with_extension_fix(archive, i, dest_dir)

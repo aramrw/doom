@@ -34,7 +34,7 @@
     shaded = true
     texture_filter = 0
     sprite_frames = ExtResource("3_sprites")
-    autoplay = "spawn"
+    autoplay = ""
 
     [node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
     simplify_path = true

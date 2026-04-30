@@ -1,49 +1,51 @@
-[gd_scene format=3 uid="uid://dstbgbib3emu7"]
+[gd_scene load_steps=6 format=3]
 
-[ext_resource type="Script" uid="uid://cs44fpyvf8m0x" path="res://enemies/grin/doom_enemy.gd" id="1_script"]
-[ext_resource type="Script" uid="uid://38lt845hd6jo" path="res://enemies/enemy_sounds.gd" id="2_sounds"]
-[ext_resource type="SpriteFrames" path="res://enemies/wicked/godot_data/wicked_spriteframes.tres" id="3_sprites"]
-[ext_resource type="Resource" path="res://enemies/wicked/godot_data/wicked_missile_action.tres" id="action_missile"]
+    [ext_resource type="Script" path="res://enemies/grin/doom_enemy.gd" id="1_script"]
+    [ext_resource type="Script" path="res://enemies/enemy_sounds.gd" id="2_sounds"]
+    [ext_resource type="SpriteFrames" path="res://enemies/wicked/godot_data/wicked_spriteframes.tres" id="3_sprites"]
+    [ext_resource type="Resource" path="res://enemies/wicked/godot_data/wicked_missile_action.tres" id="action_missile"]
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1"]
-radius = 0.625
-height = 2.2
+    [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1"]
+    radius = 0.6250
+    height = 2.2000
 
-[node name="wicked" type="CharacterBody3D" unique_id=1620982037 groups=["Enemies"]]
-collision_layer = 4
-collision_mask = 3
-floor_stop_on_slope = false
-safe_margin = 0.5
-script = ExtResource("1_script")
-speed = 8.75
-meleerange = 1.6
-reactiontime = 0.2286
-pain_chance = 112
-missile_action = ExtResource("action_missile")
-health = 275
+    [node name="wicked" type="CharacterBody3D" groups=["Enemies"]]
+    collision_layer = 4
+    collision_mask = 3
+    floor_stop_on_slope = false
+    safe_margin = 0.5
+    script = ExtResource("1_script")
+    speed = 8.7500
+    meleerange = 1.6000
+    damage = 5
+    reactiontime = 0.2286
+    pain_chance = 112
+    health = 275
+    use_gravity = true
+    missile_action = ExtResource("action_missile")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=897857991]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
-shape = SubResource("CapsuleShape3D_1")
+    [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+    transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1000, 0)
+    shape = SubResource("CapsuleShape3D_1")
 
-[node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="." unique_id=1980724902]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 1.1, 0)
-billboard = 2
-shaded = true
-texture_filter = 0
-sprite_frames = ExtResource("3_sprites")
-animation = &"death_1"
-autoplay = "spawn"
+    [node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="."]
+    transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 1.1000, 0)
+    billboard = 2
+    shaded = true
+    texture_filter = 0
+    sprite_frames = ExtResource("3_sprites")
+    autoplay = ""
 
-[node name="NavigationAgent3D" type="NavigationAgent3D" parent="." unique_id=754959514]
-simplify_path = true
+    [node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+    simplify_path = true
 
-[node name="RayCast3D" type="RayCast3D" parent="." unique_id=1949052614]
-collision_mask = 3
+    [node name="RayCast3D" type="RayCast3D" parent="."]
+    collision_mask = 3
 
-[node name="EnemySounds" type="AudioStreamPlayer3D" parent="." unique_id=866773162]
-bus = &"SfxBus"
-script = ExtResource("2_sounds")
-death_folder = "res://enemies/wicked/godot_data/sounds/wicked/death"
-hurt_folder = "res://enemies/wicked/godot_data/sounds/wicked/hurt"
-taunt_folder = "res://enemies/wicked/godot_data/sounds/wicked/taunt"
+    [node name="EnemySounds" type="AudioStreamPlayer3D" parent="."]
+    bus = &"SfxBus"
+    script = ExtResource("2_sounds")
+    death_folder = "res://enemies/wicked/godot_data/sounds/wicked/death"
+    hurt_folder = "res://enemies/wicked/godot_data/sounds/wicked/hurt"
+    taunt_folder = "res://enemies/wicked/godot_data/sounds/wicked/taunt"
+    

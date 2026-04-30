@@ -1,0 +1,190 @@
+[gd_resource type="SpriteFrames" format=3]
+
+[ext_resource type="Texture2D" path="enemies/wicked/wicked/godot_data/sprites/wicked/wickedfx/idle/WIBLE0.png" id="1_ext"]
+[ext_resource type="Texture2D" path="enemies/wicked/wicked/godot_data/sprites/wicked/wickedfx/idle/WIBLF0.png" id="2_ext"]
+[ext_resource type="Texture2D" path="enemies/wicked/wicked/godot_data/sprites/wicked/wickedfx/idle/WIBLG0.png" id="3_ext"]
+[ext_resource type="Texture2D" path="enemies/wicked/wicked/godot_data/sprites/wicked/wickedfx/idle/WIBLH0.png" id="4_ext"]
+[ext_resource type="Texture2D" path="enemies/wicked/wicked/godot_data/sprites/wicked/wickedfx/idle/WIBLI0.png" id="5_ext"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 3,
+"texture": ExtResource("1_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("2_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("3_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("4_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("5_ext")
+}],
+"loop": true,
+"name": &"spawn_1",
+"speed": 35.0
+}, {
+"frames": [{
+"duration": 3,
+"texture": ExtResource("1_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("2_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("3_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("4_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("5_ext")
+}],
+"loop": true,
+"name": &"spawn_2",
+"speed": 35.0
+}, {
+"frames": [{
+"duration": 3,
+"texture": ExtResource("1_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("2_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("3_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("4_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("5_ext")
+}],
+"loop": true,
+"name": &"spawn_3",
+"speed": 35.0
+}, {
+"frames": [{
+"duration": 3,
+"texture": ExtResource("1_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("2_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("3_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("4_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("5_ext")
+}],
+"loop": true,
+"name": &"spawn_4",
+"speed": 35.0
+}, {
+"frames": [{
+"duration": 3,
+"texture": ExtResource("1_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("2_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("3_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("4_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("5_ext")
+}],
+"loop": true,
+"name": &"spawn_5",
+"speed": 35.0
+}, {
+"frames": [{
+"duration": 3,
+"texture": ExtResource("1_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("2_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("3_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("4_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("5_ext")
+}],
+"loop": true,
+"name": &"spawn_6",
+"speed": 35.0
+}, {
+"frames": [{
+"duration": 3,
+"texture": ExtResource("1_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("2_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("3_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("4_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("5_ext")
+}],
+"loop": true,
+"name": &"spawn_7",
+"speed": 35.0
+}, {
+"frames": [{
+"duration": 3,
+"texture": ExtResource("1_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("2_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("3_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("4_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("5_ext")
+}],
+"loop": true,
+"name": &"spawn_8",
+"speed": 35.0
+}, {
+"frames": [{
+"duration": 3,
+"texture": ExtResource("1_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("2_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("3_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("4_ext")
+}, {
+"duration": 3,
+"texture": ExtResource("5_ext")
+}],
+"loop": true,
+"name": &"spawn",
+"speed": 35.0
+}]

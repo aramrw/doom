@@ -524,21 +524,21 @@ impl ResourceGenerator {
             let mut id_counter = 1;
             let mut texture_to_id = HashMap::new();
 
-            let mut keys: Vec<_> = label_sprites.keys().collect();
+            let mut keys: Vec<_> = label_sprites.keys().cloned().collect();
             keys.sort();
 
             for label in keys {
-                let sprites = label_sprites.get(label).unwrap();
+                let sprites = label_sprites.get(&label).unwrap();
                 if sprites.is_empty() { continue; }
                 
                 let anim_name = label.to_lowercase();
                 let is_looping = anim_name == "see" || anim_name == "spawn" || anim_name == "idle";
-
-                // Generate 8 directions for all states to be safe, or just 1 if no directional frames exist
+                
+                // Use anim_name (lowercase) for animation naming
                 for i in 1..=8 {
                     let dir_sprites = Self::get_direction_sprites(sprites, i);
                     let active_sprites = if dir_sprites.is_empty() { 
-                        if i > 1 { continue; } // Only generate _1 if no directions
+                        if i > 1 { continue; }
                         sprites 
                     } else { 
                         &dir_sprites 
@@ -565,7 +565,7 @@ r#"{{
 }}"#, frames.join(", "), is_looping, anim_name, i));
                 }
                 
-                // Also provide a non-suffixed version for fallback
+                // Fallback for base animation
                 let mut frames = Vec::new();
                 for (sprite_rel_path, duration) in sprites {
                     let id = texture_to_id.get(sprite_rel_path).unwrap();

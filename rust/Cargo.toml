@@ -6,6 +6,10 @@ edition = "2021"
 [lib]
 crate-type = ["cdylib", "rlib"] 
 
+[[bin]]
+name = "importer"
+path = "src/bin/importer.rs"
+
 [dependencies]
 godot = "0.5.0"
 zip = "8.5.0"

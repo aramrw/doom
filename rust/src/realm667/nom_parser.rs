@@ -173,23 +173,22 @@ pub fn parse_state_frame(input: &str) -> IResult<&str, StateFrame> {
     ))))(input)?;
     let is_bright = modifiers.iter().any(|m| m.to_lowercase() == "bright");
     
-    // Actions can be a single function call, a block of them, or nothing
-    let (input, actions) = alt((
+    // Try to parse actions, but don't fail if we can't find them
+    let (input, actions) = match opt(alt((
         map(parse_function_call, |c| vec![c]),
         delimited(
             ws(char('{')),
             many0(terminated(ws(parse_function_call), opt(ws(char(';'))))),
             ws(char('}'))
         ),
-        // Fallback for simple identifier actions without parens
-        // MUST be on the same line as the duration
         map(ws_no_newline(recognize(pair(alpha1, many0(alt((alphanumeric1, tag("_"))))))), |name| vec![GZFunctionCall {
             name: name.to_string(),
             args: vec![],
         }]),
-        // If nothing matches on the same line, no actions
-        map(sp_no_newline, |_| vec![]),
-    ))(input)?;
+    )))(input) {
+        Ok((rem, Some(actions))) => (rem, actions),
+        _ => (input, vec![]), // Fallback: no actions, but successfully parsed frame
+    };
 
     // Optional semicolon
     let (input, _) = opt(ws_no_newline(char(';')))(input)?;
@@ -411,8 +410,15 @@ pub fn parse_actor(input: &str) -> IResult<&str, ActorDefinition> {
             continue;
         }
         
-        // If nothing matches, we hit an unexpected token
-        return Err(nom::Err::Failure(nom::error::Error::new(input, nom::error::ErrorKind::Tag)));
+        // If nothing matches, log and skip unexpected token instead of failing
+        if let Ok((next_input, _)) = take_until::<&str, &str, nom::error::Error<&str>>("\n")(input) {
+            println!("Warning: Skipping unexpected input");
+            input = next_input;
+            continue;
+        } else {
+            // If even taking until newline fails, just break/abort
+            break;
+        }
     }
     
     Ok((input, actor))
