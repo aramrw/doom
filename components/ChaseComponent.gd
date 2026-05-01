@@ -66,9 +66,10 @@ func _find_nearest_target():
 	var nearest_node = null
 	
 	for t in targets:
+		# EXCLUSION: Don't chase yourself or your family
 		if t == actor or t.get_parent() == actor or t == actor.get_parent():
 			continue
-		
+			
 		if not is_instance_valid(t):
 			continue
 		

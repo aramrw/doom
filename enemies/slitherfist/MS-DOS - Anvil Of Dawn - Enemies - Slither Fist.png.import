@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://d2kfwn1h8rj4h"
-path.s3tc="res://.godot/imported/MS-DOS - Anvil Of Dawn - Enemies - Slither Fist.png-e882d2170575a78e14ce9d4ae0eaf967.s3tc.ctex"
+path.s3tc="res://.godot/imported/MS-DOS - Anvil Of Dawn - Enemies - Slither Fist.png-d04598112a2533fa5eabcbc16163c71e.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://enemies/slitherfist/MS-DOS - Anvil Of Dawn - Enemies - Slither Fist.png"
-dest_files=["res://.godot/imported/MS-DOS - Anvil Of Dawn - Enemies - Slither Fist.png-e882d2170575a78e14ce9d4ae0eaf967.s3tc.ctex"]
+dest_files=["res://.godot/imported/MS-DOS - Anvil Of Dawn - Enemies - Slither Fist.png-d04598112a2533fa5eabcbc16163c71e.s3tc.ctex"]
 
 [params]
 

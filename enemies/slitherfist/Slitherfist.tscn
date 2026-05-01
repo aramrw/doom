@@ -1,12 +1,12 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://br551piwvkxhl"]
 
-[ext_resource type="Script" path="res://enemies/slitherfist/Slitherfist.gd" id="1_slitherfist"]
-[ext_resource type="Script" path="res://enemies/template/enemy_sounds.gd" id="2_jgin6"]
-[ext_resource type="Script" path="res://components/HealthComponent.gd" id="3_health_component"]
-[ext_resource type="Texture2D" path="res://enemies/slitherfist/MS-DOS - Anvil Of Dawn - Enemies - Slither Fist.png" id="4_5ueal"]
-[ext_resource type="Script" path="res://components/AttackComponent.gd" id="4_attack_component"]
-[ext_resource type="Script" path="res://components/ChaseComponent.gd" id="chase_comp"]
-[ext_resource type="Script" path="res://components/AnimationComponent.gd" id="anim_comp"]
+[ext_resource type="Script" uid="uid://dvyanwgkq3hbo" path="res://enemies/slitherfist/Slitherfist.gd" id="1_slitherfist"]
+[ext_resource type="Script" uid="uid://bmnl2e66g824f" path="res://enemies/template/enemy_sounds.gd" id="2_jgin6"]
+[ext_resource type="Script" uid="uid://q0jeh0ade15l" path="res://components/HealthComponent.gd" id="3_health_component"]
+[ext_resource type="Texture2D" uid="uid://d2kfwn1h8rj4h" path="res://enemies/slitherfist/MS-DOS - Anvil Of Dawn - Enemies - Slither Fist.png" id="4_5ueal"]
+[ext_resource type="Script" uid="uid://b4xp3spbaebdm" path="res://components/AttackComponent.gd" id="4_attack_component"]
+[ext_resource type="Script" uid="uid://b1diia2jpf5qi" path="res://components/AnimationComponent.gd" id="anim_comp"]
+[ext_resource type="Script" uid="uid://dmmjmxe72o8nn" path="res://components/ChaseComponent.gd" id="chase_comp"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ej5ua"]
 height = 2.3876038
@@ -287,7 +287,7 @@ animations = [{
 "speed": 8.0
 }]
 
-[node name="Slitherfist" type="CharacterBody3D" unique_id=1290029648]
+[node name="Slitherfist" type="CharacterBody3D" unique_id=1290029648 groups=["Enemies"]]
 collision_layer = 4
 collision_mask = 3
 floor_stop_on_slope = false
@@ -313,10 +313,12 @@ sprite_frames = SubResource("SpriteFrames_lch36")
 animation = &"attack"
 autoplay = "idle"
 
-[node name="ChaseComponent" type="Node" parent="."]
+[node name="ChaseComponent" type="Node" parent="." unique_id=211311145]
 script = ExtResource("chase_comp")
+awareness_range = 8.0
+lose_interest_range = 15.0
 
-[node name="AnimationComponent" type="Node" parent="."]
+[node name="AnimationComponent" type="Node" parent="." unique_id=960981738]
 script = ExtResource("anim_comp")
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="." unique_id=1221744110]

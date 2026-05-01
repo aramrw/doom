@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bl36g86yxxb04"]
 
 [ext_resource type="Script" uid="uid://b325pyfasy6r7" path="res://assets/base_prop.gd" id="1_script"]
-[ext_resource type="SpriteFrames" path="res://assets/props/burning/godot_data/burningcorpse1_spriteframes.tres" id="2_sprites"]
+[ext_resource type="SpriteFrames" uid="uid://bweakcc7j1sk5" path="res://assets/props/burning/godot_data/burningcorpse1_spriteframes.tres" id="2_sprites"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_m1clt"]
 radius = 0.21191406
