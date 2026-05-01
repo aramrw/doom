@@ -55,7 +55,8 @@ func _on_body_entered(body: Node3D):
 		damageable = body
 		
 	if damageable:
-		damageable.take_damage(damage)
+		print("[Projectile] ", name, " hitting ", damageable.name, " for ", damage)
+		damageable.take_damage(damage, firer)
 		hit_something = true
 		
 	if hit_something and firer and firer.is_in_group("Player"):

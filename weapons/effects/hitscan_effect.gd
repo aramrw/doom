@@ -26,9 +26,20 @@ func execute(source_node: Node, weapon_manager: Node) -> void:
 		
 		if raycast.is_colliding():
 			var target = raycast.get_collider()
+			var damageable = null
+			
 			if target.has_method("take_damage"):
-				target.take_damage(damage)
+				damageable = target
+			elif target.get_parent() and target.get_parent().has_method("take_damage"):
+				damageable = target.get_parent()
+				
+			if damageable:
+				print("[Hitscan] Hit ", damageable.name, " for ", damage, " damage.")
+				damageable.take_damage(damage, weapon_manager.get_parent())
 				if weapon_manager and weapon_manager.has_signal("enemy_hit"):
 					weapon_manager.enemy_hit.emit()
+			else:
+				print("[Hitscan] Hit non-damageable object: ", target.name)
+
 	
 	raycast.rotation_degrees = original_rotation

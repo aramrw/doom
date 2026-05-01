@@ -8,6 +8,7 @@ class_name Slitherfist
 @onready var animation_component = $AnimationComponent
 
 func _ready():
+	print("[Slitherfist] _ready() called")
 	# Make sure the animation component has its references
 	if animation_component:
 		animation_component.sprite = sprite
@@ -49,11 +50,10 @@ func _process(_delta):
 			elif dot < -0.1:
 				sprite.flip_h = false
 
-	# Play chase animation if moving
-	if velocity.length() > 0.1 and animation_component.current_state in ["idle", "walk", "chase"]:
-		animation_component.play_chase()
-	elif velocity.length() <= 0.1 and animation_component.current_state in ["chase", "walk"]:
-		animation_component.play_idle()
+
+func take_damage(amount: int, source = null):
+	if health_component:
+		health_component.take_damage(amount, source)
 
 func _on_died(_source):
 	# Stop logic components

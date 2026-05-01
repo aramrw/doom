@@ -8,8 +8,10 @@
 [ext_resource type="Script" uid="uid://b1diia2jpf5qi" path="res://components/AnimationComponent.gd" id="anim_comp"]
 [ext_resource type="Script" uid="uid://dmmjmxe72o8nn" path="res://components/ChaseComponent.gd" id="chase_comp"]
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ej5ua"]
-height = 2.3876038
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_bwxca"]
+margin = 0.0
+radius = 0.58081055
+height = 1.5192871
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_vveby"]
 atlas = ExtResource("4_5ueal")
@@ -188,9 +190,6 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("4_5ueal")
-}, {
-"duration": 1.0,
 "texture": SubResource("AtlasTexture_w3mla")
 }, {
 "duration": 1.0,
@@ -296,27 +295,33 @@ script = ExtResource("1_slitherfist")
 
 [node name="HealthComponent" type="Node" parent="." unique_id=979718076]
 script = ExtResource("3_health_component")
+max_health = 40
+current_health = 40
 
 [node name="AttackComponent" type="Node" parent="." unique_id=1317250281]
 script = ExtResource("4_attack_component")
+attack_damage = 7
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=2090450077]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.026836932, 1.5509595, 0.0030199215)
-shape = SubResource("CapsuleShape3D_ej5ua")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.14039987, 0.65085065, 0)
+shape = SubResource("CapsuleShape3D_bwxca")
 
 [node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="." unique_id=647343100]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0.48562, 1.0706522, 0)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0.3, 0.1)
 billboard = 2
 shaded = true
 texture_filter = 0
 sprite_frames = SubResource("SpriteFrames_lch36")
-animation = &"attack"
+animation = &"idle"
 autoplay = "idle"
 
-[node name="ChaseComponent" type="Node" parent="." unique_id=211311145]
+[node name="ChaseComponent" type="Node" parent="." unique_id=211311145 node_paths=PackedStringArray("actor", "nav_agent")]
 script = ExtResource("chase_comp")
+speed = 1.0
 awareness_range = 8.0
 lose_interest_range = 15.0
+actor = NodePath("..")
+nav_agent = NodePath("../NavigationAgent3D")
 
 [node name="AnimationComponent" type="Node" parent="." unique_id=960981738]
 script = ExtResource("anim_comp")

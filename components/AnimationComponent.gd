@@ -3,8 +3,36 @@ class_name AnimationComponent
 
 @export var sprite: AnimatedSprite3D
 @export var actor: Node3D
+@export var flash_duration: float = 0.2
 
 var current_state: String = "idle"
+var visual_mat: ShaderMaterial
+var _flash_tween: Tween
+
+func _ready():
+	if not sprite and get_parent().has_node("AnimatedSprite3D"):
+		sprite = get_parent().get_node("AnimatedSprite3D")
+	
+	if sprite:
+		# Setup the shader material
+		visual_mat = ShaderMaterial.new()
+		visual_mat.shader = load("res://shaders/enemy_visuals.gdshader")
+		sprite.material_override = visual_mat
+		
+		# Ensure sprite is visible
+		sprite.visible = true
+		sprite.modulate = Color(1, 1, 1, 1)
+		
+		if actor:
+			play_idle()
+
+func _process(_delta):
+	# Sync the texture to the shader every frame
+	if sprite and visual_mat:
+		var frames = sprite.sprite_frames
+		if frames and frames.has_animation(sprite.animation):
+			var tex = frames.get_frame_texture(sprite.animation, sprite.frame)
+			visual_mat.set_shader_parameter("tex", tex)
 
 func play_idle():
 	_play_anim("idle")
@@ -16,29 +44,38 @@ func on_attack_fired(_damage):
 	_play_anim("attack")
 
 func on_damaged(_amount, _new_health, _source):
+	flash()
 	_play_anim("pain")
 
 func on_died(_source):
 	_play_anim("death")
 
-func _play_anim(anim_name: String):
-	current_state = anim_name
+func flash():
+	if not visual_mat: return
 	
-	# Fallback if animation doesn't exist (e.g., chase might just use idle or walk)
+	if _flash_tween:
+		_flash_tween.kill()
+	
+	_flash_tween = create_tween()
+	_flash_tween.tween_method(func(v): visual_mat.set_shader_parameter("hit_flash", v), 1.0, 0.0, flash_duration)
+
+func _play_anim(anim_name: String):
+	if not sprite: return
+	
 	var target_anim = anim_name
 	if not sprite.sprite_frames.has_animation(target_anim):
-		if target_anim == "chase" and sprite.sprite_frames.has_animation("walk"):
-			target_anim = "walk"
-		elif not sprite.sprite_frames.has_animation(target_anim):
-			return # Animation not found
+		if target_anim == "chase":
+			target_anim = "walk" if sprite.sprite_frames.has_animation("walk") else "idle"
+		elif target_anim in ["pain", "death"]:
+			return
+		else:
+			return
 
+	current_state = anim_name
 	sprite.play(target_anim)
 	
-	# If it's a one-shot animation like attack or pain, return to idle after
 	if anim_name in ["attack", "pain"]:
 		sprite.set_frame_and_progress(0, 0.0)
-		
-		# Connect to animation_finished if not already connected
 		if not sprite.animation_finished.is_connected(_on_animation_finished):
 			sprite.animation_finished.connect(_on_animation_finished)
 
@@ -46,10 +83,16 @@ func _on_animation_finished():
 	if current_state in ["attack", "pain"]:
 		if sprite.animation_finished.is_connected(_on_animation_finished):
 			sprite.animation_finished.disconnect(_on_animation_finished)
-		play_idle()
+		current_state = "idle"
 
-func _process(_delta):
+func _physics_process(_delta):
 	if not actor or not sprite:
 		return
-	# flipping logic could go here, but it's currently in the main script
-	pass
+	
+	if current_state in ["idle", "walk", "chase"]:
+		if actor.velocity.length() > 0.1:
+			if current_state != "chase":
+				play_chase()
+		else:
+			if current_state != "idle":
+				play_idle()
