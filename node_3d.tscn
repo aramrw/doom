@@ -33,8 +33,8 @@
 [ext_resource type="PackedScene" uid="uid://b6u2f58traqug" path="res://assets/props/helltrees/godot_data/helltreeburn3.tscn" id="32_ype4i"]
 [ext_resource type="PackedScene" uid="uid://c8jadc4i4ypji" path="res://assets/props/helltrees/godot_data/helltreescorch1.tscn" id="33_riyl1"]
 [ext_resource type="PackedScene" uid="uid://m1tfxf2q41hn" path="res://assets/props/rocks/godot_data/rockblack.tscn" id="34_pb8dk"]
-[ext_resource type="PackedScene" uid="uid://br551piwvkxhl" path="res://enemies/goblins/goblin.tscn" id="35_2mu51"]
-[ext_resource type="PackedScene" uid="uid://br551piwvkxhl" path="res://enemies/slitherfist/Slitherfist.tscn" id="35_vmvb8"]
+[ext_resource type="PackedScene" path="res://enemies/goblins/goblin.tscn" id="35_2mu51"]
+[ext_resource type="PackedScene" path="res://enemies/slitherfist/Slitherfist.tscn" id="35_vmvb8"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_i5arm"]
 shader = ExtResource("1_jka67")
