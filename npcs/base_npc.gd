@@ -43,6 +43,15 @@ func _ready():
 
 	if health_component:
 		health_component.died.connect(_on_died)
+		if animation_component:
+			health_component.damaged.connect(animation_component.on_damaged)
+			health_component.died.connect(animation_component.on_died)
+	
+	if attack_component and animation_component:
+		attack_component.attack_fired.connect(animation_component.on_attack_fired)
+		
+	if animation_component:
+		animation_component.actor = self
 	
 	print("[BaseNPC] ", name, " initialized. State: ", npc_state)
 
@@ -54,11 +63,8 @@ func _physics_process(delta):
 		NPCState.TALKING:
 			process_talking(delta)
 		NPCState.FOLLOW:
-			# ChaseComponent handles movement, we just update animation
-			if velocity.length() > 0.1 and animation_component:
-				animation_component.play_chase()
-			elif animation_component:
-				animation_component.play_idle()
+			# Animation component handles movement animations via its own _physics_process
+			pass
 
 func process_talking(_delta):
 	var players = get_tree().get_nodes_in_group("Player")
@@ -91,8 +97,8 @@ func _on_died(_source):
 
 func interact(_p: Node = null):
 	print("[BaseNPC] ", name, " interact() called. Current state: ", npc_state)
-	if npc_state == NPCState.COMBAT: 
-		print("[BaseNPC] interaction blocked by COMBAT state")
+	if npc_state == NPCState.COMBAT or npc_state == NPCState.TALKING: 
+		print("[BaseNPC] interaction blocked by state: ", npc_state)
 		return
 
 	var manager = get_node_or_null("DialogueManager")
@@ -131,5 +137,8 @@ func _on_dialogue_finished():
 	npc_state = NPCState.IDLE
 	if follows_player: npc_state = NPCState.FOLLOW
 	
-	if chase_component: chase_component.is_aggressive = true
-	if attack_component: attack_component.is_aggressive = true
+	# Restore component state based on original behavior flags
+	if chase_component:
+		chase_component.is_aggressive = follows_player or attacks_player or attacks_enemies
+	if attack_component:
+		attack_component.is_aggressive = attacks_player or attacks_enemies

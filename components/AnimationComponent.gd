@@ -10,13 +10,21 @@ var visual_mat: ShaderMaterial
 var _flash_tween: Tween
 
 func _ready():
+	print("[AnimationComponent] Initializing for ", get_parent().name)
+	
 	if not sprite and get_parent().has_node("AnimatedSprite3D"):
 		sprite = get_parent().get_node("AnimatedSprite3D")
 	
 	if sprite:
 		# Setup the shader material
 		visual_mat = ShaderMaterial.new()
-		visual_mat.shader = load("res://shaders/enemy_visuals.gdshader")
+		var shader = load("res://shaders/enemy_visuals.gdshader")
+		if shader:
+			print("[AnimationComponent] Shader loaded successfully.")
+			visual_mat.shader = shader
+		else:
+			push_error("[AnimationComponent] FAILED to load shader res://shaders/enemy_visuals.gdshader")
+		
 		sprite.material_override = visual_mat
 		
 		# Ensure sprite is visible
@@ -44,6 +52,7 @@ func on_attack_fired(_damage):
 	_play_anim("attack")
 
 func on_damaged(_amount, _new_health, _source):
+	print("[AnimationComponent] ", get_parent().name, " FLASHING.")
 	flash()
 	_play_anim("pain")
 
