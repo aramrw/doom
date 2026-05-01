@@ -89,6 +89,26 @@ region = Rect2(338, 513, 57, 98)
 atlas = ExtResource("21_tiw80")
 region = Rect2(395, 513, 57, 98)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_yqn77"]
+atlas = ExtResource("21_tiw80")
+region = Rect2(0, 0, 64, 101)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vhdwa"]
+atlas = ExtResource("21_tiw80")
+region = Rect2(62, 0, 62, 101)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nbujr"]
+atlas = ExtResource("21_tiw80")
+region = Rect2(128, 0, 64, 101)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j02m7"]
+atlas = ExtResource("21_tiw80")
+region = Rect2(195, 0, 65, 101)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tiw80"]
+atlas = ExtResource("21_tiw80")
+region = Rect2(260, 0, 65, 101)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_x8aui"]
 atlas = ExtResource("21_tiw80")
 region = Rect2(0, 608, 53, 101)
@@ -274,6 +294,46 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_yqn77")
+}],
+"loop": false,
+"name": &"idle_1",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vhdwa")
+}],
+"loop": false,
+"name": &"idle_2",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nbujr")
+}],
+"loop": false,
+"name": &"idle_3",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j02m7")
+}],
+"loop": true,
+"name": &"idle_4",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tiw80")
+}],
+"loop": false,
+"name": &"idle_5",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_x8aui")
 }],
 "loop": false,
@@ -430,9 +490,7 @@ billboard = 1
 shaded = true
 texture_filter = 0
 sprite_frames = SubResource("SpriteFrames_1")
-animation = &"death_1"
-frame = 10
-frame_progress = 1.0
+animation = &"idle_5"
 
 [node name="HealthComponent" type="Node" parent="." unique_id=1220893724]
 script = ExtResource("46_qvvbo")
