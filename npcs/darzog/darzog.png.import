@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dtuhhr4w2k3lf"
-path.s3tc="res://.godot/imported/MARAH0.png-5c23ecc2f70c2a3a51e38155f4c9cdbd.s3tc.ctex"
+uid="uid://batek5fkrb1w0"
+path.s3tc="res://.godot/imported/darzog.png-e3252f019e5c8d2e0d32d65efaa72949.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://npcs/ShotgunMonk/sprites/MARAH0.png"
-dest_files=["res://.godot/imported/MARAH0.png-5c23ecc2f70c2a3a51e38155f4c9cdbd.s3tc.ctex"]
+source_file="res://npcs/darzog/darzog.png"
+dest_files=["res://.godot/imported/darzog.png-e3252f019e5c8d2e0d32d65efaa72949.s3tc.ctex"]
 
 [params]
 

@@ -52,6 +52,7 @@ func _ready():
 		
 	if animation_component:
 		animation_component.actor = self
+		animation_component.play_idle()
 	
 	print("[BaseNPC] ", name, " initialized. State: ", npc_state)
 

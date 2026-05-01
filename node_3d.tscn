@@ -33,8 +33,9 @@
 [ext_resource type="PackedScene" uid="uid://b6u2f58traqug" path="res://assets/props/helltrees/godot_data/helltreeburn3.tscn" id="32_ype4i"]
 [ext_resource type="PackedScene" uid="uid://c8jadc4i4ypji" path="res://assets/props/helltrees/godot_data/helltreescorch1.tscn" id="33_riyl1"]
 [ext_resource type="PackedScene" uid="uid://m1tfxf2q41hn" path="res://assets/props/rocks/godot_data/rockblack.tscn" id="34_pb8dk"]
-[ext_resource type="PackedScene" path="res://enemies/goblins/goblin.tscn" id="35_2mu51"]
+[ext_resource type="PackedScene" uid="uid://c6vggecfxyo1b" path="res://enemies/goblins/goblin.tscn" id="35_2mu51"]
 [ext_resource type="PackedScene" path="res://enemies/slitherfist/Slitherfist.tscn" id="35_vmvb8"]
+[ext_resource type="PackedScene" uid="uid://c2gsov44fnr77" path="res://npcs/darzog/darzog.tscn" id="36_vmvb8"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_i5arm"]
 shader = ExtResource("1_jka67")
@@ -321,3 +322,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -39.443954, 5.606499, 0.31296
 
 [node name="Goblin" parent="." unique_id=1290029648 instance=ExtResource("35_2mu51")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.720244, 6.0099998, 0.87730575)
+
+[node name="Darzog" parent="." unique_id=1155083772 instance=ExtResource("36_vmvb8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -38.0016, 5.9397492, 32.571964)

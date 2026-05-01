@@ -1,0 +1,196 @@
+[gd_scene format=3 uid="uid://c2gsov44fnr77"]
+
+[ext_resource type="Script" uid="uid://c0seuvhjuadad" path="res://npcs/base_npc.gd" id="1_01p4v"]
+[ext_resource type="Texture2D" uid="uid://batek5fkrb1w0" path="res://npcs/darzog/darzog.png" id="2_b24xl"]
+[ext_resource type="Script" uid="uid://q0jeh0ade15l" path="res://components/HealthComponent.gd" id="46_u0pv8"]
+[ext_resource type="Script" uid="uid://b4xp3spbaebdm" path="res://components/AttackComponent.gd" id="47_bm48q"]
+[ext_resource type="Script" uid="uid://dmmjmxe72o8nn" path="res://components/ChaseComponent.gd" id="48_g5kup"]
+[ext_resource type="Script" uid="uid://b1diia2jpf5qi" path="res://components/AnimationComponent.gd" id="49_5jnpt"]
+[ext_resource type="Script" uid="uid://bmnl2e66g824f" path="res://enemies/template/enemy_sounds.gd" id="50_8bree"]
+[ext_resource type="AudioStream" uid="uid://kgiybjyuki2i" path="res://npcs/ShotgunMonk/dialogue/audio/ElevenLabs_2026-04-29T18_58_47_Hiro - Calm, Measured and Husky_pvc_sp100_s50_sb75_v3.mp3" id="51_gft3m"]
+[ext_resource type="AudioStream" uid="uid://pw76dqxgyuli" path="res://npcs/ShotgunMonk/dialogue/audio/ElevenLabs_2026-04-29T19_25_02_Hiro - Calm, Measured and Husky_pvc_sp100_s50_sb75_v3.mp3" id="52_bxji2"]
+[ext_resource type="AudioStream" uid="uid://bs4wogvfmk14o" path="res://npcs/ShotgunMonk/dialogue/audio/ElevenLabs_2026-04-29T19_02_52_Hiro - Calm, Measured and Husky_pvc_sp100_s50_sb75_v3.mp3" id="53_4dt12"]
+[ext_resource type="AudioStream" uid="uid://btys4ag67r867" path="res://npcs/ShotgunMonk/dialogue/audio/ElevenLabs_2026-04-29T19_32_52_Hiro - Calm, Measured and Husky_pvc_sp100_s50_sb75_v3.mp3" id="54_job8p"]
+[ext_resource type="AudioStream" uid="uid://cgpryuq0wr0y3" path="res://npcs/ShotgunMonk/dialogue/audio/ElevenLabs_2026-04-29T19_34_20_Hiro - Calm, Measured and Husky_pvc_sp100_s50_sb75_v3.mp3" id="55_q3ryw"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1"]
+radius = 1.1286621
+height = 2.2573242
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ivaj6"]
+atlas = ExtResource("2_b24xl")
+region = Rect2(0, 0, 251, 151)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vdbhw"]
+atlas = ExtResource("2_b24xl")
+region = Rect2(251, 0, 251, 151)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cm0ct"]
+atlas = ExtResource("2_b24xl")
+region = Rect2(502, 0, 251, 151)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xem61"]
+atlas = ExtResource("2_b24xl")
+region = Rect2(753, 0, 251, 151)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0sugv"]
+atlas = ExtResource("2_b24xl")
+region = Rect2(0, 151, 251, 151)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3qi4i"]
+atlas = ExtResource("2_b24xl")
+region = Rect2(251, 151, 251, 151)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_auj6p"]
+atlas = ExtResource("2_b24xl")
+region = Rect2(502, 151, 251, 151)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aon52"]
+atlas = ExtResource("2_b24xl")
+region = Rect2(753, 151, 251, 151)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_1"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ivaj6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vdbhw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cm0ct")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xem61")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0sugv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3qi4i")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_auj6p")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_aon52")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 8.0
+}]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_au4qf"]
+radius = 2.019645
+
+[sub_resource type="DialogueLine" id="DialogueLine_udfx5"]
+text = "俺はヴァチカン特務第１３課イスカリオテ機関の藤沢マーレでございます。これからよろしく"
+audio = ExtResource("52_bxji2")
+
+[sub_resource type="DialogueLine" id="DialogueLine_my845"]
+text = "忘れてたか...ヤベー。"
+audio = ExtResource("51_gft3m")
+next_line = SubResource("DialogueLine_udfx5")
+
+[sub_resource type="DialogueChoice" id="DialogueChoice_rpv6j"]
+label = "誰だお前？"
+next_node = SubResource("DialogueLine_my845")
+
+[sub_resource type="DialogueLine" id="DialogueLine_s8yxr"]
+text = "どこにどこでもある。。。この凄まじい感じ。。。強い！"
+audio = ExtResource("53_4dt12")
+
+[sub_resource type="DialogueChoice" id="DialogueChoice_udfx5"]
+label = "なんだこの圧力！"
+next_node = SubResource("DialogueLine_s8yxr")
+
+[sub_resource type="DialogueLine" id="DialogueLine_31sx5"]
+text = "そりゃどうでもいい、とにかく銃を見つけなきゃこまる。"
+audio = ExtResource("55_q3ryw")
+
+[sub_resource type="DialogueLine" id="DialogueLine_kv7hp"]
+text = "落ち着け。お前も、この腐れた洞窟の事もなにも知らぬ。"
+audio = ExtResource("54_job8p")
+next_line = SubResource("DialogueLine_31sx5")
+
+[sub_resource type="DialogueChoice" id="DialogueChoice_rqp60"]
+label = "俺は誰、とどこかここ！"
+next_node = SubResource("DialogueLine_kv7hp")
+
+[sub_resource type="DialogueLine" id="DialogueLine_au4qf"]
+text = "まだ生きてる事こそ称えます"
+line_type = 1
+choices = Array[DialogueChoice]([SubResource("DialogueChoice_rpv6j"), SubResource("DialogueChoice_udfx5"), SubResource("DialogueChoice_rqp60")])
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_my845"]
+radius = 2.6355777
+
+[node name="Darzog" type="CharacterBody3D" unique_id=1155083772 groups=["Enemies", "NPCs"]]
+collision_layer = 4
+collision_mask = 3
+script = ExtResource("1_01p4v")
+attacks_enemies = false
+become_hostile_on_damage = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1445630673]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2227539, 0)
+shape = SubResource("CapsuleShape3D_1")
+
+[node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="." unique_id=2036543861]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+offset = Vector2(0, 10)
+pixel_size = 0.03
+billboard = 1
+shaded = true
+texture_filter = 0
+sprite_frames = SubResource("SpriteFrames_1")
+animation = &"idle"
+frame_progress = 0.23185873
+
+[node name="HealthComponent" type="Node" parent="." unique_id=1220893724]
+script = ExtResource("46_u0pv8")
+
+[node name="AttackComponent" type="Node" parent="." unique_id=238761579]
+script = ExtResource("47_bm48q")
+
+[node name="ChaseComponent" type="Node" parent="." unique_id=1560236564]
+script = ExtResource("48_g5kup")
+
+[node name="AnimationComponent" type="Node" parent="." unique_id=1761444566]
+script = ExtResource("49_5jnpt")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="." unique_id=783421459]
+
+[node name="RayCast3D" type="RayCast3D" parent="." unique_id=414383251]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+target_position = Vector3(0, 0, -10)
+collision_mask = 3
+
+[node name="EnemySounds" type="AudioStreamPlayer3D" parent="." unique_id=1959173265]
+bus = &"SfxBus"
+script = ExtResource("50_8bree")
+death_folder = "res://npcs/ShotgunMonk/sounds/death"
+hurt_folder = "res://npcs/ShotgunMonk/sounds/hurt"
+taunt_folder = "res://npcs/ShotgunMonk/sounds/taunt"
+
+[node name="InteractionZone" type="Area3D" parent="." unique_id=1062173447]
+collision_layer = 4
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="InteractionZone" unique_id=937984414]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2591308, 0)
+shape = SubResource("SphereShape3D_au4qf")
+
+[node name="DialogueManager" type="DialogueManager" parent="." unique_id=909343281]
+root_node = SubResource("DialogueLine_au4qf")
+audio_bus_override = true
+audio_bus_name = &"NPC"
+reverb_bus_name = &"SfxBus"
+reverb_bus_amount = 0.55
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DialogueManager" unique_id=1841720009]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0104651, 0)
+shape = SubResource("SphereShape3D_my845")
+
+[connection signal="dialogue_started" from="DialogueManager" to="." method="_on_dialogue_manager_dialogue_started"]
