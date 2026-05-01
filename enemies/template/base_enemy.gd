@@ -1,8 +1,6 @@
 extends CharacterBody3D
 class_name BaseEnemy
 
-@export var death_linger_time: float = 2.0
-
 @onready var sprite = $AnimatedSprite3D
 @onready var health_component = $HealthComponent
 @onready var attack_component = $AttackComponent
@@ -67,15 +65,3 @@ func _on_died(_source):
 	# Disable collisions so player doesn't bump into the "corpse"
 	collision_layer = 0
 	collision_mask = 0
-
-	# Wait for the death animation to finish
-	if sprite.sprite_frames.has_animation("death"):
-		await sprite.animation_finished
-	else:
-		await get_tree().create_timer(1.0).timeout
-	
-	# Linger for a bit before disappearing
-	if death_linger_time > 0:
-		await get_tree().create_timer(death_linger_time).timeout
-	
-	queue_free()

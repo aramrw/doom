@@ -9,7 +9,6 @@ var npc_state = NPCState.IDLE
 @export var attacks_enemies: bool = true
 @export var attacks_player: bool = false
 @export var become_hostile_on_damage: bool = true
-@export var death_linger_time: float = 3.0
 
 @export_group("Dialogue")
 @export var npc_display_name: String = "NPC"
@@ -99,19 +98,6 @@ func _on_died(_source):
 	# Disable collisions so player doesn't bump into the "corpse"
 	collision_layer = 0
 	collision_mask = 0
-
-	# Wait for the death animation to finish (AnimationComponent handles starting it)
-	var sprite = get_node_or_null("AnimatedSprite3D")
-	if sprite and sprite.sprite_frames.has_animation("death"):
-		await sprite.animation_finished
-	else:
-		await get_tree().create_timer(1.0).timeout
-	
-	# Linger for a bit before disappearing
-	if death_linger_time > 0:
-		await get_tree().create_timer(death_linger_time).timeout
-	
-	queue_free()
 
 func interact(_p: Node = null):
 	print("[BaseNPC] ", name, " interact() called. Current state: ", npc_state)
