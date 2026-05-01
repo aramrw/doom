@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode unshaded, cull_disabled, depth_draw_opaque;
+render_mode cull_disabled, depth_draw_opaque; // Removed 'unshaded'
 
 uniform sampler2D tex : source_color, filter_nearest;
 uniform float hit_flash : hint_range(0.0, 1.0) = 0.0;
@@ -42,12 +42,15 @@ void fragment() {
 
 	// 2. Draw Logic
 	if (color.a > 0.5) {
-		// Main Sprite + Hit Flash
-		ALBEDO = mix(color.rgb, flash_color.rgb * 5.0, hit_flash);
+		// Main Sprite
+		ALBEDO = color.rgb;
+		// Apply hit flash as EMISSION so it bypasses shading and looks bright
+		EMISSION = flash_color.rgb * hit_flash * 10.0;
 		ALPHA = color.a;
 	} else if (outline_alpha > 0.5) {
-		// Outline
+		// Outline (Unshaded for visibility)
 		ALBEDO = outline_color.rgb;
+		EMISSION = outline_color.rgb;
 		ALPHA = outline_color.a;
 	} else {
 		discard;

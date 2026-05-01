@@ -1,39 +1,39 @@
-[gd_resource type="SpriteFrames" format=3]
+[gd_resource type="SpriteFrames" format=3 uid="uid://c2t13aovxfso5"]
 
-[ext_resource type="Texture2D" path="res://assets/props/burning/godot_data/sprites/burning/burningcorpse2/inactive/ALV2A0.png" id="1_ext"]
-[ext_resource type="Texture2D" path="res://assets/props/burning/godot_data/sprites/burning/burningcorpse2/spawn/BAV2A0.png" id="2_ext"]
-[ext_resource type="Texture2D" path="res://assets/props/burning/godot_data/sprites/burning/burningcorpse2/spawn/BAV2B0.png" id="3_ext"]
-[ext_resource type="Texture2D" path="res://assets/props/burning/godot_data/sprites/burning/burningcorpse2/spawn/BAV2C0.png" id="4_ext"]
-[ext_resource type="Texture2D" path="res://assets/props/burning/godot_data/sprites/burning/burningcorpse2/spawn/BAV2D0.png" id="5_ext"]
-[ext_resource type="Texture2D" path="res://assets/props/burning/godot_data/sprites/burning/burningcorpse2/spawn/ALV2A0.png" id="6_ext"]
+[ext_resource type="Texture2D" uid="uid://0vrjgsxr0ktf" path="res://assets/props/burning/godot_data/sprites/burning/burningcorpse2/inactive/ALV2A0.png" id="1_ext"]
+[ext_resource type="Texture2D" uid="uid://cecq7o570d3g4" path="res://assets/props/burning/godot_data/sprites/burning/burningcorpse2/spawn/BAV2A0.png" id="2_ext"]
+[ext_resource type="Texture2D" uid="uid://c4d2bcllgxq6k" path="res://assets/props/burning/godot_data/sprites/burning/burningcorpse2/spawn/BAV2B0.png" id="3_ext"]
+[ext_resource type="Texture2D" uid="uid://cui6qju12bd5y" path="res://assets/props/burning/godot_data/sprites/burning/burningcorpse2/spawn/BAV2C0.png" id="4_ext"]
+[ext_resource type="Texture2D" uid="uid://c2jfq4hdgusbw" path="res://assets/props/burning/godot_data/sprites/burning/burningcorpse2/spawn/BAV2D0.png" id="5_ext"]
+[ext_resource type="Texture2D" uid="uid://dakni33d2grjm" path="res://assets/props/burning/godot_data/sprites/burning/burningcorpse2/spawn/ALV2A0.png" id="6_ext"]
 
 [resource]
 animations = [{
-    "frames": [{
-"duration": 1,
+"frames": [{
+"duration": 1.0,
 "texture": ExtResource("1_ext")
 }],
-    "loop": true,
-    "name": &"inactive",
-    "speed": 35.0
-    }, {
-    "frames": [{
-"duration": 4,
+"loop": true,
+"name": &"inactive",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 4.0,
 "texture": ExtResource("2_ext")
 }, {
-"duration": 4,
+"duration": 4.0,
 "texture": ExtResource("3_ext")
 }, {
-"duration": 4,
+"duration": 4.0,
 "texture": ExtResource("4_ext")
 }, {
-"duration": 4,
+"duration": 4.0,
 "texture": ExtResource("5_ext")
 }, {
-"duration": 1,
+"duration": 1.0,
 "texture": ExtResource("6_ext")
 }],
-    "loop": true,
-    "name": &"spawn",
-    "speed": 35.0
-    }]
+"loop": true,
+"name": &"spawn",
+"speed": 35.0
+}]

@@ -2,16 +2,15 @@
 
 [ext_resource type="Script" uid="uid://c0seuvhjuadad" path="res://npcs/base_npc.gd" id="1_01p4v"]
 [ext_resource type="Texture2D" uid="uid://batek5fkrb1w0" path="res://npcs/darzog/darzog.png" id="2_b24xl"]
+[ext_resource type="AudioStream" uid="uid://clapg61lrip4a" path="res://npcs/darzog/dialogue/kikitaikotowananda.mp3" id="8_ivaj6"]
+[ext_resource type="AudioStream" uid="uid://dmvk3hu6ula2i" path="res://npcs/darzog/dialogue/bureinamono.mp3" id="9_lugeh"]
+[ext_resource type="AudioStream" uid="uid://cjq5g3sex3wr5" path="res://npcs/darzog/dialogue/あーラン.mp3" id="10_fx87p"]
+[ext_resource type="AudioStream" uid="uid://b17x42sj0x3rs" path="res://npcs/darzog/dialogue/王と歩んだ.mp3" id="11_q8n3i"]
 [ext_resource type="Script" uid="uid://q0jeh0ade15l" path="res://components/HealthComponent.gd" id="46_u0pv8"]
 [ext_resource type="Script" uid="uid://b4xp3spbaebdm" path="res://components/AttackComponent.gd" id="47_bm48q"]
 [ext_resource type="Script" uid="uid://dmmjmxe72o8nn" path="res://components/ChaseComponent.gd" id="48_g5kup"]
 [ext_resource type="Script" uid="uid://b1diia2jpf5qi" path="res://components/AnimationComponent.gd" id="49_5jnpt"]
 [ext_resource type="Script" uid="uid://bmnl2e66g824f" path="res://enemies/template/enemy_sounds.gd" id="50_8bree"]
-[ext_resource type="AudioStream" uid="uid://kgiybjyuki2i" path="res://npcs/ShotgunMonk/dialogue/audio/ElevenLabs_2026-04-29T18_58_47_Hiro - Calm, Measured and Husky_pvc_sp100_s50_sb75_v3.mp3" id="51_gft3m"]
-[ext_resource type="AudioStream" uid="uid://pw76dqxgyuli" path="res://npcs/ShotgunMonk/dialogue/audio/ElevenLabs_2026-04-29T19_25_02_Hiro - Calm, Measured and Husky_pvc_sp100_s50_sb75_v3.mp3" id="52_bxji2"]
-[ext_resource type="AudioStream" uid="uid://bs4wogvfmk14o" path="res://npcs/ShotgunMonk/dialogue/audio/ElevenLabs_2026-04-29T19_02_52_Hiro - Calm, Measured and Husky_pvc_sp100_s50_sb75_v3.mp3" id="53_4dt12"]
-[ext_resource type="AudioStream" uid="uid://btys4ag67r867" path="res://npcs/ShotgunMonk/dialogue/audio/ElevenLabs_2026-04-29T19_32_52_Hiro - Calm, Measured and Husky_pvc_sp100_s50_sb75_v3.mp3" id="54_job8p"]
-[ext_resource type="AudioStream" uid="uid://cgpryuq0wr0y3" path="res://npcs/ShotgunMonk/dialogue/audio/ElevenLabs_2026-04-29T19_34_20_Hiro - Calm, Measured and Husky_pvc_sp100_s50_sb75_v3.mp3" id="55_q3ryw"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1"]
 radius = 1.1286621
@@ -84,44 +83,35 @@ animations = [{
 [sub_resource type="SphereShape3D" id="SphereShape3D_au4qf"]
 radius = 2.019645
 
-[sub_resource type="DialogueLine" id="DialogueLine_udfx5"]
-text = "俺はヴァチカン特務第１３課イスカリオテ機関の藤沢マーレでございます。これからよろしく"
-audio = ExtResource("52_bxji2")
+[sub_resource type="DialogueLine" id="DialogueLine_02r0r"]
+text = "無礼な者、おりゃダーゾッぐだ、アーラン王国の大鬼才だ。馬鹿げた事を聞くな。"
+audio = ExtResource("9_lugeh")
 
-[sub_resource type="DialogueLine" id="DialogueLine_my845"]
-text = "忘れてたか...ヤベー。"
-audio = ExtResource("51_gft3m")
-next_line = SubResource("DialogueLine_udfx5")
+[sub_resource type="DialogueChoice" id="DialogueChoice_lugeh"]
+label = "誰だ？"
+next_node = SubResource("DialogueLine_02r0r")
 
-[sub_resource type="DialogueChoice" id="DialogueChoice_rpv6j"]
-label = "誰だお前？"
-next_node = SubResource("DialogueLine_my845")
+[sub_resource type="DialogueLine" id="DialogueLine_lugeh"]
+text = "帝国の事か...。強い国だ。アーラン王様も優しい、文句がない程の。"
+audio = ExtResource("10_fx87p")
 
-[sub_resource type="DialogueLine" id="DialogueLine_s8yxr"]
-text = "どこにどこでもある。。。この凄まじい感じ。。。強い！"
-audio = ExtResource("53_4dt12")
+[sub_resource type="DialogueChoice" id="DialogueChoice_fx87p"]
+label = "オットマン帝国について"
+next_node = SubResource("DialogueLine_lugeh")
 
-[sub_resource type="DialogueChoice" id="DialogueChoice_udfx5"]
-label = "なんだこの圧力！"
-next_node = SubResource("DialogueLine_s8yxr")
+[sub_resource type="DialogueLine" id="DialogueLine_b24xl"]
+text = "王と歩んだ栄光の日...。このダルゾグ、地の底で何を綴ればいい"
+audio = ExtResource("11_q8n3i")
 
-[sub_resource type="DialogueLine" id="DialogueLine_31sx5"]
-text = "そりゃどうでもいい、とにかく銃を見つけなきゃこまる。"
-audio = ExtResource("55_q3ryw")
-
-[sub_resource type="DialogueLine" id="DialogueLine_kv7hp"]
-text = "落ち着け。お前も、この腐れた洞窟の事もなにも知らぬ。"
-audio = ExtResource("54_job8p")
-next_line = SubResource("DialogueLine_31sx5")
-
-[sub_resource type="DialogueChoice" id="DialogueChoice_rqp60"]
-label = "俺は誰、とどこかここ！"
-next_node = SubResource("DialogueLine_kv7hp")
+[sub_resource type="DialogueChoice" id="DialogueChoice_ivaj6"]
+label = "どうやって来た？"
+next_node = SubResource("DialogueLine_b24xl")
 
 [sub_resource type="DialogueLine" id="DialogueLine_au4qf"]
-text = "まだ生きてる事こそ称えます"
+text = "聞きたい事はなんだ？"
+audio = ExtResource("8_ivaj6")
 line_type = 1
-choices = Array[DialogueChoice]([SubResource("DialogueChoice_rpv6j"), SubResource("DialogueChoice_udfx5"), SubResource("DialogueChoice_rqp60")])
+choices = Array[DialogueChoice]([SubResource("DialogueChoice_lugeh"), SubResource("DialogueChoice_fx87p"), SubResource("DialogueChoice_ivaj6")])
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_my845"]
 radius = 2.6355777
@@ -146,7 +136,7 @@ shaded = true
 texture_filter = 0
 sprite_frames = SubResource("SpriteFrames_1")
 animation = &"idle"
-frame_progress = 0.23185873
+frame_progress = 0.8201364
 
 [node name="HealthComponent" type="Node" parent="." unique_id=1220893724]
 script = ExtResource("46_u0pv8")

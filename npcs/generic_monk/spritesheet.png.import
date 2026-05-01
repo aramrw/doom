@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bmuqdkn5ht258"
-path.s3tc="res://.godot/imported/MARAC7C3.png-398925aa1f17601745753cc919af8eef.s3tc.ctex"
+uid="uid://su53fslxk4ca"
+path.s3tc="res://.godot/imported/spritesheet.png-0ee7411195d728824615fd322122407d.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://npcs/ShotgunMonk/sprites/MARAC7C3.png"
-dest_files=["res://.godot/imported/MARAC7C3.png-398925aa1f17601745753cc919af8eef.s3tc.ctex"]
+source_file="res://npcs/generic_monk/spritesheet.png"
+dest_files=["res://.godot/imported/spritesheet.png-0ee7411195d728824615fd322122407d.s3tc.ctex"]
 
 [params]
 
