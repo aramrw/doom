@@ -74,15 +74,15 @@ impl ResourceGenerator {
                             let pellets = action.args.get(1).map(|v| v.to_string_lossy()).unwrap_or_else(|| "1".to_string());
 
                             (path, format!(
-    r#"[gd_resource type="Resource" script_class="HitscanEffect" format=3]
-    [ext_resource type="Script" path="{}" id="1_script"]
-    [resource]
-    script = ExtResource("1_script")
-    damage = {}
-    spread_angle = {}
-    pellets = {}
-    range_distance = {}
-    "#, path, damage, spread, pellets, range))
+r#"[gd_resource type="Resource" script_class="HitscanEffect" format=3]
+[ext_resource type="Script" path="{}" id="1_script"]
+[resource]
+script = ExtResource("1_script")
+damage = {}
+spread_angle = {}
+pellets = {}
+range_distance = {}
+"#, path, damage, spread, pellets, range))
 
                         } else if lower_name == "a_fireprojectile" || lower_name == "a_firecustommissile" || lower_name == "a_custommissile" {
                             let path = "res://weapons/effects/projectile_effect.gd";
@@ -91,15 +91,15 @@ impl ResourceGenerator {
                             let projectile_res_path = format!("{}/{}.tscn", rel_path, p_name);
 
                             (path, format!(
-    r#"[gd_resource type="Resource" script_class="ProjectileEffect" format=3]
-    [ext_resource type="Script" path="{}" id="1_script"]
-    [ext_resource type="PackedScene" path="{}" id="2_proj"]
-    [resource]
-    script = ExtResource("1_script")
-    projectile_scene = ExtResource("2_proj")
-    speed = 50.0
-    damage = 20
-    "#, path, projectile_res_path))
+r#"[gd_resource type="Resource" script_class="ProjectileEffect" format=3]
+[ext_resource type="Script" path="{}" id="1_script"]
+[ext_resource type="PackedScene" path="{}" id="2_proj"]
+[resource]
+script = ExtResource("1_script")
+projectile_scene = ExtResource("2_proj")
+speed = 50.0
+damage = 20
+"#, path, projectile_res_path))
 
                         } else if lower_name == "a_playsound" || lower_name == "a_startsound" || lower_name == "a_playweaponsound" {
                             let path = "res://weapons/effects/sound_effect.gd";
@@ -117,35 +117,35 @@ impl ResourceGenerator {
                             }
 
                             (path, format!(
-    r#"[gd_resource type="Resource" script_class="SoundEffect" format=3]
-    [ext_resource type="Script" path="{}" id="1_script"]
-    {}
-    [resource]
-    script = ExtResource("1_script")
-    {}pitch_randomness = 0.05
-    "#, path, sound_ext_res, sound_property))
+r#"[gd_resource type="Resource" script_class="SoundEffect" format=3]
+[ext_resource type="Script" path="{}" id="1_script"]
+{}
+[resource]
+script = ExtResource("1_script")
+{}pitch_randomness = 0.05
+"#, path, sound_ext_res, sound_property))
 
                         } else if lower_name == "a_quake" || lower_name == "a_recoil" {
                             let path = "res://weapons/effects/camera_shake_effect.gd";
                             
                             (path, format!(
-    r#"[gd_resource type="Resource" script_class="CameraShakeEffect" format=3]
-    [ext_resource type="Script" path="{}" id="1_script"]
-    [resource]
-    script = ExtResource("1_script")
-    trauma_amount = 0.2
-    "#, path))
+r#"[gd_resource type="Resource" script_class="CameraShakeEffect" format=3]
+[ext_resource type="Script" path="{}" id="1_script"]
+[resource]
+script = ExtResource("1_script")
+trauma_amount = 0.2
+"#, path))
 
                         } else if lower_name == "a_gunflash" {
                             let path = "res://weapons/effects/visual_effect.gd";
                             
                             (path, format!(
-    r#"[gd_resource type="Resource" script_class="VisualEffect" format=3]
-    [ext_resource type="Script" path="{}" id="1_script"]
-    [resource]
-    script = ExtResource("1_script")
-    muzzle_flash = true
-    "#, path))
+r#"[gd_resource type="Resource" script_class="VisualEffect" format=3]
+[ext_resource type="Script" path="{}" id="1_script"]
+[resource]
+script = ExtResource("1_script")
+muzzle_flash = true
+"#, path))
 
                         } else {
                             let path = "res://weapons/effects/raw_zscript_effect.gd";
@@ -156,13 +156,13 @@ impl ResourceGenerator {
                                 .join(", ");
 
                             (path, format!(
-    r#"[gd_resource type="Resource" script_class="RawZScriptEffect" format=3]
-    [ext_resource type="Script" path="{}" id="1_script"]
-    [resource]
-    script = ExtResource("1_script")
-    function_name = "{}"
-    arguments = [{}]
-    "#, path, action.name, args_str))
+r#"[gd_resource type="Resource" script_class="RawZScriptEffect" format=3]
+[ext_resource type="Script" path="{}" id="1_script"]
+[resource]
+script = ExtResource("1_script")
+function_name = "{}"
+arguments = [{}]
+"#, path, action.name, args_str))
                         };
 
                         if !effect_content.is_empty() {
@@ -179,15 +179,15 @@ impl ResourceGenerator {
                         let step_id = format!("step_{}", step_id_counter);
                         
                         let step_content = format!(
-    r#"[gd_resource type="Resource" script_class="ActionStep" format=3]
-    [ext_resource type="Script" path="res://weapons/action_step.gd" id="1_script"]
-    [ext_resource type="Script" path="res://weapons/effects/weapon_effect.gd" id="2_base"]
-    {}
-    [resource]
-    script = ExtResource("1_script")
-    frame_index = {}
-    effects = Array[ExtResource("2_base")]([{}])
-    "#, effect_ext_resources.join("\n"), frame_idx, effect_array_items.join(", "));
+r#"[gd_resource type="Resource" script_class="ActionStep" format=3]
+[ext_resource type="Script" path="res://weapons/action_step.gd" id="1_script"]
+[ext_resource type="Script" path="res://weapons/effects/weapon_effect.gd" id="2_base"]
+{}
+[resource]
+script = ExtResource("1_script")
+frame_index = {}
+effects = Array[ExtResource("2_base")]([{}])
+"#, effect_ext_resources.join("\n"), frame_idx, effect_array_items.join(", "));
                         
                         fs::write(&step_path, step_content)?;
                         fire_ext_resources.push(format!("[ext_resource type=\"Resource\" path=\"{}/{}\" id=\"{}\"]", rel_path, step_filename, step_id));
@@ -201,16 +201,16 @@ impl ResourceGenerator {
             let consumes_ammo = !actor.flags.contains(&"WEAPON.MELEEWEAPON".to_string());
             let action_path = target_dir.join(format!("{}_fire_action.tres", weapon_name));
             let action_content = format!(
-    r#"[gd_resource type="Resource" script_class="WeaponAction" format=3]
-    [ext_resource type="Script" path="res://weapons/weapon_action.gd" id="1_script"]
-    {}
-    [resource]
-    script = ExtResource("1_script")
-    animation_name = "shoot"
-    steps = [{}]
-    loop = false
-    consumes_ammo = {}
-    "#, fire_ext_resources.join("\n"), fire_steps.join(", "), consumes_ammo);
+r#"[gd_resource type="Resource" script_class="WeaponAction" format=3]
+[ext_resource type="Script" path="res://weapons/weapon_action.gd" id="1_script"]
+{}
+[resource]
+script = ExtResource("1_script")
+animation_name = "shoot"
+steps = [{}]
+loop = false
+consumes_ammo = {}
+"#, fire_ext_resources.join("\n"), fire_steps.join(", "), consumes_ammo);
             fs::write(&action_path, action_content)?;
 
             // 4. Generate SpriteFrames
@@ -238,12 +238,12 @@ impl ResourceGenerator {
                 }
                 
                 animations.push(format!(
-    r#"{{
-    "frames": [{}],
-    "loop": {},
-    "name": &"{}",
-    "speed": 35.0
-    }}"#, frames.join(", "), if anim_name == "idle" { "true" } else { "false" }, anim_name));
+r#"{{
+"frames": [{}],
+"loop": {},
+"name": &"{}",
+"speed": 35.0
+}}"#, frames.join(", "), if anim_name == "idle" { "true" } else { "false" }, anim_name));
             }
 
             sf_content.push_str(&ext_resources.join("\n"));
@@ -256,19 +256,19 @@ impl ResourceGenerator {
             // 5. Generate WeaponData
             let wpdata_path = target_dir.join(format!("{}_wpdata.tres", weapon_name));
             let wpdata_content = format!(
-    r#"[gd_resource type="Resource" script_class="WeaponData" format=3]
-    [ext_resource type="Script" path="res://weapons/weapon_data.gd" id="1_script"]
-    [ext_resource type="SpriteFrames" path="{}/{}_spriteframes.tres" id="2_sprites"]
-    [ext_resource type="Resource" path="{}/{}_fire_action.tres" id="3_fire"]
-    [resource]
-    script = ExtResource("1_script")
-    item_name = "{}"
-    sprite_frames = ExtResource("2_sprites")
-    sprite_offset = Vector2(0, 0)
-    flip_h = false
-    actions = {{ "primary": ExtResource("3_fire") }}
-    ammo_give = {}
-    "#, rel_path, weapon_name, rel_path, weapon_name, weapon_name, 
+r#"[gd_resource type="Resource" script_class="WeaponData" format=3]
+[ext_resource type="Script" path="res://weapons/weapon_data.gd" id="1_script"]
+[ext_resource type="SpriteFrames" path="{}/{}_spriteframes.tres" id="2_sprites"]
+[ext_resource type="Resource" path="{}/{}_fire_action.tres" id="3_fire"]
+[resource]
+script = ExtResource("1_script")
+item_name = "{}"
+sprite_frames = ExtResource("2_sprites")
+sprite_offset = Vector2(0, 0)
+flip_h = false
+actions = {{ "primary": ExtResource("3_fire") }}
+ammo_give = {}
+"#, rel_path, weapon_name, rel_path, weapon_name, weapon_name, 
                 actor.properties.get("Weapon.AmmoGive")
                     .map(|v| v.to_string_lossy())
                     .unwrap_or_else(|| "30".to_string()));
@@ -278,62 +278,84 @@ impl ResourceGenerator {
             // 6. Generate Pickup Scene
             let pickup_path = target_dir.join(format!("{}_pickup.tscn", weapon_name));
             let pickup_content = format!(
-    r#"[gd_scene load_steps=6 format=3]
+r#"[gd_scene load_steps=6 format=3]
 
-    [ext_resource type="Script" path="res://items/pickup.gd" id="1_pickup"]
-    [ext_resource type="Resource" path="{}/{}_wpdata.tres" id="2_data"]
-    [ext_resource type="SpriteFrames" path="{}/{}_spriteframes.tres" id="3_sprites"]
+[ext_resource type="Script" path="res://items/pickup.gd" id="1_pickup"]
+[ext_resource type="Resource" path="{}/{}_wpdata.tres" id="2_data"]
+[ext_resource type="SpriteFrames" path="{}/{}_spriteframes.tres" id="3_sprites"]
 
-    [sub_resource type="SphereShape3D" id="SphereShape3D_1"]
-    radius = 0.5
+[sub_resource type="SphereShape3D" id="SphereShape3D_1"]
+radius = 0.5
 
-    [node name="Pickup" type="Area3D"]
-    collision_layer = 4
-    collision_mask = 2
-    script = ExtResource("1_pickup")
-    data = ExtResource("2_data")
-    mode = 2
+[node name="Pickup" type="Area3D"]
+collision_layer = 4
+collision_mask = 2
+script = ExtResource("1_pickup")
+data = ExtResource("2_data")
+mode = 2
 
-    [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-    transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
-    shape = SubResource("SphereShape3D_1")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+shape = SubResource("SphereShape3D_1")
 
-    [node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="."]
-    transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
-    billboard = 2
-    texture_filter = 0
-    sprite_frames = ExtResource("3_sprites")
-    autoplay = "ground"
-    "#, rel_path, weapon_name, rel_path, weapon_name);
+[node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+billboard = 2
+texture_filter = 0
+sprite_frames = ExtResource("3_sprites")
+autoplay = "ground"
+"#, rel_path, weapon_name, rel_path, weapon_name);
             
             fs::write(&pickup_path, pickup_content)?;
             Ok(())
         })
     }
 
-    fn get_direction_sprites(sprites: &[(String, i32)], dir: usize) -> Vec<(String, i32)> {
-        let dir_char = std::char::from_digit(dir as u32, 10).unwrap();
-        sprites.iter().filter(|(s, _)| {
-            let stem = Path::new(s).file_stem().unwrap_or_default().to_str().unwrap_or_default().to_uppercase();
-            if stem.ends_with('0') { return true; }
-            
-            // Standard Doom sprite: PREFIX + FRAME + ROTATION (e.g., XXXXA1 or XXXXA2A8)
-            // or multi-frame: XXXXA1B1 (A=frame1, 1=rot1, B=frame2, 1=rot2)
-            if stem.len() >= 6 {
-                // Check all characters from index 5 onwards for the direction digit
-                let rotations = &stem[5..];
-                rotations.contains(dir_char)
-            } else {
-                false
-            }
-        }).cloned().collect()
-    }
+    fn find_sprite_for_frame_dir(
+        pool: &[(String, i32)], 
+        prefix: &str, 
+        frame_char: char, 
+        dir: usize
+    ) -> Option<(String, i32)> {
+        let dir_char = std::char::from_digit(dir as u32, 10).unwrap_or('0');
+        let prefix_upper = prefix.to_uppercase();
 
+        for (rel_path, dur) in pool {
+            let stem = Path::new(rel_path).file_stem().unwrap_or_default().to_str().unwrap_or_default().to_uppercase();
+            if !stem.starts_with(&prefix_upper) { continue; }
+            let rest = &stem[prefix_upper.len()..]; // e.g. "A1C1" or "A0"
+
+            // It can be F0
+            if rest.len() == 2 && rest.chars().nth(0) == Some(frame_char) && rest.chars().nth(1) == Some('0') {
+                return Some((rel_path.clone(), *dur));
+            }
+
+            // Or F D (e.g. A 1)
+            if rest.len() == 2 && rest.chars().nth(0) == Some(frame_char) && rest.chars().nth(1) == Some(dir_char) {
+                return Some((rel_path.clone(), *dur));
+            }
+
+            // Or F1 D1 F2 D2 (e.g. A 1 C 1)
+            if rest.len() == 4 {
+                let f1 = rest.chars().nth(0).unwrap();
+                let d1 = rest.chars().nth(1).unwrap();
+                let f2 = rest.chars().nth(2).unwrap();
+                let d2 = rest.chars().nth(3).unwrap();
+
+                if (f1 == frame_char && d1 == dir_char) || (f2 == frame_char && d2 == dir_char) {
+                    return Some((rel_path.clone(), *dur));
+                }
+            }
+        }
+        None
+    }
     pub fn generate_enemy_resources(
         actor: &ActorDefinition, 
         actor_root: &Path, 
         rel_base: &str,
-        label_sprites: &HashMap<String, Vec<(String, i32)>>
+        label_sprites: &HashMap<String, Vec<(String, i32)>>,
+        sounds_map: &HashMap<String, String>,
+        mod_name: &str
     ) -> std::io::Result<()> {
         with_atomic_gen(actor_root, |target_dir| {
             let enemy_name = actor.name.to_lowercase();
@@ -384,8 +406,10 @@ impl ResourceGenerator {
             // Process all labels
             for (label, frames) in &actor.states {
                 let mut steps = Vec::new();
+                let mut cumulative_frames = 0;
                 for (frame_idx, frame) in frames.iter().enumerate() {
                     if frame.actions.is_empty() {
+                        cumulative_frames += frame.frames.len();
                         continue;
                     }
 
@@ -409,7 +433,8 @@ impl ResourceGenerator {
 
                             let (_script_path, effect_content) = if sub_lower_name == "a_spawnprojectile" || sub_lower_name == "a_fireprojectile" || sub_lower_name == "a_firecustommissile" || sub_lower_name == "a_customcomboattack" {
                                  let path = "res://weapons/effects/projectile_effect.gd";
-                                 let p_name = sub_action.args.get(0)
+                                 let p_idx = if sub_lower_name == "a_customcomboattack" { 1 } else { 0 };
+                                 let p_name = sub_action.args.get(p_idx)
                                     .map(|v| v.to_string_lossy().to_lowercase().replace("\"", ""))
                                     .unwrap_or_else(|| "unknown".to_string());
                                  
@@ -423,15 +448,15 @@ impl ResourceGenerator {
                                  }
 
                                  (path, format!(
-    r#"[gd_resource type="Resource" script_class="ProjectileEffect" format=3]
-    [ext_resource type="Script" path="{}" id="1_script"]
-    [ext_resource type="PackedScene" path="{}" id="2_proj"]
-    [resource]
-    script = ExtResource("1_script")
-    projectile_scene = ExtResource("2_proj")
-    speed = 20.0
-    damage = 15
-    "#, path, projectile_res_path))
+r#"[gd_resource type="Resource" script_class="ProjectileEffect" format=3]
+[ext_resource type="Script" path="{}" id="1_script"]
+[ext_resource type="PackedScene" path="{}" id="2_proj"]
+[resource]
+script = ExtResource("1_script")
+projectile_scene = ExtResource("2_proj")
+speed = 20.0
+damage = 15
+"#, path, projectile_res_path))
                             } else if sub_lower_name == "a_custommeleeattack" {
                                  let path = "res://weapons/effects/hitscan_effect.gd";
                                  let damage_val = sub_action.args.get(0).map(|v| {
@@ -442,28 +467,35 @@ impl ResourceGenerator {
                                  }).unwrap_or(10);
                                  
                                  (path, format!(
-    r#"[gd_resource type="Resource" script_class="HitscanEffect" format=3]
-    [ext_resource type="Script" path="{}" id="1_script"]
-    [resource]
-    script = ExtResource("1_script")
-    damage = {}
-    range_distance = 2.0
-    "#, path, damage_val))
+r#"[gd_resource type="Resource" script_class="HitscanEffect" format=3]
+[ext_resource type="Script" path="{}" id="1_script"]
+[resource]
+script = ExtResource("1_script")
+damage = {}
+range_distance = 2.0
+"#, path, damage_val))
                             } else if sub_lower_name == "a_playsound" || sub_lower_name == "a_startsound" {
                                 let path = "res://weapons/effects/sound_effect.gd";
                                 let sound_alias = sub_action.args.get(0).map(|v| v.to_string_lossy().to_uppercase()).unwrap_or_else(|| "NONE".to_string());
-                                // For enemies, sounds are already extracted to sounds/mod/alias.ogg
-                                let sound_rel_res = format!("{}/sounds/{}/{}.ogg", rel_path, enemy_name, sound_alias.to_lowercase());
                                 
+                                let mut sound_ext_res = "".to_string();
+                                let mut sound_property = "".to_string();
+
+                                if let Some(_) = sounds_map.get(&sound_alias) {
+                                    let sound_stem = sound_alias.split('/').last().unwrap().to_lowercase();
+                                    let sound_rel_res = format!("{}/sounds/{}/{}.ogg", rel_path, mod_name, sound_stem);
+                                    sound_ext_res = format!("[ext_resource type=\"AudioStream\" path=\"{}\" id=\"2_sound\"]\n", sound_rel_res);
+                                    sound_property = "sound = ExtResource(\"2_sound\")\n".to_string();
+                                }
+
                                 (path, format!(
-    r#"[gd_resource type="Resource" script_class="SoundEffect" format=3]
-    [ext_resource type="Script" path="{}" id="1_script"]
-    [ext_resource type="AudioStream" path="{}" id="2_sound"]
-    [resource]
-    script = ExtResource("1_script")
-    sound = ExtResource("2_sound")
-    pitch_randomness = 0.05
-    "#, path, sound_rel_res))
+r#"[gd_resource type="Resource" script_class="SoundEffect" format=3]
+[ext_resource type="Script" path="{}" id="1_script"]
+{}
+[resource]
+script = ExtResource("1_script")
+{}pitch_randomness = 0.05
+"#, path, sound_ext_res, sound_property))
                             } else {
                                 // Raw fallback
                                  let path = "res://weapons/effects/raw_zscript_effect.gd";
@@ -472,13 +504,13 @@ impl ResourceGenerator {
                                     .collect::<Vec<_>>()
                                     .join(", ");
                                  (path, format!(
-    r#"[gd_resource type="Resource" script_class="RawZScriptEffect" format=3]
-    [ext_resource type="Script" path="{}" id="1_script"]
-    [resource]
-    script = ExtResource("1_script")
-    function_name = "{}"
-    arguments = [{}]
-    "#, path, sub_action.name, args_str))
+r#"[gd_resource type="Resource" script_class="RawZScriptEffect" format=3]
+[ext_resource type="Script" path="{}" id="1_script"]
+[resource]
+script = ExtResource("1_script")
+function_name = "{}"
+arguments = [{}]
+"#, path, sub_action.name, args_str))
                             };
 
                             fs::write(&effect_path, effect_content)?;
@@ -493,22 +525,24 @@ impl ResourceGenerator {
                         let step_path = target_dir.join(&step_filename);
                         let step_id = format!("step_{}", step_id_counter);
                         
+                        println!("DEBUG: Enemy {} label {} frame {} cumulative {} len {}", enemy_name, label, frame_idx, cumulative_frames, frame.frames.len());
                         let step_content = format!(
-    r#"[gd_resource type="Resource" script_class="ActionStep" format=3]
-    [ext_resource type="Script" path="res://weapons/action_step.gd" id="1_script"]
-    [ext_resource type="Script" path="res://weapons/effects/weapon_effect.gd" id="2_base"]
-    {}
-    [resource]
-    script = ExtResource("1_script")
-    frame_index = {}
-    effects = Array[ExtResource("2_base")]([{}])
-    "#, effect_ext_resources.join("\n"), frame_idx, effect_array_items.join(", "));
+r#"[gd_resource type="Resource" script_class="ActionStep" format=3]
+[ext_resource type="Script" path="res://weapons/action_step.gd" id="1_script"]
+[ext_resource type="Script" path="res://weapons/effects/weapon_effect.gd" id="2_base"]
+{}
+[resource]
+script = ExtResource("1_script")
+frame_index = {}
+effects = Array[ExtResource("2_base")]([{}])
+"#, effect_ext_resources.join("\n"), cumulative_frames, effect_array_items.join(", "));
                         
                         fs::write(&step_path, step_content)?;
                         action_ext_resources.push(format!("[ext_resource type=\"Resource\" path=\"{}/{}\" id=\"{}\"]", rel_path, step_filename, step_id));
                         steps.push(format!("ExtResource(\"{}\")", step_id));
                         step_id_counter += 1;
                     }
+                    cumulative_frames += frame.frames.len();
                 }
                 if !steps.is_empty() {
                     label_to_steps.insert(label.clone(), steps);
@@ -533,52 +567,68 @@ impl ResourceGenerator {
                 
                 let anim_name = label.to_lowercase();
                 let is_looping = anim_name == "see" || anim_name == "spawn" || anim_name == "idle";
+                let states = actor.states.get(&label).unwrap();
                 
-                // Use anim_name (lowercase) for animation naming
+                // Directional animations
                 for i in 1..=8 {
-                    let dir_sprites = Self::get_direction_sprites(sprites, i);
-                    let active_sprites = if dir_sprites.is_empty() { 
-                        if i > 1 { continue; }
-                        sprites 
-                    } else { 
-                        &dir_sprites 
-                    };
-                    
                     let mut frames = Vec::new();
-                    for (sprite_rel_path, duration) in active_sprites {
-                        let id = texture_to_id.entry(sprite_rel_path.clone()).or_insert_with(|| {
-                            let new_id = format!("{}_ext", id_counter);
-                            ext_resources.push(format!("[ext_resource type=\"Texture2D\" path=\"{}\" id=\"{}\"]", sprite_rel_path, new_id));
-                            id_counter += 1;
-                            new_id
-                        });
-                        let dur = if *duration <= 0 { 1.0 } else { *duration as f32 };
-                        frames.push(format!("{{\n\"duration\": {},\n\"texture\": ExtResource(\"{}\")\n}}", dur, id));
+                    for state_frame in states {
+                        let prefix = &state_frame.sprite_prefix;
+                        for frame_char in state_frame.frames.chars() {
+                            if let Some((sprite_path, _)) = Self::find_sprite_for_frame_dir(sprites, prefix, frame_char, i) {
+                                let id = texture_to_id.entry(sprite_path.clone()).or_insert_with(|| {
+                                    let new_id = format!("{}_ext", id_counter);
+                                    ext_resources.push(format!("[ext_resource type=\"Texture2D\" path=\"{}\" id=\"{}\"]", sprite_path, new_id));
+                                    id_counter += 1;
+                                    new_id
+                                });
+                                let dur = if state_frame.duration <= 0 { 1.0 } else { state_frame.duration as f32 };
+                                frames.push(format!("{{\n\"duration\": {},\n\"texture\": ExtResource(\"{}\")\n}}", dur, id));
+                            }
+                        }
                     }
 
-                    animations.push(format!(
+                    if !frames.is_empty() {
+                        animations.push(format!(
 r#"{{
 "frames": [{}],
 "loop": {},
 "name": &"{}_{}",
 "speed": 35.0
 }}"#, frames.join(", "), is_looping, anim_name, i));
+                    }
                 }
                 
                 // Fallback for base animation
-                let mut frames = Vec::new();
-                for (sprite_rel_path, duration) in sprites {
-                    let id = texture_to_id.get(sprite_rel_path).unwrap();
-                    let dur = if *duration <= 0 { 1.0 } else { *duration as f32 };
-                    frames.push(format!("{{\n\"duration\": {},\n\"texture\": ExtResource(\"{}\")\n}}", dur, id));
+                let mut fallback_frames = Vec::new();
+                for state_frame in states {
+                    let prefix = &state_frame.sprite_prefix;
+                    for frame_char in state_frame.frames.chars() {
+                        let found = Self::find_sprite_for_frame_dir(sprites, prefix, frame_char, 0)
+                            .or_else(|| Self::find_sprite_for_frame_dir(sprites, prefix, frame_char, 1));
+                            
+                        if let Some((sprite_path, _)) = found {
+                            let id = texture_to_id.entry(sprite_path.clone()).or_insert_with(|| {
+                                let new_id = format!("{}_ext", id_counter);
+                                ext_resources.push(format!("[ext_resource type=\"Texture2D\" path=\"{}\" id=\"{}\"]", sprite_path, new_id));
+                                id_counter += 1;
+                                new_id
+                            });
+                            let dur = if state_frame.duration <= 0 { 1.0 } else { state_frame.duration as f32 };
+                            fallback_frames.push(format!("{{\n\"duration\": {},\n\"texture\": ExtResource(\"{}\")\n}}", dur, id));
+                        }
+                    }
                 }
-                animations.push(format!(
+
+                if !fallback_frames.is_empty() {
+                    animations.push(format!(
 r#"{{
 "frames": [{}],
 "loop": {},
 "name": &"{}",
 "speed": 35.0
-}}"#, frames.join(", "), is_looping, anim_name));
+}}"#, fallback_frames.join(", "), is_looping, anim_name));
+                }
             }
 
             sf_content.push_str(&ext_resources.join("\n"));
@@ -607,16 +657,16 @@ r#"{{
                     let action_id = format!("action_{}", label.to_lowercase());
                     
                     let action_content = format!(
-    r#"[gd_resource type="Resource" script_class="WeaponAction" format=3]
-    [ext_resource type="Script" path="res://weapons/weapon_action.gd" id="1_script"]
-    {}
-    [resource]
-    script = ExtResource("1_script")
-    animation_name = "attack"
-    steps = [{}]
-    loop = false
-    consumes_ammo = false
-    "#, action_ext_resources.join("\n"), steps.join(", "));
+r#"[gd_resource type="Resource" script_class="WeaponAction" format=3]
+[ext_resource type="Script" path="res://weapons/weapon_action.gd" id="1_script"]
+{}
+[resource]
+script = ExtResource("1_script")
+animation_name = "{}"
+steps = [{}]
+loop = false
+consumes_ammo = false
+"#, action_ext_resources.join("\n"), label.to_lowercase(), steps.join(", "));
                     
                     fs::write(&action_path, action_content)?;
                     action_tres_ext.push(format!("[ext_resource type=\"Resource\" path=\"{}/{}\" id=\"{}\"]", rel_path, action_filename, action_id));
@@ -629,55 +679,55 @@ r#"{{
             let tscn_content = format!(
     r#"[gd_scene load_steps=6 format=3]
 
-    [ext_resource type="Script" path="res://enemies/grin/doom_enemy.gd" id="1_script"]
-    [ext_resource type="Script" path="res://enemies/enemy_sounds.gd" id="2_sounds"]
-    [ext_resource type="SpriteFrames" path="{}/{}_spriteframes.tres" id="3_sprites"]
-    {}
+[ext_resource type="Script" path="res://enemies/grin/doom_enemy.gd" id="1_script"]
+[ext_resource type="Script" path="res://enemies/enemy_sounds.gd" id="2_sounds"]
+[ext_resource type="SpriteFrames" path="{}/{}_spriteframes.tres" id="3_sprites"]
+{}
 
-    [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1"]
-    radius = {:.4}
-    height = {:.4}
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1"]
+radius = {:.4}
+height = {:.4}
 
-    [node name="{}" type="CharacterBody3D" groups=["Enemies"]]
-    collision_layer = 4
-    collision_mask = 3
-    floor_stop_on_slope = false
-    safe_margin = 0.5
-    script = ExtResource("1_script")
-    speed = {:.4}
-    meleerange = {:.4}
-    damage = {}
-    reactiontime = {:.4}
-    pain_chance = {}
-    health = {}
-    use_gravity = {}
-    {}
+[node name="{}" type="CharacterBody3D" groups=["Enemies"]]
+collision_layer = 4
+collision_mask = 3
+floor_stop_on_slope = false
+safe_margin = 0.5
+script = ExtResource("1_script")
+speed = {:.4}
+meleerange = {:.4}
+damage = {}
+reactiontime = {:.4}
+pain_chance = {}
+health = {}
+use_gravity = {}
+{}
 
-    [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-    transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, {:.4}, 0)
-    shape = SubResource("CapsuleShape3D_1")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, {:.4}, 0)
+shape = SubResource("CapsuleShape3D_1")
 
-    [node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="."]
-    transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, {:.4}, 0)
-    billboard = 2
-    shaded = true
-    texture_filter = 0
-    sprite_frames = ExtResource("3_sprites")
-    autoplay = "{}"
+[node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="."]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, {:.4}, 0)
+billboard = 2
+shaded = true
+texture_filter = 0
+sprite_frames = ExtResource("3_sprites")
+autoplay = "{}"
 
-    [node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
-    simplify_path = true
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+simplify_path = true
 
-    [node name="RayCast3D" type="RayCast3D" parent="."]
-    collision_mask = 3
+[node name="RayCast3D" type="RayCast3D" parent="."]
+collision_mask = 3
 
-    [node name="EnemySounds" type="AudioStreamPlayer3D" parent="."]
-    bus = &"SfxBus"
-    script = ExtResource("2_sounds")
-    death_folder = "{}/sounds/{}/death"
-    hurt_folder = "{}/sounds/{}/hurt"
-    taunt_folder = "{}/sounds/{}/taunt"
-    "#, 
+[node name="EnemySounds" type="AudioStreamPlayer3D" parent="."]
+bus = &"SfxBus"
+script = ExtResource("2_sounds")
+death_folder = "{}/sounds/{}/death"
+hurt_folder = "{}/sounds/{}/hurt"
+taunt_folder = "{}/sounds/{}/taunt"
+"#, 
                 rel_path, enemy_name, 
                 action_tres_ext.join("\n"),
                 r_val, h_val,
@@ -742,12 +792,12 @@ r#"{{
                 }
                 
                 animations.push(format!(
-    r#"{{
-    "frames": [{}],
-    "loop": {},
-    "name": &"{}",
-    "speed": 35.0
-    }}"#, frames.join(", "), if anim_name == "idle" || anim_name == "spawn" { "true" } else { "false" }, anim_name.to_lowercase()));
+r#"{{
+"frames": [{}],
+"loop": {},
+"name": &"{}",
+"speed": 35.0
+}}"#, frames.join(", "), if anim_name == "idle" || anim_name == "spawn" { "true" } else { "false" }, anim_name.to_lowercase()));
             }
 
             sf_content.push_str(&ext_resources.join("\n"));
@@ -769,31 +819,31 @@ r#"{{
             let tscn_content = format!(
     r#"[gd_scene load_steps=5 format=3]
 
-    [ext_resource type="Script" path="res://weapons/projectiles/base_projectile.gd" id="1_script"]
-    [ext_resource type="SpriteFrames" path="{}/{}_spriteframes.tres" id="2_sprites"]
+[ext_resource type="Script" path="res://weapons/projectiles/base_projectile.gd" id="1_script"]
+[ext_resource type="SpriteFrames" path="{}/{}_spriteframes.tres" id="2_sprites"]
 
-    [sub_resource type="SphereShape3D" id="SphereShape3D_1"]
-    radius = {:.4}
+[sub_resource type="SphereShape3D" id="SphereShape3D_1"]
+radius = {:.4}
 
-    [node name="Projectile" type="Area3D"]
-    script = ExtResource("1_script")
-    speed = {}
-    damage = 20
+[node name="Projectile" type="Area3D"]
+script = ExtResource("1_script")
+speed = {}
+damage = 20
 
-    [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-    shape = SubResource("SphereShape3D_1")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_1")
 
-    [node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="."]
-    transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 0, 0)
-    billboard = 2
-    shaded = true
-    texture_filter = 0
-    sprite_frames = ExtResource("2_sprites")
-    autoplay = "{}"
+[node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="."]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 0, 0)
+billboard = 2
+shaded = true
+texture_filter = 0
+sprite_frames = ExtResource("2_sprites")
+autoplay = "{}"
 
-    [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
-    bus = &"SfxBus"
-    "#, rel_path, proj_name, r_val, speed, autoplay_anim);
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
+bus = &"SfxBus"
+"#, rel_path, proj_name, r_val, speed, autoplay_anim);
             fs::write(&tscn_path, tscn_content)?;
             Ok(())
         })
@@ -844,12 +894,12 @@ r#"{{
                 }
                 
                 animations.push(format!(
-    r#"{{
-    "frames": [{}],
-    "loop": true,
-    "name": &"{}",
-    "speed": 35.0
-    }}"#, frames.join(", "), anim_name.to_lowercase()));
+r#"{{
+"frames": [{}],
+"loop": true,
+"name": &"{}",
+"speed": 35.0
+}}"#, frames.join(", "), anim_name.to_lowercase()));
             }
 
             sf_content.push_str(&ext_resources.join("\n"));
@@ -874,25 +924,25 @@ r#"{{
             let mut tscn_content = format!(
     r#"[gd_scene load_steps=5 format=3]
 
-    [ext_resource type="Script" path="res://assets/base_prop.gd" id="1_script"]
-    [ext_resource type="SpriteFrames" path="{}/{}_spriteframes.tres" id="2_sprites"]
+[ext_resource type="Script" path="res://assets/base_prop.gd" id="1_script"]
+[ext_resource type="SpriteFrames" path="{}/{}_spriteframes.tres" id="2_sprites"]
 
-    [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1"]
-    radius = {:.4}
-    height = {:.4}
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1"]
+radius = {:.4}
+height = {:.4}
 
-    [node name="{}" type="StaticBody3D"]
-    script = ExtResource("1_script")
-    initial_state = "{}"
-    "#, rel_path, prop_name, r_val, h_val, actor.name, autoplay_anim);
+[node name="{}" type="StaticBody3D"]
+script = ExtResource("1_script")
+initial_state = "{}"
+"#, rel_path, prop_name, r_val, h_val, actor.name, autoplay_anim);
 
             if is_solid {
                 tscn_content.push_str(&format!(
     r#"
-    [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-    transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, {:.4}, 0)
-    shape = SubResource("CapsuleShape3D_1")
-    "#, h_val / 2.0));
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, {:.4}, 0)
+shape = SubResource("CapsuleShape3D_1")
+"#, h_val / 2.0));
             }
 
             // Add 4 sprites for volumetric effect
@@ -900,13 +950,13 @@ r#"{{
                 let rot = (i as f32) * 45.0;
                 tscn_content.push_str(&format!(
     r#"
-    [node name="Sprite3D_{}" type="AnimatedSprite3D" parent="."]
-    transform = Transform3D({:.4}, 0, {:.4}, 0, 1, 0, {:.4}, 0, {:.4}, 0, {:.4}, 0)
-    shaded = true
-    texture_filter = 0
-    sprite_frames = ExtResource("2_sprites")
-    autoplay = "{}"
-    "#, 
+[node name="Sprite3D_{}" type="AnimatedSprite3D" parent="."]
+transform = Transform3D({:.4}, 0, {:.4}, 0, 1, 0, {:.4}, 0, {:.4}, 0, {:.4}, 0)
+shaded = true
+texture_filter = 0
+sprite_frames = ExtResource("2_sprites")
+autoplay = "{}"
+"#, 
                     i, 
                     (rot.to_radians()).cos(), (rot.to_radians()).sin(),
                     -(rot.to_radians()).sin(), (rot.to_radians()).cos(),
@@ -959,12 +1009,12 @@ r#"{{
                 }
                 
                 animations.push(format!(
-    r#"{{
-    "frames": [{}],
-    "loop": true,
-    "name": &"{}",
-    "speed": 35.0
-    }}"#, frames.join(", "), anim_name.to_lowercase()));
+r#"{{
+"frames": [{}],
+"loop": true,
+"name": &"{}",
+"speed": 35.0
+}}"#, frames.join(", "), anim_name.to_lowercase()));
             }
 
             sf_content.push_str(&ext_resources.join("\n"));
@@ -988,9 +1038,9 @@ r#"{{
             let mut item_res_content = format!(
     r#"[gd_resource type="Resource" script_class="InventoryItemData" load_steps=3 format=3]
 
-    [ext_resource type="Script" path="res://items/inventory_item_data.gd" id="1_script"]
-    [ext_resource type="SpriteFrames" path="{}/{}_spriteframes.tres" id="2_sprites"]
-    "# , rel_path, item_name);
+[ext_resource type="Script" path="res://items/inventory_item_data.gd" id="1_script"]
+[ext_resource type="SpriteFrames" path="{}/{}_spriteframes.tres" id="2_sprites"]
+"# , rel_path, item_name);
 
             if !first_sprite_path.is_empty() {
                  item_res_content.push_str(&format!("[ext_resource type=\"Texture2D\" path=\"{}\" id=\"3_icon\"]\n", first_sprite_path));
@@ -998,11 +1048,11 @@ r#"{{
 
             item_res_content.push_str(&format!(
     r#"
-    [resource]
-    script = ExtResource("1_script")
-    item_name = "{}"
-    sprite_frames = ExtResource("2_sprites")
-    "# , actor.name));
+[resource]
+script = ExtResource("1_script")
+item_name = "{}"
+sprite_frames = ExtResource("2_sprites")
+"# , actor.name));
 
             if !first_sprite_path.is_empty() {
                 item_res_content.push_str("icon = ExtResource(\"3_icon\")\n");
@@ -1015,31 +1065,31 @@ r#"{{
             let pickup_content = format!(
     r#"[gd_scene load_steps=5 format=3]
 
-    [ext_resource type="Script" path="res://items/pickup.gd" id="1_pickup"]
-    [ext_resource type="Resource" path="{}/{}_item.tres" id="2_data"]
-    [ext_resource type="SpriteFrames" path="{}/{}_spriteframes.tres" id="3_sprites"]
+[ext_resource type="Script" path="res://items/pickup.gd" id="1_pickup"]
+[ext_resource type="Resource" path="{}/{}_item.tres" id="2_data"]
+[ext_resource type="SpriteFrames" path="{}/{}_spriteframes.tres" id="3_sprites"]
 
-    [sub_resource type="SphereShape3D" id="SphereShape3D_1"]
-    radius = 0.5
+[sub_resource type="SphereShape3D" id="SphereShape3D_1"]
+radius = 0.5
 
-    [node name="Pickup" type="Area3D"]
-    collision_layer = 4
-    collision_mask = 2
-    script = ExtResource("1_pickup")
-    data = ExtResource("2_data")
-    mode = 2
+[node name="Pickup" type="Area3D"]
+collision_layer = 4
+collision_mask = 2
+script = ExtResource("1_pickup")
+data = ExtResource("2_data")
+mode = 2
 
-    [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-    transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
-    shape = SubResource("SphereShape3D_1")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+shape = SubResource("SphereShape3D_1")
 
-    [node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="."]
-    transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
-    billboard = 2
-    texture_filter = 0
-    sprite_frames = ExtResource("3_sprites")
-    autoplay = "{}"
-    "#, rel_path, item_name, rel_path, item_name, autoplay_anim);
+[node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+billboard = 2
+texture_filter = 0
+sprite_frames = ExtResource("3_sprites")
+autoplay = "{}"
+"#, rel_path, item_name, rel_path, item_name, autoplay_anim);
             
             fs::write(&pickup_path, pickup_content)?;
             Ok(())

@@ -1,7 +1,0 @@
-monster/sight BHLD_SIT
-monster/pain  BHLDPAIN
-monster/death BHLD_DTH
-monster/active BHLD_ACT
-monster/melee BHLDBITE
-
-monster/attack BHLDFIRE

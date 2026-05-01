@@ -10,7 +10,7 @@
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_oul6g"]
 
-[node name="Player" type="Node3D" unique_id=432180329 groups=["Player"]]
+[node name="Player" type="Node3D" unique_id=432180329 ]
 script = ExtResource("1_oul6g")
 runspeed = 15.0
 SPEED = 3.0

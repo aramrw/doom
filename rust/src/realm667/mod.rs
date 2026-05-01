@@ -197,18 +197,21 @@ impl Realm667Importer {
                 .unwrap_or(&actors[0])
         };
 
-        let mod_folder_name = pk3_path_obj.file_stem().unwrap().to_string_lossy().to_lowercase();
+        let mod_folder_name = pk3_path_obj.file_stem().unwrap().to_string_lossy().replace(' ', "_").to_lowercase();
         let parent_dir = pk3_path_obj.parent().unwrap_or(Path::new(""));
 
         // Output directory is parent/mod_folder_name
         let abs_output_base = parent_dir.join(&mod_folder_name);
         let _ = fs::create_dir_all(&abs_output_base);
 
-        let parent_res_path = if let Some(pos) = path.rfind('/') {
+        let mut parent_res_path = if let Some(pos) = path.rfind('/') {
             path[..pos].to_string()
         } else {
             "res://".to_string()
         };
+        if !parent_res_path.starts_with("res://") {
+            parent_res_path = format!("res://{}", parent_res_path.trim_start_matches('/'));
+        }
         let res_output_base = format!("{}/{}", parent_res_path.trim_end_matches('/'), mod_folder_name);
 
         godot_print!("--------------------------------------------------");
@@ -309,7 +312,7 @@ impl Realm667Importer {
                         godot_print!("  Frame {}: prefix={}, actions={:?}", i, frame.sprite_prefix, frame.actions);
                     }
                 }
-                ResourceGenerator::generate_weapon_resources(
+                let _ = ResourceGenerator::generate_weapon_resources(
                     &actor,
                     &godot_data_root,
                     &godot_data_res,
@@ -324,13 +327,15 @@ impl Realm667Importer {
                     &godot_data_root,
                     &godot_data_res,
                     &label_sprites,
+                    &sounds_map,
+                    &mod_folder_name,
                 ) {
                     godot_error!("Failed to generate enemy resources: {}", e);
                     return;
                 }
-                godot_print!("Realm667Importer: Created Godot data for projectile {}", actor.name);
+                godot_print!("Realm667Importer: Created Godot data for enemy {}", actor.name);
             } else if category == ActorCategory::Prop {
-                ResourceGenerator::generate_prop_resources(
+                let _ = ResourceGenerator::generate_prop_resources(
                     &actor,
                     &godot_data_root,
                     &godot_data_res,
@@ -338,7 +343,7 @@ impl Realm667Importer {
                 );
                 godot_print!("Realm667Importer: Created Godot data for prop {}", actor.name);
             } else if category == ActorCategory::Item || category == ActorCategory::Ammo {
-                ResourceGenerator::generate_item_resources(
+                let _ = ResourceGenerator::generate_item_resources(
                     &actor,
                     &godot_data_root,
                     &godot_data_res,
@@ -546,16 +551,19 @@ impl Realm667Importer {
             ("DeathSound", "death"),
             ("ActiveSound", "taunt"),
             ("SelectSound", "taunt"),
-            ];        let sounds_dir = godot_data_root.join("sounds").join(mod_name);
+        ];
+        let sounds_dir = godot_data_root.join("sounds").join(mod_name);
         for (prop, subfolder) in sound_props {
             if let Some(alias) = actor.properties.get(prop) {
-                if let Some(file_path) = sounds_map.get(&alias.to_string_lossy().to_uppercase()) {
+                let alias_str = alias.to_string_lossy().to_uppercase();
+                if let Some(file_path) = sounds_map.get(&alias_str) {
+                    let desired_stem = alias_str.split('/').last().unwrap().to_lowercase();
                     let dest_dir = if category == ActorCategory::Enemy {
                         sounds_dir.join(subfolder)
                     } else {
                         sounds_dir.clone()
                     };
-                    self.extract_sound_file(file_path, archive, &dest_dir);
+                    self.extract_sound_file(file_path, Some(&desired_stem), archive, &dest_dir);
                 }
             }
         }
@@ -569,16 +577,17 @@ impl Realm667Importer {
                         if let Some(alias) = action.args.get(if lower_name == "a_custommeleeattack" { 1 } else { 0 }) {
                             let alias_str = alias.to_string_lossy().to_uppercase();
                             if let Some(file_path) = sounds_map.get(&alias_str) {
-                                self.extract_sound_file(file_path, archive, &sounds_dir);
+                                let desired_stem = alias_str.split('/').last().unwrap().to_lowercase();
+                                self.extract_sound_file(file_path, Some(&desired_stem), archive, &sounds_dir);
                             }
                         }
                     }
                 }
             }
         }
-
         result_map
     }
+
 fn extract_sprites_for_frame(
     &self,
     frame: &crate::realm667::actor::StateFrame,
@@ -589,111 +598,122 @@ fn extract_sprites_for_frame(
     godot_print!("Extracting for prefix: {} frames: {}", frame.sprite_prefix, frame.frames);
 
     for f_char in frame.frames.chars() {
-        // ... (rest of function)
-            let mut seen_filenames = HashSet::new();
-            let f_char_upper = f_char.to_uppercase().next().unwrap();
-            let prefix_upper = frame.sprite_prefix.to_uppercase();
+        let mut seen_filenames = HashSet::new();
+        let f_char_upper = f_char.to_uppercase().next().unwrap();
+        let prefix_upper = frame.sprite_prefix.to_uppercase();
 
-            for i in 0..archive.len() {
-                let entry_name = archive
-                    .by_index(i)
-                    .unwrap()
-                    .name()
-                    .to_lowercase()
-                    .replace('\\', "/");
-                let raw_file_name = entry_name.split('/').last().unwrap_or("").to_uppercase();
-                let mut file_name = raw_file_name.clone();
-                if let Some(pos) = raw_file_name.find('_') {
-                     if raw_file_name[..pos].chars().all(|c| c.is_ascii_digit()) {
-                         file_name = raw_file_name[pos+1..].to_string();
-                     }
+        for i in 0..archive.len() {
+            let entry_name = archive
+                .by_index(i)
+                .unwrap()
+                .name()
+                .to_lowercase()
+                .replace('\\', "/");
+            let raw_file_name = entry_name.split('/').last().unwrap_or("").to_uppercase();
+            let mut file_name = raw_file_name.clone();
+            if let Some(pos) = raw_file_name.find('_') {
+                 if raw_file_name[..pos].chars().all(|c| c.is_ascii_digit()) {
+                     file_name = raw_file_name[pos+1..].to_string();
+                 }
+            }
+
+            if file_name.starts_with("BM") || file_name.starts_with("BR") {
+                continue;
+            }
+
+            let is_match = if file_name.starts_with(&prefix_upper) {
+                if file_name.len() > 4 {
+                    let char_at_4 = file_name.chars().nth(4).unwrap();
+                    let char_at_6 = file_name.chars().nth(6);
+
+                    char_at_4 == f_char_upper || (char_at_6.is_some() && char_at_6.unwrap() == f_char_upper)
+                } else {
+                    false
                 }
-
-                // Skip brightmaps
-                if file_name.starts_with("BM") || file_name.starts_with("BR") {
-                    continue;
-                }
-
-                // Match sprite prefix and frame char
-                // Standard Doom sprite: XXXXA1 or XXXXA2A8 or XXXXA1B1
-                let is_match = if file_name.starts_with(&prefix_upper) {
-                    if file_name.len() > 4 {
-                        let char_at_4 = file_name.chars().nth(4).unwrap();
-                        let char_at_6 = file_name.chars().nth(6);
-                        
+            } else if let Some(pos) = file_name.find('_') {
+                let sub = &file_name[pos+1..];
+                if sub.starts_with(&prefix_upper) {
+                    if sub.len() > 4 {
+                        let char_at_4 = sub.chars().nth(4).unwrap();
+                        let char_at_6 = sub.chars().nth(6);
                         char_at_4 == f_char_upper || (char_at_6.is_some() && char_at_6.unwrap() == f_char_upper)
-                    } else {
-                        false
-                    }
-                } else if let Some(pos) = file_name.find('_') {
-                    let sub = &file_name[pos+1..];
-                    if sub.starts_with(&prefix_upper) {
-                        if sub.len() > 4 {
-                            let char_at_4 = sub.chars().nth(4).unwrap();
-                            let char_at_6 = sub.chars().nth(6);
-                            char_at_4 == f_char_upper || (char_at_6.is_some() && char_at_6.unwrap() == f_char_upper)
-                        } else {
-                            false
-                        }
                     } else {
                         false
                     }
                 } else {
                     false
+                }
+            } else {
+                false
+            };
+
+            if is_match {
+                let base_name = if let Some(pos) = file_name.find('.') {
+                    &file_name[..pos]
+                } else {
+                    &file_name
                 };
 
-                if is_match {
-                    // Check if it's a valid Doom sprite name (e.g. Q2BLA0.PNG)
-                    let base_name = if let Some(pos) = file_name.find('.') {
-                        &file_name[..pos]
-                    } else {
-                        &file_name
-                    };
+                let actual_base = if let Some(pos) = base_name.find('_') {
+                    &base_name[pos+1..]
+                } else {
+                    base_name
+                };
 
-                    let actual_base = if let Some(pos) = base_name.find('_') {
-                        &base_name[pos+1..]
-                    } else {
-                        base_name
-                    };
-
-                    if actual_base.starts_with(&prefix_upper) {
-                        if !seen_filenames.contains(&file_name) {
-                            if let Some(path) =
-                                AssetHandler::extract_with_extension_fix(archive, i, dest_dir)
-                            {
-                                extracted_paths.push(path);
-                                seen_filenames.insert(file_name);
-                            }
+                if actual_base.starts_with(&prefix_upper) {
+                    if !seen_filenames.contains(&file_name) {
+                        if let Some(path) =
+                            AssetHandler::extract_with_extension_fix(archive, i, dest_dir)
+                        {
+                            extracted_paths.push(path);
+                            seen_filenames.insert(file_name);
                         }
                     }
                 }
             }
         }
-        extracted_paths
     }
-    fn extract_sound_file(
-        &self,
-        sound_path: &str,
-        archive: &mut ZipArchive<File>,
-        dest_dir: &Path,
-    ) {
-        let search_name = sound_path.to_uppercase().replace('\\', "/");
-        for i in 0..archive.len() {
-            let name = archive
-                .by_index(i)
-                .unwrap()
-                .name()
-                .to_uppercase()
-                .replace('\\', "/");
-            if name.contains(&search_name) {
+    extracted_paths
+}
+
+fn extract_sound_file(
+    &self,
+    sound_path: &str,
+    desired_stem: Option<&str>,
+    archive: &mut ZipArchive<File>,
+    dest_dir: &Path,
+) {
+    let search_name = sound_path.to_uppercase().replace('\\', "/");
+    for i in 0..archive.len() {
+        let name = archive
+            .by_index(i)
+            .unwrap()
+            .name()
+            .to_uppercase()
+            .replace('\\', "/");
+        if name.contains(&search_name) {
+            if let Some(stem) = desired_stem {
+                let mut content = Vec::new();
+                {
+                    let mut zip_file = archive.by_index(i).unwrap();
+                    let _ = zip_file.read_to_end(&mut content);
+                }
+                let fixed_name = format!("{}.ogg", stem);
+                let dest_path = dest_dir.join(fixed_name);
+                let _ = fs::create_dir_all(dest_dir);
+                if let Ok(mut out_file) = File::create(dest_path) {
+                    let _ = out_file.write_all(&content);
+                }
+            } else {
                 let _ = AssetHandler::extract_with_extension_fix(archive, i, dest_dir);
             }
         }
     }
+}
 
-    #[func]
-    pub fn fix_extensions(&self, dir_path: String) {
-        let path = Path::new(&dir_path);
-        AssetHandler::fix_extensions_in_dir(path);
-    }
+#[func]
+pub fn fix_extensions(&self, dir_path: String) {
+    let path = Path::new(&dir_path);
+    AssetHandler::fix_extensions_in_dir(path);
+}
 }

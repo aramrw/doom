@@ -46,12 +46,13 @@ fn main() {
             for actor in actors {
                 println!("Generating resources for: {}", actor.name);
                 let _ = ResourceGenerator::generate_enemy_resources(
-                    &actor, 
-                    out_dir, 
-                    "res://enemies/wicked/godot_data", 
-                    &HashMap::new() // label_sprites (empty for now)
-                );
-            }
+                   &actor, 
+                   out_dir, 
+                   "res://enemies/wicked/godot_data", 
+                   &HashMap::new(), // label_sprites 
+                   &HashMap::new(), // sounds_map
+                   "wicked"         // mod_name
+                );            }
         },
         Err(e) => {
             println!("Error parsing document: {:?}", e);

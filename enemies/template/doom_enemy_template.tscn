@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://jiroxm874ano"]
 
 [ext_resource type="Script" uid="uid://cs44fpyvf8m0x" path="res://enemies/Grin/doom_enemy.gd" id="1_lch36"]
-[ext_resource type="Script" uid="uid://bmnl2e66g824f" path="res://enemies/enemy_sounds.gd" id="2_jgin6"]
+[ext_resource type="Script" uid="uid://bmnl2e66g824f" path="res://enemies/template/enemy_sounds.gd" id="2_jgin6"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ej5ua"]
 height = 2.3876038

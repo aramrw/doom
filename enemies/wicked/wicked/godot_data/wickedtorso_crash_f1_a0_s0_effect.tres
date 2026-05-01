@@ -1,8 +1,0 @@
-[gd_resource type="Resource" script_class="SoundEffect" format=3]
-    [ext_resource type="Script" path="res://weapons/effects/sound_effect.gd" id="1_script"]
-    [ext_resource type="AudioStream" path="enemies/wicked/wicked/godot_data/sounds/wickedtorso/monster/tenpn2.ogg" id="2_sound"]
-    [resource]
-    script = ExtResource("1_script")
-    sound = ExtResource("2_sound")
-    pitch_randomness = 0.05
-    

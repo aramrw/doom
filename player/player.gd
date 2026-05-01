@@ -50,7 +50,8 @@ var max_health: int = 100
 var health: int = max_health
 
 func _ready():
-	add_to_group("Player")
+	body.add_to_group("Player")
+	# add_to_group("Player") # Removed from root to prevent AI targeting the stationary start point
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	gun_default_pos = gun_sprite.position
 	item_default_pos = item_manager.item_sprite.position
@@ -363,7 +364,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		camera.rotation.x = clamp(camera.rotation.x, deg_to_rad(-80), deg_to_rad(80))
 
 # --- NEW DAMAGE FUNCTION ---
-func take_damage(amount: int):
+func take_damage(amount: int, _source = null):
 	health -= amount
 	print("Player Health: ", health)
 	
