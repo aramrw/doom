@@ -7,6 +7,8 @@ pub enum DialogueType {
     #[default]
     Static = 0,
     MultiChoice = 1,
+    RandStatic = 2,
+    RandMultiChoice = 3,
 }
 
 #[derive(GodotClass)]
@@ -25,6 +27,7 @@ impl DialogueChoice {}
 pub struct DialogueLine {
     #[base] pub base: Base<Resource>,
     #[export] pub text: GString,
+    #[export] pub random_lines: Array<Gd<DialogueLine>>,
     #[export] pub audio: Option<Gd<AudioStream>>,
     #[export] pub line_type: DialogueType,
     #[export] pub next_line: Option<Gd<DialogueLine>>,

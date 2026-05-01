@@ -96,10 +96,21 @@ func start_dialogue_rs(line, npc_name: String, manager: Node = null):
 
 func display_line(line):
 	current_node = line # Reusing variable name
-	text_label.text = line.text
 	
-	if line.audio and audio_player:
-		audio_player.stream = line.audio
+	var display_text = line.text
+	var display_audio = line.audio
+	
+	if line.line_type == 2 or line.line_type == 3: # RandStatic or RandMultiChoice
+		if line.random_lines and line.random_lines.size() > 0:
+			var rand_line = line.random_lines[randi() % line.random_lines.size()]
+			if rand_line:
+				display_text = rand_line.text
+				display_audio = rand_line.audio
+				
+	text_label.text = display_text
+	
+	if display_audio and audio_player:
+		audio_player.stream = display_audio
 		audio_player.play()
 	
 	if choices_container:
@@ -108,7 +119,7 @@ func display_line(line):
 		
 		var first_button = null
 		
-		if line.line_type == 0: # Static
+		if line.line_type == 0 or line.line_type == 2: # Static or RandStatic
 			var button = Button.new()
 			button.text = "[ 次へ ]"
 			button.alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -116,7 +127,7 @@ func display_line(line):
 			button.pressed.connect(_on_next_pressed)
 			choices_container.add_child(button)
 			first_button = button
-		else: # Choice
+		else: # Choice or RandMultiChoice
 			for i in range(line.choices.size()):
 				var choice = line.choices[i]
 				var button = Button.new()

@@ -36,7 +36,7 @@ impl DialogueManager {
         };
         let line_bind = line.bind();
 
-        if line_bind.line_type == DialogueType::Static {
+        if line_bind.line_type == DialogueType::Static || line_bind.line_type == DialogueType::RandStatic {
             if let Some(next) = line_bind.next_line.clone() {
                 self.current_line = Some(next.clone());
                 self.base_mut()
@@ -54,7 +54,7 @@ impl DialogueManager {
         };
         let line_bind = line.bind();
 
-        if line_bind.line_type == DialogueType::MultiChoice {
+        if line_bind.line_type == DialogueType::MultiChoice || line_bind.line_type == DialogueType::RandMultiChoice {
             if let Some(choice_gd) = line_bind.choices.get(index as usize) {
                 if let Some(next) = choice_gd.bind().next_node.clone() {
                     self.current_line = Some(next.clone());

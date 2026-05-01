@@ -1,6 +1,7 @@
 extends Node
 class_name AnimationComponent
 
+@export var use_multi_directional: bool = false
 @export var sprite: AnimatedSprite3D
 @export var actor: Node3D
 @export var flash_duration: float = 0.2
@@ -89,22 +90,27 @@ func flash():
 
 func _play_anim(anim_name: String):
 	if not sprite: return
-	var target_anim = anim_name
-	if not sprite.sprite_frames.has_animation(target_anim):
-		if target_anim == "chase":
-			if sprite.sprite_frames.has_animation("move"):
-				target_anim = "move"
-			elif sprite.sprite_frames.has_animation("walk"):
-				target_anim = "walk"
-			else:
-				target_anim = "idle"
-		elif target_anim in ["pain", "death"]:
-			return
-		else:
-			return
-
+	
 	current_state = anim_name
-	sprite.play(target_anim)
+	
+	if use_multi_directional:
+		update_facing_animation()
+	else:
+		var target_anim = anim_name
+		if not sprite.sprite_frames.has_animation(target_anim):
+			if target_anim == "chase":
+				if sprite.sprite_frames.has_animation("move"):
+					target_anim = "move"
+				elif sprite.sprite_frames.has_animation("walk"):
+					target_anim = "walk"
+				else:
+					target_anim = "idle"
+			elif target_anim in ["pain", "death"]:
+				return
+			else:
+				return
+
+		sprite.play(target_anim)
 	
 	if anim_name in ["attack", "pain"]:
 		sprite.set_frame_and_progress(0, 0.0)
@@ -118,10 +124,104 @@ func _on_animation_finished():
 			sprite.animation_finished.disconnect(_on_animation_finished)
 		current_state = "idle"
 
+func update_facing_animation():
+	var camera = get_viewport().get_camera_3d()
+	if not camera or not actor or not sprite:
+		return
+		
+	var to_cam = (camera.global_position - actor.global_position)
+	var to_cam2 = Vector2(to_cam.x, to_cam.z).normalized()
+	
+	var fwd = -actor.global_transform.basis.z
+	var fwd2 = Vector2(fwd.x, fwd.z).normalized()
+	
+	var angle = rad_to_deg(fwd2.angle_to(to_cam2))
+	if angle < 0:
+		angle += 360.0
+		
+	var sector = int(round(angle / 45.0)) % 8
+	var frame_index = 1
+	var flip = false
+	
+	match sector:
+		0:
+			frame_index = 1
+			flip = false
+		1:
+			frame_index = 2
+			flip = true
+		2:
+			frame_index = 3
+			flip = true
+		3:
+			frame_index = 4
+			flip = true
+		4:
+			frame_index = 5
+			flip = false
+		5:
+			frame_index = 4
+			flip = false
+		6:
+			frame_index = 3
+			flip = false
+		7:
+			frame_index = 2
+			flip = false
+			
+	var target_anim = current_state + "_" + str(frame_index)
+	var valid_anim = ""
+	
+	var frames = sprite.sprite_frames
+	if not frames: return
+	
+	if frames.has_animation(target_anim):
+		valid_anim = target_anim
+	elif frames.has_animation(current_state + "_1"):
+		valid_anim = current_state + "_1"
+	elif frames.has_animation(current_state):
+		valid_anim = current_state
+	elif current_state == "chase":
+		if frames.has_animation("move_" + str(frame_index)):
+			valid_anim = "move_" + str(frame_index)
+		elif frames.has_animation("walk_" + str(frame_index)):
+			valid_anim = "walk_" + str(frame_index)
+		elif frames.has_animation("move_1"):
+			valid_anim = "move_1"
+		elif frames.has_animation("walk_1"):
+			valid_anim = "walk_1"
+		elif frames.has_animation("move"):
+			valid_anim = "move"
+		elif frames.has_animation("walk"):
+			valid_anim = "walk"
+			
+	if valid_anim == "":
+		return
+		
+	sprite.flip_h = flip
+	
+	if sprite.animation != valid_anim:
+		var current_frame = sprite.frame
+		var current_progress = sprite.frame_progress
+		var was_playing = sprite.is_playing()
+		
+		var base_old = str(sprite.animation).get_slice("_", 0)
+		var base_new = valid_anim.get_slice("_", 0)
+		var should_preserve_frame = was_playing and (base_old == base_new)
+		
+		sprite.play(valid_anim)
+		
+		if should_preserve_frame:
+			sprite.set_frame_and_progress(current_frame, current_progress)
+
 func _physics_process(_delta):
-	if is_dead: return
 	if not actor or not sprite:
 		return
+		
+	if use_multi_directional:
+		update_facing_animation()
+		
+	if is_dead: return
 	
 	if current_state in ["idle", "walk", "chase", "move"]:
 		if actor.velocity.length() > 0.1:

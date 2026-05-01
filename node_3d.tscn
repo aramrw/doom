@@ -35,6 +35,7 @@
 [ext_resource type="PackedScene" uid="uid://c6vggecfxyo1b" path="res://enemies/goblins/goblin.tscn" id="35_2mu51"]
 [ext_resource type="PackedScene" path="res://enemies/slitherfist/Slitherfist.tscn" id="35_vmvb8"]
 [ext_resource type="PackedScene" uid="uid://c2gsov44fnr77" path="res://npcs/darzog/darzog.tscn" id="36_vmvb8"]
+[ext_resource type="PackedScene" uid="uid://bg60o2a24hvld" path="res://npcs/generic_monk/generic_monk.tscn" id="37_3s0n5"]
 [ext_resource type="PackedScene" uid="uid://bon6ujob2asiu" path="res://enemies/heart_demon/heart_demon.tscn" id="37_4i7mf"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_i5arm"]
@@ -109,7 +110,7 @@ grow_vertical = 2
 environment = SubResource("Environment_4xowi")
 
 [node name="Player" parent="." unique_id=432180329 instance=ExtResource("2_noarx")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40.866367, 5.956777, 28.987959)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.114741, 5.956777, -3.7688015)
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="." unique_id=236648503]
 navigation_mesh = SubResource("NavigationMesh_wc5p8")
@@ -330,10 +331,17 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.338158, 5.15, 6.773472)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -39.443954, 5.606499, 0.3129635)
 
 [node name="Goblin" parent="." unique_id=1290029648 instance=ExtResource("35_2mu51")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.720244, 6.0099998, 0.87730575)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.523865, 6.0099998, -6.7758017)
+
+[node name="Goblin2" parent="." unique_id=436230307 instance=ExtResource("35_2mu51")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20.368404, 6.0099998, 7.1686487)
 
 [node name="Darzog" parent="." unique_id=1155083772 instance=ExtResource("36_vmvb8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -38.0016, 5.9397492, 32.571964)
 
 [node name="HeartDemon" parent="." unique_id=1045438275 instance=ExtResource("37_4i7mf")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -54.50195, 5.1, 41.615)
+
+[node name="GenericMonk" parent="." unique_id=376653437 instance=ExtResource("37_3s0n5")]
+transform = Transform3D(-0.9976437, 0, -0.06860743, 0, 1, 0, 0.06860743, 0, -0.9976437, -1.6749594, 4.977429, -10.793898)
+npc_display_name = "操 鶴原"
