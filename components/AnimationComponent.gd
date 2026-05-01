@@ -8,6 +8,7 @@ class_name AnimationComponent
 var current_state: String = "idle"
 var visual_mat: ShaderMaterial
 var _flash_tween: Tween
+var is_dead: bool = false
 
 func _ready():
 	print("[AnimationComponent] Initializing for ", get_parent().name)
@@ -20,7 +21,6 @@ func _ready():
 		visual_mat = ShaderMaterial.new()
 		var shader = load("res://shaders/enemy_visuals.gdshader")
 		if shader:
-			print("[AnimationComponent] Shader loaded successfully.")
 			visual_mat.shader = shader
 		else:
 			push_error("[AnimationComponent] FAILED to load shader res://shaders/enemy_visuals.gdshader")
@@ -43,20 +43,31 @@ func _process(_delta):
 			visual_mat.set_shader_parameter("tex", tex)
 
 func play_idle():
+	if is_dead: return
 	_play_anim("idle")
 
 func play_chase():
+	if is_dead: return
 	_play_anim("chase")
 
 func on_attack_fired(_damage):
+	if is_dead: return
 	_play_anim("attack")
 
-func on_damaged(_amount, _new_health, _source):
+func on_damaged(_amount, new_health, _source):
+	if is_dead: return
+	
 	print("[AnimationComponent] ", get_parent().name, " FLASHING.")
 	flash()
-	_play_anim("pain")
+	
+	# Only play pain if we are still alive
+	if new_health > 0:
+		_play_anim("pain")
 
 func on_died(_source):
+	if is_dead: return
+	is_dead = true
+	print("[AnimationComponent] Playing death for ", get_parent().name)
 	_play_anim("death")
 
 func flash():
@@ -74,7 +85,12 @@ func _play_anim(anim_name: String):
 	var target_anim = anim_name
 	if not sprite.sprite_frames.has_animation(target_anim):
 		if target_anim == "chase":
-			target_anim = "walk" if sprite.sprite_frames.has_animation("walk") else "idle"
+			if sprite.sprite_frames.has_animation("move"):
+				target_anim = "move"
+			elif sprite.sprite_frames.has_animation("walk"):
+				target_anim = "walk"
+			else:
+				target_anim = "idle"
 		elif target_anim in ["pain", "death"]:
 			return
 		else:
@@ -89,18 +105,22 @@ func _play_anim(anim_name: String):
 			sprite.animation_finished.connect(_on_animation_finished)
 
 func _on_animation_finished():
+	if is_dead: return
+	
 	if current_state in ["attack", "pain"]:
 		if sprite.animation_finished.is_connected(_on_animation_finished):
 			sprite.animation_finished.disconnect(_on_animation_finished)
 		current_state = "idle"
 
 func _physics_process(_delta):
+	if is_dead: return
 	if not actor or not sprite:
 		return
 	
-	if current_state in ["idle", "walk", "chase"]:
+	# Only auto-switch if we are in a movement-capable state
+	if current_state in ["idle", "walk", "chase", "move"]:
 		if actor.velocity.length() > 0.1:
-			if current_state != "chase":
+			if current_state not in ["chase", "move", "walk"]:
 				play_chase()
 		else:
 			if current_state != "idle":

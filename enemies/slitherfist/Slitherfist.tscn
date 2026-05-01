@@ -1,6 +1,6 @@
-[gd_scene format=3 uid="uid://br551piwvkxhl"]
+[gd_scene format=3]
 
-[ext_resource type="Script" uid="uid://dvyanwgkq3hbo" path="res://enemies/slitherfist/Slitherfist.gd" id="1_slitherfist"]
+[ext_resource type="Script" path="res://enemies/template/base_enemy.gd" id="1_base_enemy"]
 [ext_resource type="Script" uid="uid://bmnl2e66g824f" path="res://enemies/template/enemy_sounds.gd" id="2_jgin6"]
 [ext_resource type="Script" uid="uid://q0jeh0ade15l" path="res://components/HealthComponent.gd" id="3_health_component"]
 [ext_resource type="Texture2D" uid="uid://d2kfwn1h8rj4h" path="res://enemies/slitherfist/MS-DOS - Anvil Of Dawn - Enemies - Slither Fist.png" id="4_5ueal"]
@@ -291,7 +291,7 @@ collision_layer = 4
 collision_mask = 3
 floor_stop_on_slope = false
 safe_margin = 0.5
-script = ExtResource("1_slitherfist")
+script = ExtResource("1_base_enemy")
 
 [node name="HealthComponent" type="Node" parent="." unique_id=979718076]
 script = ExtResource("3_health_component")

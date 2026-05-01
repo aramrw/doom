@@ -1,5 +1,7 @@
 extends CharacterBody3D
-class_name Slitherfist
+class_name BaseEnemy
+
+@export var death_linger_time: float = 2.0
 
 @onready var sprite = $AnimatedSprite3D
 @onready var health_component = $HealthComponent
@@ -8,7 +10,7 @@ class_name Slitherfist
 @onready var animation_component = $AnimationComponent
 
 func _ready():
-	print("[Slitherfist] _ready() called")
+	print("[%s] _ready() called" % name)
 	# Make sure the animation component has its references
 	if animation_component:
 		animation_component.sprite = sprite
@@ -18,8 +20,8 @@ func _ready():
 	# Wire up signals
 	if health_component and animation_component:
 		health_component.damaged.connect(animation_component.on_damaged)
-		health_component.died.connect(_on_died)
 		health_component.died.connect(animation_component.on_died)
+		health_component.died.connect(_on_died)
 	
 	if attack_component and animation_component:
 		attack_component.is_aggressive = true
@@ -62,10 +64,18 @@ func _on_died(_source):
 	if attack_component:
 		attack_component.set_process(false)
 		
-	# Wait for the death animation to finish, then free the node
+	# Disable collisions so player doesn't bump into the "corpse"
+	collision_layer = 0
+	collision_mask = 0
+
+	# Wait for the death animation to finish
 	if sprite.sprite_frames.has_animation("death"):
 		await sprite.animation_finished
 	else:
 		await get_tree().create_timer(1.0).timeout
+	
+	# Linger for a bit before disappearing
+	if death_linger_time > 0:
+		await get_tree().create_timer(death_linger_time).timeout
 	
 	queue_free()

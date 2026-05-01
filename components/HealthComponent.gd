@@ -13,12 +13,6 @@ signal died(source)
 @export var current_health: int = 100:
 	set(value):
 		current_health = clampi(value, 0, max_health)
-		if current_health <= 0:
-			if not is_dead:
-				is_dead = true
-				died.emit(owner)
-		elif is_dead:
-			is_dead = false # Revived
 
 var is_dead: bool = false
 
@@ -32,6 +26,12 @@ func take_damage(amount: int, source = null):
 
 	var actual_damage = min(amount, current_health)
 	current_health -= actual_damage
+	
+	# Emit damaged first
 	damaged.emit(actual_damage, current_health, source)
-
 	print("Took ", actual_damage, " damage. Current health: ", current_health)
+
+	# Then check for death
+	if current_health <= 0:
+		is_dead = true
+		died.emit(owner)
