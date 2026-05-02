@@ -298,7 +298,6 @@ line_type = 1
 choices = Array[DialogueChoice]([SubResource("DialogueChoice_rpv6j"), SubResource("DialogueChoice_udfx5"), SubResource("DialogueChoice_rqp60")])
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_my845"]
-
 radius = 3.3916233
 
 [node name="ShotgunMonk" type="CharacterBody3D" unique_id=1155083772 groups=["Enemies", "NPCs"]]

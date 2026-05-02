@@ -164,7 +164,19 @@ transform = Transform3D(-35.866207, 8.785339, 0.27631974, -17.597572, -17.960552
 mesh = SubResource("BoxMesh_jka67")
 
 [node name="ShipWall5" parent="NavigationRegion3D" unique_id=373665275 instance=ExtResource("3_a0tk4")]
-transform = Transform3D(-35.866207, 8.785339, 0.27631974, -17.597572, -17.960552, -1.4210855e-14, 1.9851418, -0.48625565, 4.992359, -19.099056, 3.0055518, -14.976769)
+transform = Transform3D(-35.866207, 8.785339, 0.27631974, -17.597572, -17.960552, -1.4210855e-14, 1.9851418, -0.48625565, 4.992359, -19.099056, 3.0055518, -20.208666)
+mesh = SubResource("BoxMesh_jka67")
+
+[node name="ShipWall15" parent="NavigationRegion3D" unique_id=39211494 instance=ExtResource("3_a0tk4")]
+transform = Transform3D(-35.866207, 8.785339, 0.27631974, -17.597572, -17.960552, -1.4210855e-14, 1.9851418, -0.48625565, 4.992359, -3.2417622, 3.0055518, -17.528568)
+mesh = SubResource("BoxMesh_jka67")
+
+[node name="ShipWall16" parent="NavigationRegion3D" unique_id=1782709567 instance=ExtResource("3_a0tk4")]
+transform = Transform3D(-35.866207, 8.785339, 0.27631974, -17.597572, -17.960552, -1.4210855e-14, 1.9851418, -0.48625565, 4.992359, -10.202961, 18.923357, -23.179329)
+mesh = SubResource("BoxMesh_jka67")
+
+[node name="ShipWall17" parent="NavigationRegion3D" unique_id=1049259280 instance=ExtResource("3_a0tk4")]
+transform = Transform3D(2.4700022, 19.957317, 0.10614385, -39.874283, 1.2120414, 0.25511974, 1.9851418, -0.48625565, 4.992359, -23.195168, 18.923357, -23.179329)
 mesh = SubResource("BoxMesh_jka67")
 
 [node name="ShipWall6" parent="NavigationRegion3D" unique_id=1377666885 instance=ExtResource("3_a0tk4")]
@@ -213,7 +225,7 @@ transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -1.8501658, 10.3097725, -13.3
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -16.56237, 6.7422633, -12.564887)
 
 [node name="WallTorchBlack15" parent="." unique_id=2030222232 instance=ExtResource("13_imku0")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -26.078598, 6.7422633, -12.022412)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -26.078598, 7.816643, -16.94497)
 
 [node name="WallTorchBlack16" parent="." unique_id=1267153315 instance=ExtResource("13_imku0")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -34.480827, 6.7422633, -7.933001)

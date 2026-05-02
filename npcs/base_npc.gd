@@ -71,8 +71,7 @@ func process_talking(_delta):
 	var players = get_tree().get_nodes_in_group("Player")
 	if players.size() > 0:
 		var player = players[0]
-		var dir_to_player = global_position.direction_to(player.global_position)
-		var look_target = global_position - dir_to_player
+		var look_target = player.global_position
 		look_target.y = global_position.y
 		if global_position.distance_to(look_target) > 0.1:
 			look_at(look_target, Vector3.UP)
