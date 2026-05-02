@@ -1,0 +1,172 @@
+[gd_scene format=3 uid="uid://c6vggecfxyo1b"]
+
+[ext_resource type="Script" uid="uid://dqrafmuqma81" path="res://enemies/template/base_enemy.gd" id="1_base_enemy"]
+[ext_resource type="Script" uid="uid://bmnl2e66g824f" path="res://enemies/template/enemy_sounds.gd" id="2_jgin6"]
+[ext_resource type="Script" uid="uid://q0jeh0ade15l" path="res://components/HealthComponent.gd" id="3_health_component"]
+[ext_resource type="Script" uid="uid://b4xp3spbaebdm" path="res://components/AttackComponent.gd" id="4_attack_component"]
+[ext_resource type="Texture2D" uid="uid://dosjpbdrguj7y" path="res://enemies/goblins/Mountain Goblin/5. Melee/TILES003_204.png" id="4_kssk0"]
+[ext_resource type="Texture2D" uid="uid://y7fp50o54msd" path="res://enemies/goblins/Mountain Goblin/5. Melee/TILES003_205.png" id="5_7dfi7"]
+[ext_resource type="Texture2D" uid="uid://ddmu4or4fx3fm" path="res://enemies/goblins/Mountain Goblin/5. Melee/TILES003_206.png" id="6_k255r"]
+[ext_resource type="Texture2D" uid="uid://dfgx3xftvn0og" path="res://enemies/goblins/Mountain Goblin/1. Idling/TILES003_194.png" id="7_twqb8"]
+[ext_resource type="Texture2D" uid="uid://bkbt2sfffq3e7" path="res://enemies/goblins/Mountain Goblin/7. Death/TILES003_220.png" id="7_xd6pi"]
+[ext_resource type="Texture2D" uid="uid://30xoetp3m1ii" path="res://enemies/goblins/Mountain Goblin/6. Pain/TILES003_215.png" id="8_7dfi7"]
+[ext_resource type="Texture2D" uid="uid://bbuswaoub540y" path="res://enemies/goblins/Mountain Goblin/7. Death/TILES003_221.png" id="8_kd460"]
+[ext_resource type="Texture2D" uid="uid://drodqstlfw48y" path="res://enemies/goblins/Mountain Goblin/7. Death/TILES003_222.png" id="9_tiow8"]
+[ext_resource type="Texture2D" uid="uid://bo5yrmqevujmk" path="res://enemies/goblins/Mountain Goblin/7. Death/TILES003_223.png" id="10_6js3q"]
+[ext_resource type="Texture2D" uid="uid://d0hj75dqrd654" path="res://enemies/goblins/Mountain Goblin/7. Death/TILES003_224.png" id="11_pk4gn"]
+[ext_resource type="Texture2D" uid="uid://ddnq2hypu1glq" path="res://enemies/goblins/Mountain Goblin/7. Death/TILES003_225.png" id="12_dmbkj"]
+[ext_resource type="Texture2D" uid="uid://dmluwjmvf0c02" path="res://enemies/goblins/Mountain Goblin/7. Death/TILES003_226.png" id="13_riwef"]
+[ext_resource type="Texture2D" uid="uid://byoo3muatdjan" path="res://enemies/goblins/Mountain Goblin/7. Death/TILES003_227.png" id="14_qvh4q"]
+[ext_resource type="Texture2D" uid="uid://dgbs8oqrkwpes" path="res://enemies/goblins/Mountain Goblin/7. Death/TILES003_228.png" id="15_ikovg"]
+[ext_resource type="Texture2D" uid="uid://dhxg2hr4cnxhe" path="res://enemies/goblins/Mountain Goblin/7. Death/TILES003_229.png" id="16_3v7ws"]
+[ext_resource type="Texture2D" uid="uid://cutqq5ip6ho6b" path="res://enemies/goblins/Mountain Goblin/4. Movement/TILES003_174.png" id="18_d2gnn"]
+[ext_resource type="Texture2D" uid="uid://56vbk271cs7t" path="res://enemies/goblins/Mountain Goblin/4. Movement/TILES003_175.png" id="19_66rpj"]
+[ext_resource type="Texture2D" uid="uid://bb5awiry8lw8d" path="res://enemies/goblins/Mountain Goblin/4. Movement/TILES003_176.png" id="20_fmpol"]
+[ext_resource type="Texture2D" uid="uid://dbujtygmedbmq" path="res://enemies/goblins/Mountain Goblin/4. Movement/TILES003_177.png" id="21_qc2kl"]
+[ext_resource type="Script" uid="uid://b1diia2jpf5qi" path="res://components/AnimationComponent.gd" id="anim_comp"]
+[ext_resource type="Script" uid="uid://dmmjmxe72o8nn" path="res://components/ChaseComponent.gd" id="chase_comp"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_bwxca"]
+margin = 0.0
+radius = 0.74072266
+height = 1.5192871
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_lch36"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_kssk0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_k255r")
+}, {
+"duration": 2.0,
+"texture": ExtResource("5_7dfi7")
+}],
+"loop": false,
+"name": &"attack",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("7_xd6pi")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_kd460")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_tiow8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_6js3q")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_pk4gn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_dmbkj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_riwef")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_qvh4q")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_ikovg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_3v7ws")
+}],
+"loop": false,
+"name": &"death",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("7_twqb8")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("18_d2gnn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19_66rpj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_fmpol")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_qc2kl")
+}],
+"loop": true,
+"name": &"move",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("8_7dfi7")
+}],
+"loop": false,
+"name": &"pain",
+"speed": 5.0
+}]
+
+[node name="Goblin" type="CharacterBody3D" unique_id=1290029648 groups=["Enemies"]]
+collision_layer = 4
+collision_mask = 3
+floor_stop_on_slope = false
+safe_margin = 0.5
+script = ExtResource("1_base_enemy")
+
+[node name="HealthComponent" type="Node" parent="." unique_id=979718076]
+script = ExtResource("3_health_component")
+max_health = 60
+current_health = 60
+
+[node name="AttackComponent" type="Node" parent="." unique_id=1317250281]
+script = ExtResource("4_attack_component")
+attack_damage = 9
+time_between_attacks = 1.5
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=2090450077]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.14039987, 0.65085065, 0)
+shape = SubResource("CapsuleShape3D_bwxca")
+
+[node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="." unique_id=647343100]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0.3, 0.1)
+billboard = 2
+shaded = true
+texture_filter = 0
+sprite_frames = SubResource("SpriteFrames_lch36")
+animation = &"death"
+
+[node name="ChaseComponent" type="Node" parent="." unique_id=211311145 node_paths=PackedStringArray("actor", "nav_agent")]
+script = ExtResource("chase_comp")
+speed = 1.0
+awareness_range = 8.0
+lose_interest_range = 9.0
+actor = NodePath("..")
+nav_agent = NodePath("../NavigationAgent3D")
+
+[node name="AnimationComponent" type="Node" parent="." unique_id=960981738]
+script = ExtResource("anim_comp")
+death_offset = Vector3(0, -0.8, 0)
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="." unique_id=1221744110]
+simplify_path = true
+
+[node name="RayCast3D" type="RayCast3D" parent="." unique_id=1152219676]
+collision_mask = 3
+
+[node name="EnemySounds" type="AudioStreamPlayer3D" parent="." unique_id=1315915334]
+pitch_scale = 5.0
+bus = &"SfxBus"
+script = ExtResource("2_jgin6")
+death_folder = "res://enemies/template/sounds/death"
+taunt_folder = "res://enemies/template/sounds/taunt"
+pitch_step = 10.0

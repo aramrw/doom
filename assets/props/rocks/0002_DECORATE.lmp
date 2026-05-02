@@ -1,0 +1,111 @@
+ACTOR RockGrey 16000
+{
+	//$Title Grey Rock
+	//$Category Obstacles/Rocks
+	//$IsDecoration
+	//$NotAngled
+	Scale 0.75
+	Radius 12
+	Height 8
+	+SOLID
+
+	States
+	{
+	Spawn:
+		DROK A 0 NoDelay A_ChangeFlag("SPRITEFLIP", random(0,1))
+		DROK A 0 A_Jump (256, "Rock1", "Rock2", "Rock3")
+	Rock1:
+		DROK A -1
+		stop
+	Rock2:
+		DROK B -1
+		stop
+	Rock3:
+		DROK C -1
+		stop
+	}
+}
+
+ACTOR RockBrown 16001
+{
+	//$Title Brown Rock
+	//$Category Obstacles/Rocks
+	//$IsDecoration
+	//$NotAngled
+	Scale 0.75
+	Radius 12
+	Height 8
+	+SOLID
+
+	States
+	{
+	Spawn:
+		DROK D 0 NoDelay A_ChangeFlag("SPRITEFLIP", random(0,1))
+		DROK D 0 A_Jump (256, "Rock1", "Rock2", "Rock3")
+	Rock1:
+		DROK D -1
+		stop
+	Rock2:
+		DROK E -1
+		stop
+	Rock3:
+		DROK F -1
+		stop
+	}
+}
+
+ACTOR RockTan 16002
+{
+	//$Title Tan Rock
+	//$Category Obstacles/Rocks
+	//$IsDecoration
+	//$NotAngled
+	Scale 0.75
+	Radius 12
+	Height 8
+	+SOLID
+
+	States
+	{
+	Spawn:
+		DROK G 0 NoDelay A_ChangeFlag("SPRITEFLIP", random(0,1))
+		DROK G 0 A_Jump (256, "Rock1", "Rock2", "Rock3")
+	Rock1:
+		DROK G -1
+		stop
+	Rock2:
+		DROK H -1
+		stop
+	Rock3:
+		DROK I -1
+		stop
+	}
+}
+
+ACTOR RockBlack 16003
+{
+	//$Title Black Rock
+	//$Category Obstacles/Rocks
+	//$IsDecoration
+	//$NotAngled
+	Scale 0.75
+	Radius 12
+	Height 8
+	+SOLID
+  
+	States
+	{
+	Spawn:
+		DROK J 0 NoDelay A_ChangeFlag("SPRITEFLIP", random(0,1))
+		DROK J 0 A_Jump (256, "Rock1", "Rock2", "Rock3")
+	Rock1:
+		DROK J -1
+		stop
+	Rock2:
+		DROK K -1
+		stop
+	Rock3:
+		DROK L -1
+		stop
+	}
+}

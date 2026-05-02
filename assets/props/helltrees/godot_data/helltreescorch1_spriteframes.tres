@@ -1,0 +1,14 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://dv722unooe16h"]
+
+[ext_resource type="Texture2D" uid="uid://da7kuosyoojw8" path="res://assets/props/helltrees/godot_data/sprites/helltrees/helltreescorch1/spawn/HETRB0.png" id="1_ext"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_ext")
+}],
+"loop": false,
+"name": &"spawn",
+"speed": 35.0
+}]

@@ -1,0 +1,17 @@
+flickerlight BurningCorpseLight
+{
+	COLOR 1 0.9 .3
+	size 40
+	secondarySize 48
+	chance 0.5
+}
+
+Object BurningCorpse1
+{
+	Frame BAVE { light BurningCorpseLight }
+}
+
+Object BurningCorpse2
+{
+	Frame BAV2 { light BurningCorpseLight }
+}

@@ -6,6 +6,7 @@
 
 [resource]
 script = ExtResource("1_script")
+sprite_offset = Vector2(35, 0)
 actions = {
 "primary": ExtResource("3_fire")
 }

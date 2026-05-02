@@ -1,22 +1,22 @@
-[gd_resource type="SpriteFrames" format=3]
+[gd_resource type="SpriteFrames" format=3 uid="uid://cqmfmq0vn4ha7"]
 
-[ext_resource type="Texture2D" path="res://assets/statues/dsparilstatue/godot_data/sprites/dsparilstatue/dsparilstatuered/spawn/STARA0.png" id="1_ext"]
-[ext_resource type="Texture2D" path="res://assets/statues/dsparilstatue/godot_data/sprites/dsparilstatue/dsparilstatuered/spawn/STARB0.png" id="2_ext"]
-[ext_resource type="Texture2D" path="res://assets/statues/dsparilstatue/godot_data/sprites/dsparilstatue/dsparilstatuered/spawn/STARC0.png" id="3_ext"]
+[ext_resource type="Texture2D" uid="uid://bvxe8u44k7j27" path="res://assets/statues/dsparilstatue/godot_data/sprites/dsparilstatue/dsparilstatuered/spawn/STARA0.png" id="1_ext"]
+[ext_resource type="Texture2D" uid="uid://btv4emosf758p" path="res://assets/statues/dsparilstatue/godot_data/sprites/dsparilstatue/dsparilstatuered/spawn/STARB0.png" id="2_ext"]
+[ext_resource type="Texture2D" uid="uid://dkhtnm8ua1ov7" path="res://assets/statues/dsparilstatue/godot_data/sprites/dsparilstatue/dsparilstatuered/spawn/STARC0.png" id="3_ext"]
 
 [resource]
 animations = [{
 "frames": [{
-"duration": 6,
+"duration": 6.0,
 "texture": ExtResource("1_ext")
 }, {
-"duration": 6,
+"duration": 6.0,
 "texture": ExtResource("2_ext")
 }, {
-"duration": 6,
+"duration": 6.0,
 "texture": ExtResource("3_ext")
 }],
 "loop": true,
 "name": &"spawn",
-"speed": 35.0
+"speed": 8.0
 }]

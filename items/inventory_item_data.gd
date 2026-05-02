@@ -14,5 +14,5 @@ class_name InventoryItemData
 func use(player: Node):
 	print("Using item: ", item_name)
 	if use_sound:
-		# Play sound logic here or in InventoryManager
+		# Play sound logic here
 		pass

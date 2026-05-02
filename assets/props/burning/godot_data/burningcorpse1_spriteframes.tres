@@ -1,0 +1,39 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://bweakcc7j1sk5"]
+
+[ext_resource type="Texture2D" uid="uid://dob7rhog0s7el" path="res://assets/props/burning/godot_data/sprites/burning/burningcorpse1/inactive/ALVEA0.png" id="1_ext"]
+[ext_resource type="Texture2D" uid="uid://bhfpp355l0eh4" path="res://assets/props/burning/godot_data/sprites/burning/burningcorpse1/spawn/BAVEA0.png" id="2_ext"]
+[ext_resource type="Texture2D" uid="uid://evumx0x3pfe4" path="res://assets/props/burning/godot_data/sprites/burning/burningcorpse1/spawn/BAVEB0.png" id="3_ext"]
+[ext_resource type="Texture2D" uid="uid://brcces518vscu" path="res://assets/props/burning/godot_data/sprites/burning/burningcorpse1/spawn/BAVEC0.png" id="4_ext"]
+[ext_resource type="Texture2D" uid="uid://dio6udiq0nsbu" path="res://assets/props/burning/godot_data/sprites/burning/burningcorpse1/spawn/BAVED0.png" id="5_ext"]
+[ext_resource type="Texture2D" uid="uid://brn8gykmglw50" path="res://assets/props/burning/godot_data/sprites/burning/burningcorpse1/spawn/ALVEA0.png" id="6_ext"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_ext")
+}],
+"loop": true,
+"name": &"inactive",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 4.0,
+"texture": ExtResource("2_ext")
+}, {
+"duration": 4.0,
+"texture": ExtResource("3_ext")
+}, {
+"duration": 4.0,
+"texture": ExtResource("4_ext")
+}, {
+"duration": 4.0,
+"texture": ExtResource("5_ext")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_ext")
+}],
+"loop": true,
+"name": &"spawn",
+"speed": 35.0
+}]

@@ -1,0 +1,46 @@
+[gd_scene format=3 uid="uid://iovxamaf6cxc"]
+
+[ext_resource type="Script" uid="uid://b325pyfasy6r7" path="res://assets/base_prop.gd" id="1_script"]
+[ext_resource type="SpriteFrames" path="res://assets/props/helltrees/godot_data/helltreeburn1_spriteframes.tres" id="2_sprites"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hf5b2"]
+height = 1.5205078
+
+[node name="HellTreeBurn1" type="StaticBody3D" unique_id=33109956]
+script = ExtResource("1_script")
+
+[node name="Sprite3D_0" type="AnimatedSprite3D" parent="." unique_id=936462274]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7625, 0)
+shaded = true
+texture_filter = 0
+sprite_frames = ExtResource("2_sprites")
+animation = &"spawn"
+autoplay = "spawn"
+
+[node name="Sprite3D_1" type="AnimatedSprite3D" parent="." unique_id=782547220]
+transform = Transform3D(0.7071, 0, 0.7071, 0, 1, 0, -0.7071, 0, 0.7071, 0, 0.7625, 0)
+shaded = true
+texture_filter = 0
+sprite_frames = ExtResource("2_sprites")
+animation = &"spawn"
+autoplay = "spawn"
+
+[node name="Sprite3D_2" type="AnimatedSprite3D" parent="." unique_id=329672050]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 0, 0.7625, 0)
+shaded = true
+texture_filter = 0
+sprite_frames = ExtResource("2_sprites")
+animation = &"spawn"
+autoplay = "spawn"
+
+[node name="Sprite3D_3" type="AnimatedSprite3D" parent="." unique_id=2079690182]
+transform = Transform3D(-0.7071, 0, 0.7071, 0, 1, 0, -0.7071, 0, -0.7071, 0, 0.7625, 0)
+shaded = true
+texture_filter = 0
+sprite_frames = ExtResource("2_sprites")
+animation = &"spawn"
+autoplay = "spawn"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1383959490]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7620003, 0)
+shape = SubResource("CapsuleShape3D_hf5b2")

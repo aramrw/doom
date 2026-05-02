@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bds01h6u0moes"]
 
 [ext_resource type="Script" uid="uid://b325pyfasy6r7" path="res://assets/base_prop.gd" id="1_script"]
-[ext_resource type="SpriteFrames" path="res://assets/statues/dsparilstatue/godot_data/dsparilstatuered_spriteframes.tres" id="2_sprites"]
+[ext_resource type="SpriteFrames" uid="uid://cqmfmq0vn4ha7" path="res://assets/statues/dsparilstatue/godot_data/dsparilstatuered_spriteframes.tres" id="2_sprites"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_355qh"]
 height = 1.5810547
@@ -16,6 +16,7 @@ texture_filter = 0
 sprite_frames = ExtResource("2_sprites")
 animation = &"spawn"
 autoplay = "spawn"
+frame_progress = 0.0050292853
 
 [node name="Sprite3D_1" type="AnimatedSprite3D" parent="." unique_id=1919802163]
 transform = Transform3D(0.7071, 0, 0.7071, 0, 1, 0, -0.7071, 0, 0.7071, 0, 1.2, 0)
@@ -24,6 +25,7 @@ texture_filter = 0
 sprite_frames = ExtResource("2_sprites")
 animation = &"spawn"
 autoplay = "spawn"
+frame_progress = 0.5060575
 
 [node name="Sprite3D_2" type="AnimatedSprite3D" parent="." unique_id=1236150580]
 transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 0, 1.2, 0)
@@ -47,7 +49,6 @@ shape = SubResource("CapsuleShape3D_355qh")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=522269821]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.9216979, 0)
-light_color = Color(1, 0.27841914, 0.16621798, 1)
-light_energy = 2.5
+light_color = Color(1, 0.7372549, 1, 1)
 shadow_enabled = true
-omni_range = 20.0
+omni_range = 50.0

@@ -50,7 +50,8 @@ var max_health: int = 100
 var health: int = max_health
 
 func _ready():
-	add_to_group("Player")
+	body.add_to_group("Player")
+	# add_to_group("Player") # Removed from root to prevent AI targeting the stationary start point
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	gun_default_pos = gun_sprite.position
 	item_default_pos = item_manager.item_sprite.position
@@ -189,10 +190,9 @@ func update_target_outline():
 
 func handle_interaction():
 	print("Player: handle_interaction called")
-	# 1. If dialogue is already open, advance it and return
+	# 1. If dialogue is already open, do nothing (dialogue UI handles its own input)
 	var dialogue_ui = get_tree().get_first_node_in_group("DialogueUI")
 	if dialogue_ui and dialogue_ui.visible:
-		dialogue_ui.advance()
 		return
 		
 	# 2. Otherwise, look for something to interact with
@@ -364,7 +364,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		camera.rotation.x = clamp(camera.rotation.x, deg_to_rad(-80), deg_to_rad(80))
 
 # --- NEW DAMAGE FUNCTION ---
-func take_damage(amount: int):
+func take_damage(amount: int, _source = null):
 	health -= amount
 	print("Player Health: ", health)
 	
@@ -374,6 +374,12 @@ func take_damage(amount: int):
 	
 	if health <= 0:
 		die()
+
+func heal(amount: int):
+	health = clamp(health + amount, 0, max_health)
+	print("Player Healed: ", health)
+	if hud:
+		hud.update_health(health)
 
 func die():
 	print("Player Died!")
@@ -386,6 +392,6 @@ func add_trauma(amount: float):
 func has_inventory_item(item_name: String) -> bool:
 	return inventory_manager.has_item(item_name)
 
-func _process_camera_shake(delta):
+func _process_camera_shake(_delta):
 	if trauma > 0:
 		pass

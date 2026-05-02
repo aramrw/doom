@@ -1,0 +1,17 @@
+Information:
+Name: Rocks
+Connection: None
+Palette: Doom
+Summon: RockGrey, RockBrown, RockTan, RockBlack
+Ambient Sound: no
+De-/Activatable: no
+Destroyable: no
+Special Effects: random orientation and sprite 
+Brightmaps: no
+Actor modification: No
+ACS: no
+
+Credits:
+Submitted: Captain Toenail
+Decorate: Captain Toenail
+Sprites: Captain Toenail

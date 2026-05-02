@@ -19,12 +19,29 @@ pub fn sp(input: &str) -> IResult<&str, ()> {
     map(many0(alt((whitespace, line_comment, block_comment))), |_| ())(input)
 }
 
+/// Whitespace and comment parser (no newlines)
+pub fn sp_no_newline(input: &str) -> IResult<&str, ()> {
+    let line_comment = value((), pair(tag("//"), take_until("\n")));
+    let block_comment = value((), delimited(tag("/*"), take_until("*/"), tag("*/")));
+    let whitespace = value((), recognize(many1(alt((char(' '), char('\t'))))));
+    
+    map(many0(alt((whitespace, line_comment, block_comment))), |_| ())(input)
+}
+
 /// Wrapper to consume whitespace around a parser
 pub fn ws<'a, F, O>(inner: F) -> impl FnMut(&'a str) -> IResult<&'a str, O>
 where
     F: FnMut(&'a str) -> IResult<&'a str, O>,
 {
     delimited(sp, inner, sp)
+}
+
+/// Wrapper to consume whitespace around a parser (no newlines)
+pub fn ws_no_newline<'a, F, O>(inner: F) -> impl FnMut(&'a str) -> IResult<&'a str, O>
+where
+    F: FnMut(&'a str) -> IResult<&'a str, O>,
+{
+    delimited(sp_no_newline, inner, sp_no_newline)
 }
 
 /// Parse a GZValue or a complex expression (as a string)
@@ -58,7 +75,7 @@ pub fn parse_gz_value(input: &str) -> IResult<&str, GZValue> {
     )))(input)
 }
 
-fn parse_expression_value(input: &str) -> IResult<&str, GZValue> {
+pub fn parse_expression_value(input: &str) -> IResult<&str, GZValue> {
     let mut depth = 0;
     let mut end_pos = 0;
     let bytes = input.as_bytes();
@@ -79,7 +96,18 @@ fn parse_expression_value(input: &str) -> IResult<&str, GZValue> {
     }
     let val = &input[..end_pos];
     let rest = &input[end_pos..];
-    Ok((rest, GZValue::Identifier(val.trim().to_string())))
+    let val_str = val.trim();
+    
+    // Try to parse as a function call if it contains parens
+    if val_str.contains('(') {
+        if let Ok((rem, call)) = parse_function_call(val_str) {
+            if rem.trim().is_empty() {
+                return Ok((rest, GZValue::FunctionCall(call)));
+            }
+        }
+    }
+    
+    Ok((rest, GZValue::Identifier(val_str.to_string())))
 }
 
 fn parse_integer(input: &str) -> IResult<&str, GZValue> {
@@ -107,7 +135,7 @@ fn parse_string_literal(input: &str) -> IResult<&str, GZValue> {
 pub fn parse_function_call(input: &str) -> IResult<&str, GZFunctionCall> {
     let (input, name) = ws(recognize(pair(
         alt((alpha1, tag("_"))),
-        many0(alt((alphanumeric1, tag("_"), tag("."))))
+        many0(alt((alphanumeric1, tag("_"), tag("."), tag("["), tag("]"))))
     )))(input)?;
     
     let (input, args) = delimited(
@@ -129,34 +157,41 @@ pub fn parse_state_frame(input: &str) -> IResult<&str, StateFrame> {
         many0(alt((alphanumeric1, tag("_"))))
     )))(input)?;
     
-    let (input, frames) = ws(recognize(many1(none_of(" \t\n\r{}/"))))(input)?;
+    let (input, frames) = ws_no_newline(recognize(many1(none_of(" \t\n\r{}/"))))(input)?;
     
-    let (input, duration) = ws(map_res(
+    let (input, duration) = ws_no_newline(map_res(
         recognize(pair(opt(char('-')), digit1)),
         |s: &str| s.parse::<i32>()
     ))(input)?;
     
-    let (input, modifier) = opt(ws(tag_no_case("BRIGHT")))(input)?;
-    let is_bright = modifier.is_some();
+    let (input, modifiers) = many0(ws_no_newline(alt((
+        tag_no_case("BRIGHT"),
+        tag_no_case("NODELAY"),
+        tag_no_case("SLOW"),
+        tag_no_case("FAST"),
+        tag_no_case("CANRAISE"),
+    ))))(input)?;
+    let is_bright = modifiers.iter().any(|m| m.to_lowercase() == "bright");
     
-    // Actions can be a single function call, a block of them, or nothing
-    let (input, actions) = alt((
+    // Try to parse actions, but don't fail if we can't find them
+    let (input, actions) = match opt(alt((
         map(parse_function_call, |c| vec![c]),
         delimited(
             ws(char('{')),
             many0(terminated(ws(parse_function_call), opt(ws(char(';'))))),
             ws(char('}'))
         ),
-        // Fallback for simple identifier actions without parens
-        map(ws(recognize(pair(alpha1, many0(alt((alphanumeric1, tag("_"))))))), |name| vec![GZFunctionCall {
+        map(ws_no_newline(recognize(pair(alpha1, many0(alt((alphanumeric1, tag("_"))))))), |name| vec![GZFunctionCall {
             name: name.to_string(),
             args: vec![],
         }]),
-        map(sp, |_| vec![]),
-    ))(input)?;
+    )))(input) {
+        Ok((rem, Some(actions))) => (rem, actions),
+        _ => (input, vec![]), // Fallback: no actions, but successfully parsed frame
+    };
 
     // Optional semicolon
-    let (input, _) = opt(ws(char(';')))(input)?;
+    let (input, _) = opt(ws_no_newline(char(';')))(input)?;
 
     Ok((input, StateFrame {
         sprite_prefix: sprite_prefix.to_string(),
@@ -223,7 +258,7 @@ pub fn parse_states_block(input: &str) -> IResult<&str, HashMap<String, Vec<Stat
 
         // Try to parse Goto separately for better error handling
         if let Ok((next_input, _)) = ws(tag_no_case("goto"))(input) {
-            let (next_input, _) = is_not::<&str, &str, nom::error::Error<&str>>(" \t\n\r;}")(next_input)?;
+            let (next_input, _label) = ws(recognize(many1(none_of(" \t\n\r;}"))))(next_input)?;
             let (next_input, _) = opt(ws(char(';')))(next_input)?;
             input = next_input;
             current_labels.clear();
@@ -238,10 +273,9 @@ pub fn parse_states_block(input: &str) -> IResult<&str, HashMap<String, Vec<Stat
                     states.entry(label.clone()).or_insert_with(Vec::new).push(frame.clone());
                 }
                 input = next_input;
+                continue;
             }
             Err(_e) => {
-                #[cfg(test)]
-                println!("DEBUG: parse_state_frame failed: {:?}", _e);
                 return Err(_e);
             }
         }
@@ -325,15 +359,8 @@ pub fn parse_actor(input: &str) -> IResult<&str, ActorDefinition> {
                     if let Ok((next, action)) = terminated(ws(parse_function_call), opt(ws(char(';'))))(temp_input) {
                         body_actions.push(action);
                         temp_input = next;
-                    } else if !temp_input.is_empty() {
-                        // Skip one token if it doesn't match an action call
-                        if let Ok((next, _)) = ws(recognize::<&str, _, nom::error::Error<&str>, _>(many1(none_of(" \t\n\r;}"))))(temp_input) {
-                            temp_input = next;
-                        } else {
-                            temp_input = &temp_input[1..];
-                        }
                     } else {
-                        break;
+                        return Err(nom::Err::Failure(nom::error::Error::new(temp_input, nom::error::ErrorKind::Tag)));
                     }
                 }
                 actor.methods.insert(name.to_string(), body_actions);
@@ -343,7 +370,8 @@ pub fn parse_actor(input: &str) -> IResult<&str, ActorDefinition> {
         }
 
         // Handle ZScript Default block
-        if let Ok((next_input, _)) = ws(tag_no_case("Default"))(input) {
+        if input.trim_start().to_lowercase().starts_with("default") {
+             let (next_input, _) = ws(tag_no_case("Default"))(input)?;
              let (next_input, _) = ws(char('{'))(next_input)?;
              let mut inner_input = next_input;
              loop {
@@ -358,13 +386,8 @@ pub fn parse_actor(input: &str) -> IResult<&str, ActorDefinition> {
                          apply_property_or_flag(&mut actor, item);
                          inner_input = next_inner;
                      }
-                     Err(_) => {
-                         // Skip one token in Default block if parsing fails
-                         if let Ok((next, _)) = ws(recognize(many1(none_of(" \t\n\r;}"))))(inner_input) {
-                             inner_input = next;
-                         } else {
-                             inner_input = &inner_input[1..];
-                         }
+                    Err(e) => {
+                         return Err(e);
                      }
                  }
              }
@@ -373,51 +396,28 @@ pub fn parse_actor(input: &str) -> IResult<&str, ActorDefinition> {
         }
 
         // Handle States block
-        match parse_states_block(input) {
-            Ok((next_input, states)) => {
-                actor.states.extend(states);
-                input = next_input;
-                continue;
-            }
-            Err(_e) => {
-                #[cfg(test)]
-                println!("DEBUG: parse_states_block failed for actor {}: {:?}", actor.name, _e);
-            }
+        if input.trim_start().to_lowercase().starts_with("states") {
+            let (next_input, states) = parse_states_block(input)?;
+            actor.states.extend(states);
+            input = next_input;
+            continue;
         }
         
-        // Handle standalone property/flag or unknown item (like void functions)
-        match parse_property_or_flag(input) {
-            Ok((next_input, item)) => {
-                apply_property_or_flag(&mut actor, item);
-                input = next_input;
-            }
-            Err(_) => {
-                // Robust skip: skip balanced braces or single tokens
-                if let Ok((next_input, _)) = ws(char('{'))(input) {
-                    let mut depth = 1;
-                    let mut temp_input = next_input;
-                    while depth > 0 && !temp_input.is_empty() {
-                        if let Ok((next, _)) = char::<&str, nom::error::Error<&str>>('{')(temp_input) {
-                            depth += 1;
-                            temp_input = next;
-                        } else if let Ok((next, _)) = char::<&str, nom::error::Error<&str>>('}')(temp_input) {
-                            depth -= 1;
-                            temp_input = next;
-                        } else if let Ok((next, _)) = multispace1::<&str, nom::error::Error<&str>>(temp_input) {
-                            temp_input = next;
-                        } else if !temp_input.is_empty() {
-                            temp_input = &temp_input[1..];
-                        }
-                    }
-                    input = temp_input;
-                } else if let Ok((next_input, _)) = ws(recognize(many1(none_of(" \t\n\r{}"))))(input) {
-                    input = next_input;
-                } else if !input.is_empty() {
-                    input = &input[1..];
-                } else {
-                    break;
-                }
-            }
+        // Handle standalone property/flag
+        if let Ok((next_input, item)) = parse_property_or_flag(input) {
+            apply_property_or_flag(&mut actor, item);
+            input = next_input;
+            continue;
+        }
+        
+        // If nothing matches, log and skip unexpected token instead of failing
+        if let Ok((next_input, _)) = take_until::<&str, &str, nom::error::Error<&str>>("\n")(input) {
+            println!("Warning: Skipping unexpected input");
+            input = next_input;
+            continue;
+        } else {
+            // If even taking until newline fails, just break/abort
+            break;
         }
     }
     
@@ -452,8 +452,14 @@ fn apply_property_or_flag(actor: &mut ActorDefinition, item: PropertyOrFlag) {
 pub fn parse_sndinfo(input: &str) -> HashMap<String, String> {
     let mut sounds = HashMap::new();
     let mut input = input;
-    
+
     while !input.trim().is_empty() {
+        // Skip whitespace and comments
+        if let Ok((next_input, _)) = sp(input) {
+            input = next_input;
+        }
+        if input.trim().is_empty() { break; }
+
         let mut parse_entry = pair(
             ws(recognize(pair(alt((alpha1, tag("_"))), many0(alt((alphanumeric1, tag("_"), tag("."), tag("-"))))))),
             alt((
@@ -461,63 +467,41 @@ pub fn parse_sndinfo(input: &str) -> HashMap<String, String> {
                 map(ws(recognize(many1(none_of(" \t\n\r")))), |s: &str| s.to_string())
             ))
         );
-        
+
         match parse_entry(input) {
             Ok((next_input, (alias, path))) => {
                 sounds.insert(alias.to_uppercase(), path);
                 input = next_input;
             }
             Err(_) => {
-                // Skip one token or whitespace
-                if let Ok((next, _)) = multispace1::<&str, nom::error::Error<&str>>(input) {
-                    input = next;
-                } else if !input.is_empty() {
-                    let mut next_token = recognize::<&str, _, nom::error::Error<&str>, _>(many1(none_of(" \t\n\r")));
-                    if let Ok((next, _)) = next_token(input) {
-                        input = next;
-                    } else {
-                        input = &input[1..];
+                // If it starts with $, it might be a command. We skip it for now but properly.
+                if input.starts_with('$') {
+                    let mut temp_input = input;
+                    while !temp_input.is_empty() && !temp_input.starts_with('\n') && !temp_input.starts_with('\r') {
+                        temp_input = &temp_input[1..];
                     }
-                } else {
-                    break;
+                    input = temp_input;
+                    continue;
                 }
+
+                // If we don't recognize it, stop to avoid infinite loop or silent skip of errors
+                break;
             }
         }
     }
     sounds
 }
-
 pub fn parse_document(input: &str) -> Result<Vec<ActorDefinition>, String> {
     let mut actors = Vec::new();
     let mut input = input;
-    
+
     while !input.trim().is_empty() {
-        // Try to find the next actor or class
-        let mut actor_start = alt::<&str, &str, nom::error::Error<&str>, _>((tag_no_case("actor"), tag_no_case("class")));
-        
-        // Skip everything until "actor" or "class"
-        let mut temp_input = input;
-        loop {
-            if temp_input.is_empty() {
-                input = "";
-                break;
-            }
-            if let Ok(_) = actor_start(temp_input) {
-                input = temp_input;
-                break;
-            }
-            // Skip one char or whitespace
-            if let Ok((next, _)) = multispace1::<&str, nom::error::Error<&str>>(temp_input) {
-                temp_input = next;
-            } else if !temp_input.is_empty() {
-                temp_input = &temp_input[1..];
-            } else {
-                input = "";
-                break;
-            }
+        // Consume whitespace and comments
+        if let Ok((next_input, _)) = sp(input) {
+            input = next_input;
         }
-        
-        if input.is_empty() {
+
+        if input.trim().is_empty() {
             break;
         }
 
@@ -531,6 +515,6 @@ pub fn parse_document(input: &str) -> Result<Vec<ActorDefinition>, String> {
             }
         }
     }
-    
+
     Ok(actors)
 }

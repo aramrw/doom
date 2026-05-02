@@ -1,7 +1,7 @@
 #[cfg(test)]
 mod tests {
     use crate::realm667::actor::GZValue;
-    use crate::realm667::nom_parser::parse_document;
+    use crate::realm667::nom_parser::{parse_document, parse_state_frame};
 
     #[test]
     fn test_parser_actor_properties() {
@@ -227,5 +227,96 @@ mod tests {
         assert_eq!(action.name, "A_CustomMeleeAttack");
         assert_eq!(action.args.len(), 2);
         assert_eq!(action.args[0].to_string_lossy(), "15*random(1,8)");
+    }
+
+    #[test]
+    fn test_parser_enemy_properties() {
+        let input = "
+            actor MyEnemy : Actor 999 {
+                Health 100
+                Speed 8
+                PainChance 50
+                Radius 20
+                Height 56
+                +NOGRAVITY
+                States {
+                    Spawn:
+                        PLAY A 10
+                        Loop
+                    See:
+                        PLAY B 5
+                        Loop
+                }
+            }
+        ";
+        let actors = parse_document(input).unwrap();
+        assert_eq!(actors.len(), 1);
+        let actor = &actors[0];
+        assert_eq!(actor.name, "MyEnemy");
+        assert_eq!(actor.ed_number, Some(999));
+        assert_eq!(actor.properties.get("Health"), Some(&GZValue::Integer(100)));
+        assert_eq!(actor.properties.get("Speed"), Some(&GZValue::Integer(8)));
+        assert_eq!(actor.properties.get("PainChance"), Some(&GZValue::Integer(50)));
+        assert!(actor.flags.contains(&"NOGRAVITY".to_string()));
+        assert!(actor.states.contains_key("Spawn"));
+        assert!(actor.states.contains_key("See"));
+    }
+
+    #[test]
+    fn test_parser_robust_skip_failure() {
+        let input = "
+            actor BrokenActor {
+                States {
+                    Spawn:
+                        PLAY A 10
+                        !!!INVALID!!!
+                        Loop
+                }
+            }
+        ";
+        let result = parse_document(input);
+        assert!(result.is_err(), "Parser should fail on invalid tokens");
+    }
+
+    #[test]
+    fn test_parser_rock_nodelay() {
+        let input = "
+            ACTOR RockGrey 16000
+            {
+                Scale 0.75
+                Radius 12
+                Height 8
+                +SOLID
+
+                States
+                {
+                Spawn:
+                    DROK A 0 NoDelay A_ChangeFlag(\"SPRITEFLIP\", random(0,1))
+                    DROK A 0 A_Jump (256, \"Rock1\", \"Rock2\", \"Rock3\")
+                Rock1:
+                    DROK A -1
+                    stop
+                Rock2:
+                    DROK B -1
+                    stop
+                Rock3:
+                    DROK C -1
+                    stop
+                }
+            }
+        ";
+        let result = parse_document(input);
+        assert!(result.is_ok(), "Parser should handle NoDelay modifier: {:?}", result.err());
+    }
+
+    #[test]
+    fn test_parser_state_frame_nodelay() {
+        let input = "DROK A 0 NoDelay A_ChangeFlag(\"SPRITEFLIP\", random(0,1))";
+        let (rest, frame) = parse_state_frame(input).unwrap();
+        assert_eq!(frame.sprite_prefix, "DROK");
+        assert_eq!(frame.duration, 0);
+        assert_eq!(frame.actions.len(), 1);
+        assert_eq!(frame.actions[0].name, "A_ChangeFlag");
+        assert_eq!(rest.trim(), "");
     }
 }

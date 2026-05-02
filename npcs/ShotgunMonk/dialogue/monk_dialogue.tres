@@ -1,0 +1,37 @@
+[gd_resource type="DialogueResource" format=3]
+
+[sub_resource type="RsDialogueLine" id="RsDialogueLine_1obgq"]
+text = "私はこの修道院の最後の守護者だ。"
+next_line_index = 2
+
+[sub_resource type="RsDialogueLine" id="RsDialogueLine_kmapx"]
+text = "ここは聖なる場所だった。だが、リフトが全てを変えた。"
+next_line_index = 2
+
+[sub_resource type="RsDialogueChoice" id="RsDialogueChoice_va8xr"]
+text = "お前は誰だ？"
+
+[sub_resource type="RsDialogueChoice" id="RsDialogueChoice_64hl7"]
+text = "ここはどこだ？"
+next_line_index = 1
+
+[sub_resource type="RsDialogueChoice" id="RsDialogueChoice_jotuy"]
+text = "去る"
+next_line_index = -1
+
+[sub_resource type="RsDialogueLine" id="RsDialogueLine_tihl0"]
+text = "他になにか聞きたいことはあるか？"
+line_type = 1
+choices = [SubResource("RsDialogueChoice_va8xr"), SubResource("RsDialogueChoice_64hl7"), SubResource("RsDialogueChoice_jotuy")]
+
+[sub_resource type="RsDialogueLine" id="RsDialogueLine_pcwkf"]
+text = "ジゴクだ。はやく外に出ればいい。"
+next_line_index = 2
+
+[sub_resource type="RsDialogueLine" id="RsDialogueLine_62ife"]
+text = "生きてるか。"
+next_line_index = 3
+
+[resource]
+lines = [SubResource("RsDialogueLine_1obgq"), SubResource("RsDialogueLine_kmapx"), SubResource("RsDialogueLine_tihl0"), SubResource("RsDialogueLine_pcwkf"), SubResource("RsDialogueLine_62ife")]
+start_index = 4

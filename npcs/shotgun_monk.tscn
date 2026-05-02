@@ -1,7 +1,7 @@
-[gd_scene format=3 uid="uid://b45e5hjqdka1g"]
+[gd_scene format=3 uid="uid://cf5g8ihyiyq4p"]
 
 [ext_resource type="Script" uid="uid://c0seuvhjuadad" path="res://npcs/base_npc.gd" id="1_base"]
-[ext_resource type="Script" uid="uid://38lt845hd6jo" path="res://enemies/enemy_sounds.gd" id="2_sounds"]
+[ext_resource type="Script" uid="uid://bmnl2e66g824f" path="res://enemies/template/enemy_sounds.gd" id="2_sounds"]
 [ext_resource type="Texture2D" uid="uid://kr1s8fa12q6o" path="res://npcs/ShotgunMonk/sprites/MARAA1.png" id="3_tex"]
 [ext_resource type="Texture2D" uid="uid://dd5r1hm4ur2tl" path="res://npcs/ShotgunMonk/sprites/MARAB1.png" id="4_tex"]
 [ext_resource type="Texture2D" uid="uid://car7uu4u8we6i" path="res://npcs/ShotgunMonk/sprites/MARAC1.png" id="5_tex"]
@@ -46,6 +46,15 @@
 [ext_resource type="Texture2D" uid="uid://xk8ccsp0hrx4" path="res://npcs/ShotgunMonk/sprites/MARAP6P4.png" id="44_tex"]
 [ext_resource type="Texture2D" uid="uid://ygau8v5l03db" path="res://npcs/ShotgunMonk/sprites/MARAG5.png" id="45_tex"]
 [ext_resource type="Texture2D" uid="uid://dycal7h44tsy6" path="res://npcs/ShotgunMonk/sprites/MARAP5.png" id="46_tex"]
+[ext_resource type="AudioStream" uid="uid://kgiybjyuki2i" path="res://npcs/ShotgunMonk/dialogue/audio/ElevenLabs_2026-04-29T18_58_47_Hiro - Calm, Measured and Husky_pvc_sp100_s50_sb75_v3.mp3" id="48_rpv6j"]
+[ext_resource type="AudioStream" uid="uid://bs4wogvfmk14o" path="res://npcs/ShotgunMonk/dialogue/audio/ElevenLabs_2026-04-29T19_02_52_Hiro - Calm, Measured and Husky_pvc_sp100_s50_sb75_v3.mp3" id="49_ckj4m"]
+[ext_resource type="AudioStream" uid="uid://pw76dqxgyuli" path="res://npcs/ShotgunMonk/dialogue/audio/ElevenLabs_2026-04-29T19_25_02_Hiro - Calm, Measured and Husky_pvc_sp100_s50_sb75_v3.mp3" id="49_s8yxr"]
+[ext_resource type="AudioStream" uid="uid://btys4ag67r867" path="res://npcs/ShotgunMonk/dialogue/audio/ElevenLabs_2026-04-29T19_32_52_Hiro - Calm, Measured and Husky_pvc_sp100_s50_sb75_v3.mp3" id="51_nxkge"]
+[ext_resource type="AudioStream" uid="uid://cgpryuq0wr0y3" path="res://npcs/ShotgunMonk/dialogue/audio/ElevenLabs_2026-04-29T19_34_20_Hiro - Calm, Measured and Husky_pvc_sp100_s50_sb75_v3.mp3" id="52_4reaw"]
+[ext_resource type="Script" uid="uid://b1diia2jpf5qi" path="res://components/AnimationComponent.gd" id="anim_comp"]
+[ext_resource type="Script" uid="uid://b4xp3spbaebdm" path="res://components/AttackComponent.gd" id="attack_comp"]
+[ext_resource type="Script" uid="uid://dmmjmxe72o8nn" path="res://components/ChaseComponent.gd" id="chase_comp"]
+[ext_resource type="Script" uid="uid://q0jeh0ade15l" path="res://components/HealthComponent.gd" id="health_comp"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1"]
 radius = 1.1286621
@@ -249,15 +258,54 @@ animations = [{
 [sub_resource type="SphereShape3D" id="SphereShape3D_au4qf"]
 radius = 2.019645
 
+[sub_resource type="RsDialogueLine" id="RsDialogueLine_udfx5"]
+text = "俺はヴァチカン特務第１３課イスカリオテ機関の藤沢マーレでございます。これからよろしく"
+audio = ExtResource("49_s8yxr")
+
+[sub_resource type="RsDialogueLine" id="RsDialogueLine_my845"]
+text = "忘れてたか...ヤベー。"
+audio = ExtResource("48_rpv6j")
+next_line = SubResource("RsDialogueLine_udfx5")
+
+[sub_resource type="RsDialogueChoice" id="RsDialogueChoice_rpv6j"]
+label = "誰だお前？"
+next_node = SubResource("RsDialogueLine_my845")
+
+[sub_resource type="RsDialogueLine" id="RsDialogueLine_s8yxr"]
+text = "どこにどこでもある。。。この凄まじい感じ。。。強い！"
+audio = ExtResource("49_ckj4m")
+
+[sub_resource type="RsDialogueChoice" id="RsDialogueChoice_udfx5"]
+label = "なんだこの圧力！"
+next_node = SubResource("RsDialogueLine_s8yxr")
+
+[sub_resource type="RsDialogueLine" id="RsDialogueLine_31sx5"]
+text = "そりゃどうでもいい、とにかく銃を見つけなきゃこまる。"
+audio = ExtResource("52_4reaw")
+
+[sub_resource type="RsDialogueLine" id="RsDialogueLine_kv7hp"]
+text = "落ち着け。お前も、この腐れた洞窟の事もなにも知らぬ。"
+audio = ExtResource("51_nxkge")
+next_line = SubResource("RsDialogueLine_31sx5")
+
+[sub_resource type="RsDialogueChoice" id="RsDialogueChoice_rqp60"]
+label = "俺は誰、とどこかここ！"
+next_node = SubResource("RsDialogueLine_kv7hp")
+
+[sub_resource type="RsDialogueLine" id="RsDialogueLine_au4qf"]
+text = "まだ生きてる事こそ称えます"
+line_type = 1
+choices = Array[RsDialogueChoice]([SubResource("RsDialogueChoice_rpv6j"), SubResource("RsDialogueChoice_udfx5"), SubResource("RsDialogueChoice_rqp60")])
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_my845"]
+radius = 3.3916233
+
 [node name="ShotgunMonk" type="CharacterBody3D" unique_id=1155083772 groups=["Enemies", "NPCs"]]
 collision_layer = 4
 collision_mask = 3
 script = ExtResource("1_base")
-follows_player = true
-npc_display_name = "散弾銃僧"
-dialogue_lines = Array[String](["生きてるか。", "ジゴクだ。はやく外に出ればいい。"])
-speed = 0.5
-meleerange = 10.0
+attacks_enemies = false
+become_hostile_on_damage = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1445630673]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2227539, 0)
@@ -272,6 +320,18 @@ shaded = true
 texture_filter = 0
 sprite_frames = SubResource("SpriteFrames_1")
 animation = &"walk_1"
+
+[node name="HealthComponent" type="Node" parent="." unique_id=1220893724]
+script = ExtResource("health_comp")
+
+[node name="AttackComponent" type="Node" parent="." unique_id=238761579]
+script = ExtResource("attack_comp")
+
+[node name="ChaseComponent" type="Node" parent="." unique_id=1560236564]
+script = ExtResource("chase_comp")
+
+[node name="AnimationComponent" type="Node" parent="." unique_id=1761444566]
+script = ExtResource("anim_comp")
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="." unique_id=783421459]
 
@@ -294,3 +354,13 @@ collision_mask = 2
 [node name="CollisionShape3D" type="CollisionShape3D" parent="InteractionZone" unique_id=937984414]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2591308, 0)
 shape = SubResource("SphereShape3D_au4qf")
+
+[node name="RsDialogueManager" type="RsDialogueManager" parent="." unique_id=909343281]
+root_node = SubResource("RsDialogueLine_au4qf")
+audio_bus_override = true
+audio_bus_name = &"NPC"
+reverb_bus_name = &"SfxBus"
+reverb_bus_amount = 0.55
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RsDialogueManager" unique_id=1841720009]
+shape = SubResource("SphereShape3D_my845")

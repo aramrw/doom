@@ -1,0 +1,39 @@
+[gd_scene format=3 uid="uid://drkixggx3sj64"]
+
+[ext_resource type="Script" uid="uid://b325pyfasy6r7" path="res://assets/base_prop.gd" id="1_script"]
+[ext_resource type="SpriteFrames" path="res://assets/props/helltrees/godot_data/fleshtree3_spriteframes.tres" id="2_sprites"]
+
+[node name="FleshTree3" type="StaticBody3D" unique_id=1945011518]
+script = ExtResource("1_script")
+
+[node name="Sprite3D_0" type="AnimatedSprite3D" parent="." unique_id=1401649486]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1125, 0)
+shaded = true
+texture_filter = 0
+sprite_frames = ExtResource("2_sprites")
+animation = &"spawn"
+autoplay = "spawn"
+
+[node name="Sprite3D_1" type="AnimatedSprite3D" parent="." unique_id=247545536]
+transform = Transform3D(0.7071, 0, 0.7071, 0, 1, 0, -0.7071, 0, 0.7071, 0, 1.1125, 0)
+shaded = true
+texture_filter = 0
+sprite_frames = ExtResource("2_sprites")
+animation = &"spawn"
+autoplay = "spawn"
+
+[node name="Sprite3D_2" type="AnimatedSprite3D" parent="." unique_id=1264957377]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 0, 1.1125, 0)
+shaded = true
+texture_filter = 0
+sprite_frames = ExtResource("2_sprites")
+animation = &"spawn"
+autoplay = "spawn"
+
+[node name="Sprite3D_3" type="AnimatedSprite3D" parent="." unique_id=1350448583]
+transform = Transform3D(-0.7071, 0, 0.7071, 0, 1, 0, -0.7071, 0, -0.7071, 0, 1.1125, 0)
+shaded = true
+texture_filter = 0
+sprite_frames = ExtResource("2_sprites")
+animation = &"spawn"
+autoplay = "spawn"

@@ -23,6 +23,11 @@ impl AssetHandler {
             current_name.to_string()
         };
 
+        clean_name = clean_name.replace(' ', "_")
+            .replace('[', "_lsb_")
+            .replace(']', "_rsb_")
+            .replace('^', "_caret_");
+
         // PNG Magic: 89 50 4E 47 0D 0A 1A 0A
         if content.starts_with(&[0x89, 0x50, 0x4E, 0x47]) {
             if !name_lower.ends_with(".png") {

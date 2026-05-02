@@ -1,0 +1,203 @@
+[gd_scene format=3 uid="uid://bon6ujob2asiu"]
+
+[ext_resource type="Script" uid="uid://dqrafmuqma81" path="res://enemies/template/base_enemy.gd" id="1_a2nve"]
+[ext_resource type="Script" uid="uid://q0jeh0ade15l" path="res://components/HealthComponent.gd" id="2_3xiat"]
+[ext_resource type="Script" uid="uid://b4xp3spbaebdm" path="res://components/AttackComponent.gd" id="3_nnkq7"]
+[ext_resource type="Texture2D" uid="uid://dsa4llvwqkrr4" path="res://enemies/magma_mantis/spritesheet.png" id="4_1vfa2"]
+[ext_resource type="Script" uid="uid://b1diia2jpf5qi" path="res://components/AnimationComponent.gd" id="24_q62ik"]
+[ext_resource type="Script" uid="uid://bmnl2e66g824f" path="res://enemies/template/enemy_sounds.gd" id="25_vhj5v"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_bwxca"]
+margin = 0.0
+radius = 0.74072266
+height = 1.5192871
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_875j5"]
+atlas = ExtResource("4_1vfa2")
+region = Rect2(0, 0, 183, 144)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xty3x"]
+atlas = ExtResource("4_1vfa2")
+region = Rect2(183, 0, 183, 144)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0tr6m"]
+atlas = ExtResource("4_1vfa2")
+region = Rect2(366, 0, 183, 144)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ch2v1"]
+atlas = ExtResource("4_1vfa2")
+region = Rect2(549, 0, 183, 144)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0nqkd"]
+atlas = ExtResource("4_1vfa2")
+region = Rect2(0, 698, 183, 151)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p8d0l"]
+atlas = ExtResource("4_1vfa2")
+region = Rect2(183, 698, 183, 151)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q3ghn"]
+atlas = ExtResource("4_1vfa2")
+region = Rect2(366, 698, 183, 151)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pc3bg"]
+atlas = ExtResource("4_1vfa2")
+region = Rect2(549, 698, 183, 151)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6krqq"]
+atlas = ExtResource("4_1vfa2")
+region = Rect2(0, 849, 183, 151)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_buxay"]
+atlas = ExtResource("4_1vfa2")
+region = Rect2(366, 849, 183, 151)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l5l5q"]
+atlas = ExtResource("4_1vfa2")
+region = Rect2(0, 698, 183, 151)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ulcc6"]
+atlas = ExtResource("4_1vfa2")
+region = Rect2(183, 698, 183, 151)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u7ktg"]
+atlas = ExtResource("4_1vfa2")
+region = Rect2(6, 561, 181, 147)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ihj2s"]
+atlas = ExtResource("4_1vfa2")
+region = Rect2(187, 561, 181, 147)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dpo0h"]
+atlas = ExtResource("4_1vfa2")
+region = Rect2(368, 561, 181, 147)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tb0mf"]
+atlas = ExtResource("4_1vfa2")
+region = Rect2(549, 561, 181, 147)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_lch36"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_875j5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xty3x")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0tr6m")
+}, {
+"duration": 2.0,
+"texture": SubResource("AtlasTexture_ch2v1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0tr6m")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xty3x")
+}],
+"loop": false,
+"name": &"attack",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0nqkd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p8d0l")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q3ghn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pc3bg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6krqq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_buxay")
+}],
+"loop": false,
+"name": &"death",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l5l5q")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ulcc6")
+}],
+"loop": false,
+"name": &"hurt",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u7ktg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ihj2s")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dpo0h")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tb0mf")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 4.0
+}]
+
+[node name="HeartDemon" type="CharacterBody3D" unique_id=1290029648 groups=["Enemies"]]
+collision_layer = 4
+collision_mask = 3
+motion_mode = 1
+floor_stop_on_slope = false
+safe_margin = 0.5
+script = ExtResource("1_a2nve")
+
+[node name="HealthComponent" type="Node" parent="." unique_id=979718076]
+script = ExtResource("2_3xiat")
+max_health = 120
+current_health = 120
+
+[node name="AttackComponent" type="Node" parent="." unique_id=1317250281]
+script = ExtResource("3_nnkq7")
+attack_damage = 11
+attack_range = 3.0
+time_between_attacks = 3.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=2090450077]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.651, 0)
+shape = SubResource("CapsuleShape3D_bwxca")
+
+[node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="." unique_id=647343100]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0.6872902, 0)
+billboard = 2
+shaded = true
+texture_filter = 0
+sprite_frames = SubResource("SpriteFrames_lch36")
+animation = &"death"
+
+[node name="AnimationComponent" type="Node" parent="." unique_id=960981738]
+script = ExtResource("24_q62ik")
+death_linger_time = 0.0
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="." unique_id=1221744110]
+simplify_path = true
+
+[node name="RayCast3D" type="RayCast3D" parent="." unique_id=1152219676]
+collision_mask = 3
+
+[node name="EnemySounds" type="AudioStreamPlayer3D" parent="." unique_id=1315915334]
+pitch_scale = 5.0
+bus = &"SfxBus"
+script = ExtResource("25_vhj5v")
+death_folder = "res://enemies/template/sounds/death"
+taunt_folder = "res://enemies/template/sounds/taunt"
+pitch_step = 10.0
