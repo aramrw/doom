@@ -146,7 +146,7 @@ func _on_next_pressed():
 	if active_manager:
 		active_manager.advance()
 	else:
-		var manager = get_tree().get_first_node_in_group("DialogueManager")
+		var manager = get_tree().get_first_node_in_group("RsDialogueManager")
 		if manager:
 			manager.advance()
 
@@ -154,7 +154,7 @@ func _on_choice_selected(index: int):
 	if active_manager:
 		active_manager.select_choice(index)
 	else:
-		var manager = get_tree().get_first_node_in_group("DialogueManager")
+		var manager = get_tree().get_first_node_in_group("RsDialogueManager")
 		if manager:
 			manager.select_choice(index)
 

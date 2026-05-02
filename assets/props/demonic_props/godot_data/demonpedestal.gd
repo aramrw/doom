@@ -11,9 +11,9 @@ func _process(delta: float) -> void:
 func interact(_p: Node = null):
 	
 	# New Rust-based Dialogue Component interaction
-	var manager = get_node_or_null("DialogueManager")
+	var manager = get_node_or_null("RsDialogueManager")
 	if manager and manager.has_method("interact"):
-		print("BaseNPC: interacting with DialogueManager")
+		print("BaseNPC: interacting with RsDialogueManager")
 		
 		# Wire UI to Manager signals
 		var ui = get_tree().get_first_node_in_group("DialogueUI")

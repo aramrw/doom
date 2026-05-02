@@ -12,6 +12,8 @@ var npc_state = NPCState.IDLE
 
 @export_group("Dialogue")
 @export var npc_display_name: String = "NPC"
+@export var dm4_dialogue: Resource = null
+@export var dm4_start_node: String = "start"
 
 @onready var health_component = get_node_or_null("HealthComponent")
 @onready var chase_component = get_node_or_null("ChaseComponent")
@@ -99,17 +101,69 @@ func _on_died(_source):
 	collision_layer = 0
 	collision_mask = 0
 
+func _on_dialogue_action(action_id: String, args: Array = []):
+	print("[BaseNPC] _on_dialogue_action: ", action_id)
+	if action_id == "heal":
+		var amount = args[0] if args.size() > 0 else 100
+		heal(amount)
+
+func heal(amount: int):
+	print("[BaseNPC] Healing player for: ", amount)
+	npc_state = NPCState.TALKING
+	if animation_component:
+		if animation_component.sprite.sprite_frames.has_animation("heal_1"):
+			animation_component.sprite.play("heal_1")
+			animation_component.sprite.animation_finished.connect(func():
+				var players = get_tree().get_nodes_in_group("Player")
+				if players.size() > 0:
+					# The player node is the parent of the CharacterBody3D node if the CharacterBody3D was returned.
+					# Let's get the script instance correctly.
+					var player = players[0]
+					if player.has_method("heal"):
+						player.heal(amount)
+					elif player.get_parent().has_method("heal"):
+						player.get_parent().heal(amount)
+				_on_dialogue_finished()
+			, CONNECT_ONE_SHOT)
+			return
+
+	# Fallback if animation fails
+	var players = get_tree().get_nodes_in_group("Player")
+	if players.size() > 0:
+		var player = players[0]
+		if player.has_method("heal"):
+			player.heal(amount)
+		elif player.get_parent().has_method("heal"):
+			player.get_parent().heal(amount)
+	_on_dialogue_finished()
+
 func interact(_p: Node = null):
 	print("[BaseNPC] ", name, " interact() called. Current state: ", npc_state)
 	if npc_state == NPCState.COMBAT or npc_state == NPCState.TALKING: 
 		print("[BaseNPC] interaction blocked by state: ", npc_state)
 		return
 
-	var manager = get_node_or_null("DialogueManager")
+	if dm4_dialogue:
+		print("[BaseNPC] Starting DM4 dialogue")
+		npc_state = NPCState.TALKING
+		
+		if chase_component: chase_component.is_aggressive = false
+		if attack_component: attack_component.is_aggressive = false
+		
+		var player = get_tree().get_first_node_in_group("Player")
+		# DialogueManager handles balloons directly via show_example_dialogue_balloon
+		# We must use Engine.get_singleton because DialogueManager is an autoload
+		Engine.get_singleton("DialogueManager").show_example_dialogue_balloon(dm4_dialogue, dm4_start_node, [self, player])
+		
+		if not Engine.get_singleton("DialogueManager").is_connected("dialogue_ended", _on_dm4_finished):
+			Engine.get_singleton("DialogueManager").connect("dialogue_ended", _on_dm4_finished)
+		return
+
+	var manager = get_node_or_null("RsDialogueManager")
 	if not manager:
-		# Fallback: check children for anything named DialogueManager
+		# Fallback: check children for anything named RsDialogueManager
 		for child in get_children():
-			if "DialogueManager" in child.name:
+			if "RsDialogueManager" in child.name:
 				manager = child
 				break
 
@@ -134,7 +188,7 @@ func interact(_p: Node = null):
 		if not manager.is_connected("dialogue_finished", _on_dialogue_finished):
 			manager.connect("dialogue_finished", _on_dialogue_finished, CONNECT_ONE_SHOT)
 	else:
-		print("[BaseNPC] No DialogueManager found on ", name)
+		print("[BaseNPC] No RsDialogueManager found on ", name)
 
 func _on_dialogue_finished():
 	print("[BaseNPC] Dialogue finished, returning to normal state")
@@ -146,3 +200,8 @@ func _on_dialogue_finished():
 		chase_component.is_aggressive = follows_player or attacks_player or attacks_enemies
 	if attack_component:
 		attack_component.is_aggressive = attacks_player or attacks_enemies
+
+func _on_dm4_finished(_resource):
+	if Engine.get_singleton("DialogueManager").is_connected("dialogue_ended", _on_dm4_finished):
+		Engine.get_singleton("DialogueManager").disconnect("dialogue_ended", _on_dm4_finished)
+	_on_dialogue_finished()

@@ -1,0 +1,8 @@
+~ start
+Generic Monk: 誰だ？
+- 癒してくれ
+	Generic Monk: 畏まりました。
+	do heal(100)
+- 去る
+	Generic Monk: はい、...
+=> END

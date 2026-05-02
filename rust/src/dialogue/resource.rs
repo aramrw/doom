@@ -3,7 +3,7 @@ use godot::classes::AudioStream;
 
 #[derive(GodotConvert, Var, Export, Debug, Clone, Copy, PartialEq, Eq, Default)]
 #[godot(via = i32)]
-pub enum DialogueType {
+pub enum RsDialogueType {
     #[default]
     Static = 0,
     MultiChoice = 1,
@@ -13,35 +13,35 @@ pub enum DialogueType {
 
 #[derive(GodotClass)]
 #[class(base=Resource, init)]
-pub struct DialogueChoice {
+pub struct RsDialogueChoice {
     #[base] pub base: Base<Resource>,
     #[export] pub label: GString,
-    #[export] pub next_node: Option<Gd<DialogueLine>>,
+    #[export] pub next_node: Option<Gd<RsDialogueLine>>,
 }
 
 #[godot_api]
-impl DialogueChoice {}
+impl RsDialogueChoice {}
 
 #[derive(GodotClass)]
 #[class(base=Resource, init)]
-pub struct DialogueLine {
+pub struct RsDialogueLine {
     #[base] pub base: Base<Resource>,
     #[export] pub text: GString,
-    #[export] pub random_lines: Array<Gd<DialogueLine>>,
+    #[export] pub random_lines: Array<Gd<RsDialogueLine>>,
     #[export] pub audio: Option<Gd<AudioStream>>,
-    #[export] pub line_type: DialogueType,
-    #[export] pub next_line: Option<Gd<DialogueLine>>,
-    #[export] pub choices: Array<Gd<DialogueChoice>>,
+    #[export] pub line_type: RsDialogueType,
+    #[export] pub next_line: Option<Gd<RsDialogueLine>>,
+    #[export] pub choices: Array<Gd<RsDialogueChoice>>,
 }
 
 #[godot_api]
-impl DialogueLine {}
+impl RsDialogueLine {}
 
 #[derive(GodotClass)]
 #[class(base=Resource, init)]
-pub struct DialogueResource {
+pub struct RsDialogueResource {
     #[base] pub base: Base<Resource>,
 }
 
 #[godot_api]
-impl DialogueResource {}
+impl RsDialogueResource {}

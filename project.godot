@@ -18,12 +18,20 @@ config/features=PackedStringArray("4.6", "Forward Plus")
 
 buses/default_bus_layout="uid://bc1ryaeoajmw5"
 
+[autoload]
+
+DialogueManager="*res://addons/godot_dialogue_manager-main/addons/dialogue_manager/dialogue_manager.gd"
+
 [display]
 
 window/size/viewport_width=200
 window/size/viewport_height=128
 window/size/mode=3
 window/stretch/mode="viewport"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/godot_dialogue_manager-main/addons/dialogue_manager/plugin.cfg")
 
 [filesystem]
 
@@ -117,6 +125,10 @@ item_cycle_five={
 "events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":53,"key_label":0,"unicode":53,"location":0,"echo":false,"script":null)
 ]
 }
+
+[internationalization]
+
+locale/translations_pot_files=PackedStringArray("res://npcs/generic_monk/generic_monk.dialogue")
 
 [physics]
 

@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=18
+type="Resource"
+uid="uid://best4c7mljxof"
+path="res://.godot/imported/generic_monk.dialogue-ec1d7b04e067ac8fe6e659c91569d7f1.tres"
+
+[deps]
+
+source_file="res://npcs/generic_monk/generic_monk.dialogue"
+dest_files=["res://.godot/imported/generic_monk.dialogue-ec1d7b04e067ac8fe6e659c91569d7f1.tres"]
+
+[params]
+
+defaults=true

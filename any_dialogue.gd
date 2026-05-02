@@ -4,7 +4,7 @@ class_name BaseDialogue
 # --- Exports ---
 @export_group("Dialogue")
 @export var npc_display_name: String = "NPC"
-@export var dialogue_resource: DialogueResource # New resource based system
+@export var dialogue_resource: RsDialogueResource # New resource based system
 
 @export_group("Behavior")
 @export var follows_player: bool = false
@@ -24,7 +24,7 @@ var target_node: Node3D = null
 @onready var los_raycast: RayCast3D = $RayCast3D
 
 # Rust Dialogue Manager
-var dialogue_manager: DialogueManager
+var dialogue_manager: RsDialogueManager
 
 func _ready():
 	add_to_group("NPCs")
@@ -32,9 +32,9 @@ func _ready():
 		npc_state = NPCState.FOLLOW
 	
 	# Create the manager and add it to group so UI can find it
-	dialogue_manager = DialogueManager.new()
+	dialogue_manager = RsDialogueManager.new()
 	add_child(dialogue_manager)
-	dialogue_manager.add_to_group("DialogueManager")
+	dialogue_manager.add_to_group("RsDialogueManager")
 	
 	# Connect manager signals
 	dialogue_manager.dialogue_started.connect(_on_dialogue_started)
@@ -77,7 +77,7 @@ func _on_dialogue_finished_rs():
 		dialogue_ui.finish()
 	npc_state = NPCState.IDLE
 
-func _on_dialogue_action(action_id: String):
+func _on_dialogue_action(action_id: String, args: Array = []):
 	print("NPC: Action triggered: ", action_id)
 	if action_id == "give_item":
 		# Logic for giving item to player

@@ -83,35 +83,35 @@ animations = [{
 [sub_resource type="SphereShape3D" id="SphereShape3D_au4qf"]
 radius = 2.019645
 
-[sub_resource type="DialogueLine" id="DialogueLine_02r0r"]
+[sub_resource type="RsDialogueLine" id="RsDialogueLine_02r0r"]
 text = "無礼な者、おりゃダーゾッぐだ、アーラン王国の大鬼才だ。馬鹿げた事を聞くな。"
 audio = ExtResource("9_lugeh")
 
-[sub_resource type="DialogueChoice" id="DialogueChoice_lugeh"]
+[sub_resource type="RsDialogueChoice" id="RsDialogueChoice_lugeh"]
 label = "誰だ？"
-next_node = SubResource("DialogueLine_02r0r")
+next_node = SubResource("RsDialogueLine_02r0r")
 
-[sub_resource type="DialogueLine" id="DialogueLine_lugeh"]
+[sub_resource type="RsDialogueLine" id="RsDialogueLine_lugeh"]
 text = "帝国の事か...。強い国だ。アーラン王様も優しい、文句がない程の。"
 audio = ExtResource("10_fx87p")
 
-[sub_resource type="DialogueChoice" id="DialogueChoice_fx87p"]
+[sub_resource type="RsDialogueChoice" id="RsDialogueChoice_fx87p"]
 label = "オットマン帝国について"
-next_node = SubResource("DialogueLine_lugeh")
+next_node = SubResource("RsDialogueLine_lugeh")
 
-[sub_resource type="DialogueLine" id="DialogueLine_b24xl"]
+[sub_resource type="RsDialogueLine" id="RsDialogueLine_b24xl"]
 text = "王と歩んだ栄光の日...。このダルゾグ、地の底で何を綴ればいい"
 audio = ExtResource("11_q8n3i")
 
-[sub_resource type="DialogueChoice" id="DialogueChoice_ivaj6"]
+[sub_resource type="RsDialogueChoice" id="RsDialogueChoice_ivaj6"]
 label = "どうやって来た？"
-next_node = SubResource("DialogueLine_b24xl")
+next_node = SubResource("RsDialogueLine_b24xl")
 
-[sub_resource type="DialogueLine" id="DialogueLine_au4qf"]
+[sub_resource type="RsDialogueLine" id="RsDialogueLine_au4qf"]
 text = "聞きたい事はなんだ？"
 audio = ExtResource("8_ivaj6")
 line_type = 1
-choices = Array[DialogueChoice]([SubResource("DialogueChoice_lugeh"), SubResource("DialogueChoice_fx87p"), SubResource("DialogueChoice_ivaj6")])
+choices = Array[RsDialogueChoice]([SubResource("RsDialogueChoice_lugeh"), SubResource("RsDialogueChoice_fx87p"), SubResource("RsDialogueChoice_ivaj6")])
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_my845"]
 radius = 2.6355777
@@ -172,15 +172,15 @@ collision_mask = 2
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2591308, 0)
 shape = SubResource("SphereShape3D_au4qf")
 
-[node name="DialogueManager" type="DialogueManager" parent="." unique_id=909343281]
-root_node = SubResource("DialogueLine_au4qf")
+[node name="RsDialogueManager" type="RsDialogueManager" parent="." unique_id=909343281]
+root_node = SubResource("RsDialogueLine_au4qf")
 audio_bus_override = true
 audio_bus_name = &"NPC"
 reverb_bus_name = &"SfxBus"
 reverb_bus_amount = 0.55
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="DialogueManager" unique_id=1841720009]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RsDialogueManager" unique_id=1841720009]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0104651, 0)
 shape = SubResource("SphereShape3D_my845")
 
-[connection signal="dialogue_started" from="DialogueManager" to="." method="_on_dialogue_manager_dialogue_started"]
+[connection signal="dialogue_started" from="RsDialogueManager" to="." method="_on_dialogue_manager_dialogue_started"]

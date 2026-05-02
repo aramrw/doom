@@ -258,44 +258,44 @@ animations = [{
 [sub_resource type="SphereShape3D" id="SphereShape3D_au4qf"]
 radius = 2.019645
 
-[sub_resource type="DialogueLine" id="DialogueLine_udfx5"]
+[sub_resource type="RsDialogueLine" id="RsDialogueLine_udfx5"]
 text = "俺はヴァチカン特務第１３課イスカリオテ機関の藤沢マーレでございます。これからよろしく"
 audio = ExtResource("49_s8yxr")
 
-[sub_resource type="DialogueLine" id="DialogueLine_my845"]
+[sub_resource type="RsDialogueLine" id="RsDialogueLine_my845"]
 text = "忘れてたか...ヤベー。"
 audio = ExtResource("48_rpv6j")
-next_line = SubResource("DialogueLine_udfx5")
+next_line = SubResource("RsDialogueLine_udfx5")
 
-[sub_resource type="DialogueChoice" id="DialogueChoice_rpv6j"]
+[sub_resource type="RsDialogueChoice" id="RsDialogueChoice_rpv6j"]
 label = "誰だお前？"
-next_node = SubResource("DialogueLine_my845")
+next_node = SubResource("RsDialogueLine_my845")
 
-[sub_resource type="DialogueLine" id="DialogueLine_s8yxr"]
+[sub_resource type="RsDialogueLine" id="RsDialogueLine_s8yxr"]
 text = "どこにどこでもある。。。この凄まじい感じ。。。強い！"
 audio = ExtResource("49_ckj4m")
 
-[sub_resource type="DialogueChoice" id="DialogueChoice_udfx5"]
+[sub_resource type="RsDialogueChoice" id="RsDialogueChoice_udfx5"]
 label = "なんだこの圧力！"
-next_node = SubResource("DialogueLine_s8yxr")
+next_node = SubResource("RsDialogueLine_s8yxr")
 
-[sub_resource type="DialogueLine" id="DialogueLine_31sx5"]
+[sub_resource type="RsDialogueLine" id="RsDialogueLine_31sx5"]
 text = "そりゃどうでもいい、とにかく銃を見つけなきゃこまる。"
 audio = ExtResource("52_4reaw")
 
-[sub_resource type="DialogueLine" id="DialogueLine_kv7hp"]
+[sub_resource type="RsDialogueLine" id="RsDialogueLine_kv7hp"]
 text = "落ち着け。お前も、この腐れた洞窟の事もなにも知らぬ。"
 audio = ExtResource("51_nxkge")
-next_line = SubResource("DialogueLine_31sx5")
+next_line = SubResource("RsDialogueLine_31sx5")
 
-[sub_resource type="DialogueChoice" id="DialogueChoice_rqp60"]
+[sub_resource type="RsDialogueChoice" id="RsDialogueChoice_rqp60"]
 label = "俺は誰、とどこかここ！"
-next_node = SubResource("DialogueLine_kv7hp")
+next_node = SubResource("RsDialogueLine_kv7hp")
 
-[sub_resource type="DialogueLine" id="DialogueLine_au4qf"]
+[sub_resource type="RsDialogueLine" id="RsDialogueLine_au4qf"]
 text = "まだ生きてる事こそ称えます"
 line_type = 1
-choices = Array[DialogueChoice]([SubResource("DialogueChoice_rpv6j"), SubResource("DialogueChoice_udfx5"), SubResource("DialogueChoice_rqp60")])
+choices = Array[RsDialogueChoice]([SubResource("RsDialogueChoice_rpv6j"), SubResource("RsDialogueChoice_udfx5"), SubResource("RsDialogueChoice_rqp60")])
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_my845"]
 radius = 3.3916233
@@ -355,14 +355,12 @@ collision_mask = 2
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2591308, 0)
 shape = SubResource("SphereShape3D_au4qf")
 
-[node name="DialogueManager" type="DialogueManager" parent="." unique_id=909343281]
-root_node = SubResource("DialogueLine_au4qf")
+[node name="RsDialogueManager" type="RsDialogueManager" parent="." unique_id=909343281]
+root_node = SubResource("RsDialogueLine_au4qf")
 audio_bus_override = true
 audio_bus_name = &"NPC"
 reverb_bus_name = &"SfxBus"
 reverb_bus_amount = 0.55
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="DialogueManager" unique_id=1841720009]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RsDialogueManager" unique_id=1841720009]
 shape = SubResource("SphereShape3D_my845")
-
-[connection signal="dialogue_started" from="DialogueManager" to="." method="_on_dialogue_manager_dialogue_started"]

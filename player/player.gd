@@ -375,6 +375,12 @@ func take_damage(amount: int, _source = null):
 	if health <= 0:
 		die()
 
+func heal(amount: int):
+	health = clamp(health + amount, 0, max_health)
+	print("Player Healed: ", health)
+	if hud:
+		hud.update_health(health)
+
 func die():
 	print("Player Died!")
 	# For now, just restart the level when you die

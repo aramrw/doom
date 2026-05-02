@@ -7,24 +7,24 @@
 radius = 0.45
 height = 1.6
 
-[sub_resource type="DialogueLine" id="DialogueLine_v8ggl"]
+[sub_resource type="RsDialogueLine" id="RsDialogueLine_v8ggl"]
 text = "かつて、争いを嫌った彫刻師が、己の平穏を守るために一度だけ武器を作った。"
 
-[sub_resource type="DialogueChoice" id="DialogueChoice_bcldn"]
+[sub_resource type="RsDialogueChoice" id="RsDialogueChoice_bcldn"]
 label = "伝承"
-next_node = SubResource("DialogueLine_v8ggl")
+next_node = SubResource("RsDialogueLine_v8ggl")
 
-[sub_resource type="DialogueChoice" id="DialogueChoice_hls0w"]
+[sub_resource type="RsDialogueChoice" id="RsDialogueChoice_hls0w"]
 label = "去る"
 
-[sub_resource type="DialogueLine" id="DialogueLine_pa666"]
+[sub_resource type="RsDialogueLine" id="RsDialogueLine_pa666"]
 text = "最後の一品として残した、芸術品のように美しい斧。"
 line_type = 1
-choices = Array[DialogueChoice]([SubResource("DialogueChoice_bcldn"), SubResource("DialogueChoice_hls0w")])
+choices = Array[RsDialogueChoice]([SubResource("RsDialogueChoice_bcldn"), SubResource("RsDialogueChoice_hls0w")])
 
-[sub_resource type="DialogueLine" id="DialogueLine_hls0w"]
+[sub_resource type="RsDialogueLine" id="RsDialogueLine_hls0w"]
 text = "案2：断罪と祝福の斧「アタラクシア」静寂（アタラクシア）を愛した伝説の彫刻師が、"
-next_line = SubResource("DialogueLine_pa666")
+next_line = SubResource("RsDialogueLine_pa666")
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hls0w"]
 
@@ -44,9 +44,9 @@ sprite_frames = ExtResource("1_sprites")
 animation = &"spawn"
 autoplay = "spawn"
 
-[node name="DialogueManager" type="DialogueManager" parent="." unique_id=1895326246]
-root_node = SubResource("DialogueLine_hls0w")
+[node name="RsDialogueManager" type="RsDialogueManager" parent="." unique_id=1895326246]
+root_node = SubResource("RsDialogueLine_hls0w")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="DialogueManager" unique_id=1408482735]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RsDialogueManager" unique_id=1408482735]
 transform = Transform3D(0.3733926, 0.9276734, 0, -0.9276734, 0.3733926, 0, 0, 0, 1, 0, 0.7573616, 0)
 shape = SubResource("CapsuleShape3D_hls0w")

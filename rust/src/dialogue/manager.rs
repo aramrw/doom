@@ -1,22 +1,22 @@
-use crate::dialogue::resource::{DialogueLine, DialogueType};
+use crate::dialogue::resource::{RsDialogueLine, RsDialogueType};
 use godot::classes::Area3D;
 use godot::prelude::*;
 
 #[derive(GodotClass)]
 #[class(base=Area3D, init)]
-pub struct DialogueManager {
+pub struct RsDialogueManager {
     pub base: Base<Area3D>,
     #[export]
-    pub root_node: Option<Gd<DialogueLine>>,
-    pub current_line: Option<Gd<DialogueLine>>,
+    pub root_node: Option<Gd<RsDialogueLine>>,
+    pub current_line: Option<Gd<RsDialogueLine>>,
 }
 
 #[godot_api]
-impl DialogueManager {
+impl RsDialogueManager {
     #[signal]
-    fn dialogue_started(line: Gd<DialogueLine>);
+    fn dialogue_started(line: Gd<RsDialogueLine>);
     #[signal]
-    fn line_changed(line: Gd<DialogueLine>);
+    fn line_changed(line: Gd<RsDialogueLine>);
     #[signal]
     fn dialogue_finished();
 
@@ -36,7 +36,7 @@ impl DialogueManager {
         };
         let line_bind = line.bind();
 
-        if line_bind.line_type == DialogueType::Static || line_bind.line_type == DialogueType::RandStatic {
+        if line_bind.line_type == RsDialogueType::Static || line_bind.line_type == RsDialogueType::RandStatic {
             if let Some(next) = line_bind.next_line.clone() {
                 self.current_line = Some(next.clone());
                 self.base_mut()
@@ -54,7 +54,7 @@ impl DialogueManager {
         };
         let line_bind = line.bind();
 
-        if line_bind.line_type == DialogueType::MultiChoice || line_bind.line_type == DialogueType::RandMultiChoice {
+        if line_bind.line_type == RsDialogueType::MultiChoice || line_bind.line_type == RsDialogueType::RandMultiChoice {
             if let Some(choice_gd) = line_bind.choices.get(index as usize) {
                 if let Some(next) = choice_gd.bind().next_node.clone() {
                     self.current_line = Some(next.clone());

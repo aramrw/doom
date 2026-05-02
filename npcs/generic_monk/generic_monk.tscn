@@ -10,6 +10,7 @@
 [ext_resource type="Script" uid="uid://dmmjmxe72o8nn" path="res://components/ChaseComponent.gd" id="48_wv0th"]
 [ext_resource type="Script" uid="uid://b1diia2jpf5qi" path="res://components/AnimationComponent.gd" id="49_flhpb"]
 [ext_resource type="Script" uid="uid://bmnl2e66g824f" path="res://enemies/template/enemy_sounds.gd" id="50_js8vb"]
+[ext_resource type="Resource" path="res://npcs/generic_monk/generic_monk.dialogue" id="99_dm4_dialogue"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1"]
 radius = 1.1286621
@@ -427,29 +428,29 @@ animations = [{
 [sub_resource type="SphereShape3D" id="SphereShape3D_au4qf"]
 radius = 2.019645
 
-[sub_resource type="DialogueChoice" id="DialogueChoice_vhl20"]
+[sub_resource type="RsDialogueChoice" id="RsDialogueChoice_vhl20"]
 label = "去る"
 
-[sub_resource type="DialogueLine" id="DialogueLine_fu1yp"]
+[sub_resource type="RsDialogueLine" id="RsDialogueLine_fu1yp"]
 text = "はい、僕は「ヴァチカン特務第１３課イスカリオテ機関」の操 鶴原でございます。これからよろしくお願いします。"
 audio = ExtResource("8_fu1yp")
 
-[sub_resource type="DialogueChoice" id="DialogueChoice_jki7f"]
+[sub_resource type="RsDialogueChoice" id="RsDialogueChoice_jki7f"]
 label = "誰だ？"
-next_node = SubResource("DialogueLine_fu1yp")
+next_node = SubResource("RsDialogueLine_fu1yp")
 
-[sub_resource type="DialogueLine" id="DialogueLine_wmmu6"]
+[sub_resource type="RsDialogueLine" id="RsDialogueLine_wmmu6"]
 text = "ご機嫌よう。"
 audio = ExtResource("8_wmmu6")
 
-[sub_resource type="DialogueLine" id="DialogueLine_j7h2w"]
+[sub_resource type="RsDialogueLine" id="RsDialogueLine_j7h2w"]
 text = "如何に。"
 audio = ExtResource("9_j7h2w")
 
-[sub_resource type="DialogueLine" id="DialogueLine_vhl20"]
-random_lines = Array[DialogueLine]([SubResource("DialogueLine_wmmu6"), SubResource("DialogueLine_j7h2w")])
+[sub_resource type="RsDialogueLine" id="RsDialogueLine_vhl20"]
+random_lines = Array[RsDialogueLine]([SubResource("RsDialogueLine_wmmu6"), SubResource("RsDialogueLine_j7h2w")])
 line_type = 3
-choices = Array[DialogueChoice]([SubResource("DialogueChoice_vhl20"), SubResource("DialogueChoice_jki7f")])
+choices = Array[RsDialogueChoice]([SubResource("RsDialogueChoice_vhl20"), SubResource("RsDialogueChoice_jki7f")])
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_my845"]
 radius = 3.3916233
@@ -460,6 +461,8 @@ collision_mask = 3
 script = ExtResource("1_swxfo")
 attacks_enemies = false
 become_hostile_on_damage = false
+npc_display_name = "Generic Monk"
+dm4_dialogue = ExtResource("99_dm4_dialogue")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1445630673]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6213986, 0)
@@ -472,7 +475,7 @@ pixel_size = 0.02
 shaded = true
 texture_filter = 0
 sprite_frames = SubResource("SpriteFrames_1")
-animation = &"idle_1"
+animation = &"heal_1"
 
 [node name="HealthComponent" type="Node" parent="." unique_id=1220893724]
 script = ExtResource("46_qvvbo")
@@ -509,14 +512,14 @@ collision_mask = 2
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2591308, 0)
 shape = SubResource("SphereShape3D_au4qf")
 
-[node name="DialogueManager" type="DialogueManager" parent="." unique_id=909343281]
-root_node = SubResource("DialogueLine_vhl20")
+[node name="RsDialogueManager" type="RsDialogueManager" parent="." unique_id=909343281]
+root_node = SubResource("RsDialogueLine_vhl20")
 audio_bus_override = true
 audio_bus_name = &"NPC"
 reverb_bus_name = &"SfxBus"
 reverb_bus_amount = 0.55
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="DialogueManager" unique_id=1841720009]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RsDialogueManager" unique_id=1841720009]
 shape = SubResource("SphereShape3D_my845")
 
-[connection signal="dialogue_started" from="DialogueManager" to="." method="_on_dialogue_manager_dialogue_started"]
+[connection signal="dialogue_started" from="RsDialogueManager" to="." method="_on_dialogue_manager_dialogue_started"]
