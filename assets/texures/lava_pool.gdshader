@@ -26,5 +26,6 @@ void fragment() {
     vec3 crushed_color = floor(tex.rgb * 5.0) / 5.0;
     
     ALBEDO = crushed_color;
-    EMISSION = crushed_color * 1.5;
+    EMISSION = crushed_color * 10.5
+	;
 }

@@ -36,7 +36,8 @@
 [ext_resource type="PackedScene" path="res://enemies/slitherfist/Slitherfist.tscn" id="35_vmvb8"]
 [ext_resource type="PackedScene" uid="uid://c2gsov44fnr77" path="res://npcs/darzog/darzog.tscn" id="36_vmvb8"]
 [ext_resource type="PackedScene" uid="uid://bg60o2a24hvld" path="res://npcs/generic_monk/generic_monk.tscn" id="37_3s0n5"]
-[ext_resource type="PackedScene" uid="uid://bon6ujob2asiu" path="res://enemies/heart_demon/heart_demon.tscn" id="37_4i7mf"]
+[ext_resource type="PackedScene" uid="uid://bon6ujob2asiu" path="res://enemies/magma_mantis/magma_mantis.tscn" id="37_4i7mf"]
+[ext_resource type="PackedScene" uid="uid://bon6ujob2asiu" path="res://enemies/heart_demon/heart_demon.tscn" id="38_3s0n5"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_i5arm"]
 shader = ExtResource("1_jka67")
@@ -203,6 +204,9 @@ shape = SubResource("BoxShape3D_jsk3o")
 [node name="Sketchfab_Scene" parent="NavigationRegion3D" unique_id=555998006 instance=ExtResource("12_cdqbm")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.3071127, 0.57033074, -10.397333)
 
+[node name="HeartDemon" parent="NavigationRegion3D" unique_id=1290029648 instance=ExtResource("37_4i7mf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27.913479, 5.792275, -10.204794)
+
 [node name="SleepingBag" parent="." unique_id=843237321 instance=ExtResource("8_jsk3o")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2597854, 0.5225768, -3.640376)
 
@@ -342,7 +346,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.338158, 5.15, 6.773472)
 [node name="Slitherfist" parent="." unique_id=54307531 instance=ExtResource("35_vmvb8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -39.443954, 5.606499, 0.3129635)
 
-[node name="Goblin" parent="." unique_id=1290029648 instance=ExtResource("35_2mu51")]
+[node name="Goblin" parent="." unique_id=1069255009 instance=ExtResource("35_2mu51")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.523865, 6.0099998, -6.7758017)
 
 [node name="Goblin2" parent="." unique_id=436230307 instance=ExtResource("35_2mu51")]
@@ -351,9 +355,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20.368404, 6.0099998, 7.1686
 [node name="Darzog" parent="." unique_id=1155083772 instance=ExtResource("36_vmvb8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -38.0016, 5.9397492, 32.571964)
 
-[node name="HeartDemon" parent="." unique_id=1045438275 instance=ExtResource("37_4i7mf")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -54.50195, 5.1, 41.615)
-
 [node name="GenericMonk" parent="." unique_id=376653437 instance=ExtResource("37_3s0n5")]
 transform = Transform3D(-0.9976437, 0, -0.06860743, 0, 1, 0, 0.06860743, 0, -0.9976437, -1.6749594, 4.977429, -10.793898)
 npc_display_name = "操 鶴原"
+
+[node name="HeartDemon" parent="." unique_id=1561657496 instance=ExtResource("38_3s0n5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -55, 5, 42)

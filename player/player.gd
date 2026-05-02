@@ -386,6 +386,6 @@ func add_trauma(amount: float):
 func has_inventory_item(item_name: String) -> bool:
 	return inventory_manager.has_item(item_name)
 
-func _process_camera_shake(delta):
+func _process_camera_shake(_delta):
 	if trauma > 0:
 		pass

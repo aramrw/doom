@@ -4,7 +4,7 @@ class_name BaseEnemy
 @onready var sprite = $AnimatedSprite3D
 @onready var health_component = $HealthComponent
 @onready var attack_component = $AttackComponent
-@onready var chase_component = $ChaseComponent
+@export var chase_component: ChaseComponent
 @onready var animation_component = $AnimationComponent
 
 func _ready():
